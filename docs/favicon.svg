@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Mycelium">
+  <rect width="32" height="32" fill="#1c1d14"/>
+  <!-- bowtie: two triangles meeting at center -->
+  <path
+    d="M6 8 L16 16 L6 24 Z M26 8 L16 16 L26 24 Z"
+    fill="#d8c45a"
+  />
+</svg>
