@@ -1,4 +1,4 @@
-# Mycelium docs — https://mycelium-labs.github.io/mycelium-website/
+# Mycelium docs — https://mycelium-labs.github.io/try-mycelium/
 
 # Traditional search crawlers
 User-agent: *
@@ -39,4 +39,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://mycelium-labs.github.io/mycelium-website/sitemap.xml
+Sitemap: https://mycelium-labs.github.io/try-mycelium/sitemap.xml

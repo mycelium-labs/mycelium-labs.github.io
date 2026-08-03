@@ -1,14 +1,14 @@
-# Mycelium website
+# try-mycelium
 
-Public site assets for [Mycelium](https://github.com/mycelium-labs/mycelium) (PyPI: `mycelium-runtime`).
+Public site for [Mycelium](https://github.com/mycelium-labs/mycelium) (PyPI: `mycelium-runtime`): handbook + interactive sandbox.
 
-The SDK package lives in **[mycelium-labs/mycelium](https://github.com/mycelium-labs/mycelium)**. This repo holds everything else people hit in a browser.
+The SDK package lives in **[mycelium-labs/mycelium](https://github.com/mycelium-labs/mycelium)**.
 
 ## Layout
 
 | Path | What |
 |------|------|
-| `docs/` | Static handbook. Deploys to [GitHub Pages](https://mycelium-labs.github.io/mycelium-website/) on push to `main`. |
+| `docs/` | Static handbook. Deploys to [GitHub Pages](https://mycelium-labs.github.io/try-mycelium/) on push to `main`. |
 | `sandbox/` | Interactive no-LLM demo (FastAPI). Run locally or via Docker. |
 
 ## Handbook
@@ -39,5 +39,5 @@ docker run --rm -p 7860:7860 mycelium-sandbox
 ## Links
 
 - SDK / PyPI package: https://github.com/mycelium-labs/mycelium
-- Handbook: https://mycelium-labs.github.io/mycelium-website/
+- Handbook: https://mycelium-labs.github.io/try-mycelium/
 - PyPI: https://pypi.org/project/mycelium-runtime/
