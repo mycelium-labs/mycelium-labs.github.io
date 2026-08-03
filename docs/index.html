@@ -208,6 +208,34 @@
       color: var(--product-brand);
     }
 
+    .product-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.85rem 1.25rem;
+      margin: 0 0 1.25rem;
+    }
+
+    .product-ctas .product-install {
+      margin: 0;
+    }
+
+    .product-sandbox {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--product-brand);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(216, 196, 90, 0.45);
+    }
+
+    .product-sandbox:hover {
+      border-bottom-color: var(--product-brand);
+    }
+
+    .product-sandbox[hidden] {
+      display: none;
+    }
+
     .product-meta {
       display: flex;
       flex-wrap: wrap;
@@ -540,14 +568,25 @@
       on retry and redispatch, blocks bad tool calls, and keeps tool data fresh.
       Not a tracer. Prevention at the tool boundary.
     </p>
-    <button
-      type="button"
-      class="product-install"
-      id="product-install"
-      data-copy="pip install mycelium-runtime"
-      title="Click to copy"
-      aria-label="Copy pip install mycelium-runtime"
-    >pip install mycelium-runtime</button>
+    <div class="product-ctas">
+      <button
+        type="button"
+        class="product-install"
+        id="product-install"
+        data-copy="pip install mycelium-runtime"
+        title="Click to copy"
+        aria-label="Copy pip install mycelium-runtime"
+      >pip install mycelium-runtime</button>
+      <!-- Set SANDBOX_URL in the script at the bottom of this page after Azure deploy. -->
+      <a
+        class="product-sandbox"
+        id="product-sandbox"
+        href="#"
+        target="_blank"
+        rel="noopener"
+        hidden
+      >Try interactive sandbox</a>
+    </div>
     <p class="product-meta">
       <a href="https://pepy.tech/project/mycelium-runtime"><img src="https://static.pepy.tech/badge/mycelium-runtime" alt="PyPI downloads"></a>
       <a href="https://pypi.org/project/mycelium-runtime/"><img src="https://img.shields.io/pypi/v/mycelium-runtime.svg?cacheSeconds=60&amp;release=1.24.0" alt="PyPI version"></a>
@@ -1369,6 +1408,15 @@ mycelium completion status|mark                    # AF-007 checklist triage</pr
 
 <script>
   (function () {
+    // Azure Container Apps sandbox (UI + API).
+    const SANDBOX_URL = "https://myceliumsbx.mangobay-2157ee12.southindia.azurecontainerapps.io/";
+
+    const sandbox = document.getElementById("product-sandbox");
+    if (sandbox && SANDBOX_URL) {
+      sandbox.href = SANDBOX_URL;
+      sandbox.hidden = false;
+    }
+
     const install = document.getElementById("product-install");
     if (install) {
       const label = install.getAttribute("data-copy") || install.textContent.trim();

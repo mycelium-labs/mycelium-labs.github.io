@@ -1,3 +1,5 @@
+# Target linux/amd64 for Azure Container Apps (build with:
+#   docker build --platform linux/amd64 -t ... .)
 FROM python:3.12-slim
 
 WORKDIR /app
