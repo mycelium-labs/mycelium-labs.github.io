@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Starting sandbox · Mycelium</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#1c1d14">
+  <link rel="icon" href="/favicon.svg?v=3" type="image/svg+xml">
+  <style>
+    :root {
+      --bg: #1c1d14;
+      --ink: #eef0e2;
+      --muted: #a3a574;
+      --brand: #d8c45a;
+      --track: #12130c;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Helvetica Neue", Helvetica, "Segoe UI", sans-serif;
+    }
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .card {
+      width: min(26rem, 100%);
+    }
+    .brand {
+      margin: 0 0 1.5rem;
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--brand);
+    }
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .sub {
+      margin: 0 0 1.5rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+    .bar {
+      height: 4px;
+      background: var(--track);
+      border: 1px solid rgba(238, 240, 226, 0.14);
+      overflow: hidden;
+      margin: 0 0 0.85rem;
+    }
+    .bar > i {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: var(--brand);
+      transition: width 0.35s linear;
+    }
+    .bar.is-ready > i { width: 100%; }
+    .bar.is-long > i {
+      width: 92%;
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.45; }
+      50% { opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .bar > i { transition: none; }
+      .bar.is-long > i { animation: none; opacity: 0.85; }
+    }
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin: 0 0 1.5rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .status { color: var(--ink); }
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem 1.25rem;
+      font-size: 0.9rem;
+    }
+    .links a {
+      color: var(--brand);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(216, 196, 90, 0.45);
+    }
+    .links a:hover { border-bottom-color: var(--brand); }
+    .error { color: #e0b0a0; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <p class="brand">Mycelium</p>
+    <h1 id="title">Starting sandbox</h1>
+    <p class="sub" id="sub">
+      If the demo was idle, Azure may need 10–30 seconds to wake the container.
+      This page waits until it’s ready.
+    </p>
+    <div class="bar" id="bar" aria-hidden="true"><i id="fill"></i></div>
+    <div class="meta">
+      <span class="status" id="status">Checking…</span>
+      <span id="elapsed">0s</span>
+    </div>
+    <div class="links">
+      <a id="open" href="#">Open anyway</a>
+      <a href="/">Back to handbook</a>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var TARGET = "https://myceliumsbx.mangobay-2157ee12.southindia.azurecontainerapps.io/";
+      var HEALTH = TARGET.replace(/\/?$/, "/") + "api/health";
+      var EXPECTED_MS = 25000;
+      var started = Date.now();
+      var done = false;
+
+      var title = document.getElementById("title");
+      var sub = document.getElementById("sub");
+      var status = document.getElementById("status");
+      var elapsed = document.getElementById("elapsed");
+      var bar = document.getElementById("bar");
+      var fill = document.getElementById("fill");
+      var open = document.getElementById("open");
+
+      open.href = TARGET;
+
+      function tick() {
+        if (done) return;
+        var ms = Date.now() - started;
+        var sec = Math.floor(ms / 1000);
+        elapsed.textContent = sec + "s";
+        var pct = Math.min(90, (ms / EXPECTED_MS) * 90);
+        fill.style.width = pct + "%";
+        if (ms >= EXPECTED_MS) bar.classList.add("is-long");
+      }
+
+      function ready() {
+        if (done) return;
+        done = true;
+        bar.classList.remove("is-long");
+        bar.classList.add("is-ready");
+        fill.style.width = "100%";
+        title.textContent = "Sandbox ready";
+        sub.textContent = "Opening the interactive demo…";
+        status.textContent = "Ready";
+        elapsed.textContent = Math.floor((Date.now() - started) / 1000) + "s";
+        window.setTimeout(function () {
+          window.location.replace(TARGET);
+        }, 350);
+      }
+
+      function fail(msg) {
+        status.innerHTML = '<span class="error">' + msg + "</span>";
+      }
+
+      async function probe() {
+        if (done) return;
+        status.textContent = "Waking container…";
+        try {
+          var ctrl = new AbortController();
+          var t = window.setTimeout(function () { ctrl.abort(); }, 8000);
+          var res = await fetch(HEALTH, {
+            method: "GET",
+            cache: "no-store",
+            signal: ctrl.signal,
+          });
+          window.clearTimeout(t);
+          if (res.ok) {
+            ready();
+            return;
+          }
+          status.textContent = "Still starting…";
+        } catch (err) {
+          status.textContent = "Still starting…";
+        }
+      }
+
+      tick();
+      window.setInterval(tick, 250);
+      probe();
+      window.setInterval(probe, 1500);
+
+      window.setTimeout(function () {
+        if (!done) {
+          fail("Still waking after 60s — try Open anyway.");
+        }
+      }, 60000);
+    })();
+  </script>
+</body>
+</html>

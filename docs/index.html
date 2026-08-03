@@ -1466,12 +1466,12 @@ mycelium completion status|mark                    # AF-007 checklist triage</pr
 
 <script>
   (function () {
-    // Azure Container Apps sandbox (UI + API).
-    const SANDBOX_URL = "https://myceliumsbx.mangobay-2157ee12.southindia.azurecontainerapps.io/";
+    // Wake page polls Azure health, then redirects (handles cold start wait).
+    const SANDBOX_WAKE_URL = "/sandbox.html";
 
     const sandbox = document.getElementById("product-sandbox");
-    if (sandbox && SANDBOX_URL) {
-      sandbox.href = SANDBOX_URL;
+    if (sandbox && SANDBOX_WAKE_URL) {
+      sandbox.href = SANDBOX_WAKE_URL;
       sandbox.hidden = false;
     }
 

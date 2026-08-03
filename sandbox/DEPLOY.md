@@ -84,11 +84,10 @@ Open that URL — you should see the sandbox UI. Health check: `/api/health` →
 
 ## 6. Wire into github.io
 
-In `docs/index.html`, set:
+Handbook CTA goes to `/sandbox.html` (wake page). That page polls
+`/api/health` on Azure, shows elapsed wait for cold starts, then redirects.
 
-```js
-const SANDBOX_URL = "https://YOUR-APP.azurecontainerapps.io/";
-```
+In `docs/sandbox.html`, set `TARGET` to your Container App URL if it changes.
 
 Push to `main` on `mycelium-labs.github.io`. The hero shows **Try interactive sandbox**.
 

@@ -1290,3 +1290,20 @@ window.addEventListener("resize", () => drawEdges());
   render();
   requestAnimationFrame(() => requestAnimationFrame(drawEdges));
 })();
+
+(function hideBoot() {
+  const boot = document.getElementById("boot");
+  if (!boot) return;
+  const dismiss = () => {
+    boot.classList.add("is-done");
+    window.setTimeout(() => {
+      boot.hidden = true;
+    }, 280);
+  };
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(dismiss).catch(dismiss);
+    window.setTimeout(dismiss, 1200);
+  } else {
+    window.setTimeout(dismiss, 200);
+  }
+})();
