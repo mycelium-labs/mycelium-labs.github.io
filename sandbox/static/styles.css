@@ -16,6 +16,19 @@
 
 * { box-sizing: border-box; }
 
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none; /* Chrome / Safari */
+}
+
 html, body {
   margin: 0;
   min-height: 100%;
@@ -25,6 +38,8 @@ html, body {
     var(--bg0);
   color: var(--ink);
   font-family: var(--sans);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 body { padding: 1.25rem 1.25rem 3rem; }
