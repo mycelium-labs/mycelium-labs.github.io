@@ -40,11 +40,16 @@ html, body {
   font-family: var(--sans);
   scrollbar-width: none;
   -ms-overflow-style: none;
+  overflow-x: clip;
 }
 
 body { padding: 1.25rem 1.25rem 3rem; }
 
-.wrap { max-width: 1400px; margin: 0 auto; }
+.wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  min-width: 0;
+}
 
 .top {
   display: flex;
@@ -134,6 +139,50 @@ body { padding: 1.25rem 1.25rem 3rem; }
   .canvas-wrap { min-height: 360px; }
   .canvas { min-height: 300px; }
   .tagline { font-size: 0.95rem; }
+  body { padding: 1rem 0.85rem 2.5rem; }
+  .top {
+    align-items: stretch;
+    gap: 0.85rem;
+  }
+  .top-actions {
+    width: 100%;
+  }
+  .top-actions #btnRun {
+    width: 100%;
+  }
+  .lede { font-size: 0.9rem; }
+  .canvas-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .canvas {
+    min-width: 520px;
+  }
+  .node {
+    width: 168px;
+    min-height: 64px;
+    padding: 0.45rem 0.55rem 0.55rem;
+  }
+  .node-head strong { font-size: 0.76rem; }
+  .canvas-empty {
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.88rem;
+  }
+  .compare-panel { margin-top: 1rem; }
+  .story-lead { font-size: 0.98rem; }
+  .col { padding: 0.75rem; }
+}
+
+@media (max-width: 520px) {
+  .brand { font-size: clamp(1.7rem, 8vw, 2.2rem); }
+  .tagline { font-size: 0.9rem; max-width: none; }
+  .lede { max-width: none; }
+  .canvas { min-width: 460px; min-height: 280px; }
+  .canvas-wrap { min-height: 320px; }
+  .node { width: 150px; }
+  .port { width: 16px; height: 16px; }
+  .port::before { inset: -16px; }
 }
 
 .hint {

@@ -132,6 +132,7 @@
       font-size: 17px;
       -webkit-font-smoothing: antialiased;
       scroll-behavior: smooth;
+      overflow-x: clip;
     }
 
     body {
@@ -140,6 +141,7 @@
       color: var(--ink);
       background: var(--paper);
       line-height: 1.55;
+      overflow-x: clip;
     }
 
     /* Product: full first screen; docs below on scroll */
@@ -401,7 +403,21 @@
 
     .docs-group:first-of-type { margin-top: 0.5rem; }
 
-    .main { min-width: 0; }
+    .main {
+      min-width: 0;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+    }
+
+    .main img,
+    .main svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    code {
+      word-break: break-word;
+    }
 
     h1 {
       font-size: 2.4rem;
@@ -534,6 +550,8 @@
       background: var(--wash);
       border: 1px solid var(--line);
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      max-width: 100%;
       font-family: ui-monospace, Menlo, Consolas, monospace;
       font-size: 0.73rem;
       line-height: 1.6;
@@ -542,23 +560,58 @@
 
     pre + pre { margin-top: 0.75rem; }
 
-    @media (max-width: 640px) {
+    @media (max-width: 860px) {
       .layout {
         grid-template-columns: 1fr;
-        padding: 2rem 1.25rem 3rem;
+        gap: 1.75rem;
+        padding: 2.25rem 1.5rem 3rem;
       }
       .sidebar {
         position: static;
-        padding-bottom: 1.25rem;
+        padding-bottom: 1.1rem;
         border-bottom: 1px solid var(--line);
       }
+      .side-nav .side-group { margin-top: 0.85rem; }
+      .side-nav > .side-group:first-child { margin-top: 0; }
       .side-nav ol {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 0.25rem 1rem;
       }
-      h1 { font-size: 2rem; }
-      .product { padding: 1.5rem 1.25rem; }
+    }
+
+    @media (max-width: 640px) {
+      .layout { padding: 1.75rem 1.1rem 2.75rem; }
+      .side-nav ol { gap: 0.25rem 0.85rem; }
+      h1 { font-size: 1.7rem; letter-spacing: -0.02em; }
+      .lede { font-size: 0.98rem; margin-bottom: 1.5rem; padding-bottom: 1.25rem; }
+      .product {
+        padding: 1.5rem 1.15rem 4.25rem;
+        align-items: flex-start;
+        padding-top: clamp(2.5rem, 12vh, 4.5rem);
+      }
+      .product-line { font-size: 1rem; max-width: none; }
+      .product-sub { font-size: 0.92rem; max-width: none; }
+      .product-install {
+        max-width: 100%;
+        width: 100%;
+        font-size: 0.78rem;
+      }
+      .product-ctas { width: 100%; }
+      .product-scroll { bottom: 1.25rem; }
+      .docs-group { margin-top: 2rem; }
+      pre {
+        padding: 0.85rem 0.9rem;
+        font-size: 0.68rem;
+      }
+      .arch-box { min-width: 0; width: 100%; }
+      .sidebar a { padding: 0.35rem 0 0.35rem 0.65rem; }
+    }
+
+    @media (max-width: 400px) {
+      .side-nav { grid-template-columns: 1fr; }
+      .side-nav ol { grid-template-columns: 1fr; }
+      .product-name { font-size: 1.85rem; }
     }
   </style>
 </head>
