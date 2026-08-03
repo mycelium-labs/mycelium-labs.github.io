@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mycelium Sandbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600;650&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div>
+        <h1 class="brand">Mycelium</h1>
+        <p class="tagline">Runtime guards for AI agents - at the tool boundary, before side effects land.</p>
+        <p class="lede">
+          Core transition envelope: dedupe retries, hold races, hard-block ambiguous crashes,
+          reconcile with the provider when you can prove what happened.
+          Drag tools, connect them, hit Run.
+        </p>
+      </div>
+      <div class="top-actions">
+        <button type="button" id="btnRun">Run</button>
+      </div>
+    </header>
+
+    <div class="workbench">
+      <aside class="palette" id="palette">
+        <div class="palette-bar">
+          <h2>Tools</h2>
+          <button type="button" class="secondary mini" id="btnTogglePalette" aria-expanded="false">
+            Show
+          </button>
+        </div>
+        <div class="palette-body" id="paletteBody" hidden>
+          <p class="hint palette-group">Safe to repeat <span class="class-name">read</span></p>
+          <button type="button" class="palette-item" draggable="true" data-tool="search_docs">search_docs</button>
+          <button type="button" class="palette-item" draggable="true" data-tool="lookup_order">lookup_order</button>
+          <p class="hint palette-group">Safe write <span class="class-name">idempotent_mutate</span></p>
+          <button type="button" class="palette-item" draggable="true" data-tool="set_status">set_status</button>
+          <p class="hint palette-group">Keyed write <span class="class-name">keyed_mutate</span></p>
+          <button type="button" class="palette-item" draggable="true" data-tool="charge_keyed">charge_keyed</button>
+          <p class="hint palette-group">Unsafe write <span class="class-name">non_idempotent_mutate</span></p>
+          <button type="button" class="palette-item" draggable="true" data-tool="charge">charge</button>
+          <button type="button" class="palette-item" draggable="true" data-tool="refund">refund</button>
+          <button type="button" class="palette-item" draggable="true" data-tool="ship_order">ship_order</button>
+          <button type="button" class="palette-item" draggable="true" data-tool="send_email">send_email</button>
+          <button type="button" class="palette-item" draggable="true" data-tool="create_ticket">create_ticket</button>
+          <button type="button" class="palette-item" draggable="true" data-tool="post_slack">post_slack</button>
+          <p class="hint palette-group">Can’t undo <span class="class-name">irreversible</span></p>
+          <button type="button" class="palette-item" draggable="true" data-tool="delete_account">delete_account</button>
+
+          <details class="yaml-box" id="yamlDetails">
+            <summary>YAML <span class="hint-inline">after run</span></summary>
+            <pre class="yaml" id="yamlBox"># run to generate mycelium.yaml</pre>
+          </details>
+        </div>
+      </aside>
+
+      <section class="canvas-wrap">
+        <div class="canvas-bar">
+          <span>Agent graph</span>
+          <button type="button" class="secondary mini" id="btnClear">Clear layout</button>
+        </div>
+        <div class="canvas" id="canvas">
+          <svg class="edges" id="edges" xmlns="http://www.w3.org/2000/svg"></svg>
+          <p class="canvas-empty" id="canvasEmpty">Add tools from the left, then drag from a right port to a left port</p>
+        </div>
+        <p class="hint connect-hint" id="connectHint" hidden>Drop on the next node (or its left port) to connect. Esc to cancel.</p>
+      </section>
+    </div>
+
+    <section class="panel compare-panel" id="comparePanel">
+      <h2 id="compareTitle">What happened?</h2>
+      <p class="hint" id="compareHint">
+        Same agent graph twice: once unprotected, once with Mycelium. Read the outcome in plain English first.
+      </p>
+      <div class="compare" id="compare">
+        <div class="col without">
+          <h3 id="titleWithout">Without Mycelium</h3>
+          <div class="story" id="storyWithout">
+            <p class="story-lead">Run a scenario to see the real-world effect.</p>
+          </div>
+          <pre class="cmd" id="cmdWithout" hidden></pre>
+          <details class="tech">
+            <summary>Technical detail</summary>
+            <pre class="log" id="logWithout">-</pre>
+          </details>
+        </div>
+        <div class="col with">
+          <h3 id="titleWith">With Mycelium</h3>
+          <div class="story" id="storyWith">
+            <p class="story-lead">Run a scenario to see the real-world effect.</p>
+          </div>
+          <pre class="cmd" id="cmdWith" hidden></pre>
+          <details class="tech">
+            <summary>Technical detail</summary>
+            <pre class="log" id="logWith">-</pre>
+          </details>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
