@@ -31,7 +31,7 @@ Langfuse and LangSmith are observability and tracing — they show what happened
 
 ## Links
 
-- Handbook / docs: https://mycelium-labs.github.io/try-mycelium/
+- Handbook / docs: https://mycelium-labs.github.io/
 - PyPI: https://pypi.org/project/mycelium-runtime/
 - Source: https://github.com/mycelium-labs/mycelium
 - API reference: https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md
