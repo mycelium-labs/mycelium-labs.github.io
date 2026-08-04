@@ -680,6 +680,7 @@
         <li><a href="#tools">Tool boundaries</a></li>
         <li><a href="#loops">Loop guard</a></li>
         <li><a href="#completion">Completion</a></li>
+        <li><a href="#scope">Scope guard</a></li>
         <li><a href="#telemetry">Telemetry</a></li>
       </ol>
       <p class="side-group">Reference</p>
@@ -796,6 +797,12 @@ mycelium run --config mycelium.yaml -- python -m my_agent</pre>
               subtasks refuse terminal (<code>CompletionRefusedError</code>); unmarked
               <strong>optional</strong> warn and allow. Gate via
               <code>complete_run()</code>, LangGraph END, or final-message wrap.
+            </li>
+            <li>
+              <strong>Scope escalation (AF-008)</strong> (opt-in): <code>scope_guard:</code> freezes the run
+              tool allowlist and re-checks every step so handoffs cannot silently add tools.
+              Soft <code>ToolBoundaryError</code> (<code>scope_escalation_tool</code>).
+              Entity/path stay on <code>@bounded</code>.
             </li>
             <li>
               <strong>Stale or broken context</strong> (opt-in): TTL cache
@@ -1124,6 +1131,10 @@ loop_guard:
   storage: file
   path: ./mycelium-loop.json
 
+# scope_guard:                # AF-008 opt-in — freeze run tool allowlist
+#   storage: file
+#   path: ./mycelium-scope.json
+
 # completion:                 # AF-007 opt-in
 #   storage: file
 #   path: ./mycelium-completion.json
@@ -1259,8 +1270,9 @@ def fetch_customer(customer_id: str) -> dict:
             </li>
           </ol>
           <p>
-            Wrapper order: <code>@loop_guard</code> → <code>@ledger</code> →
-            <code>@bounded</code> → <code>@protect</code>. Enabled by default in
+            Wrapper order: <code>@scope_guard</code> → <code>@loop_guard</code> →
+            <code>@ledger</code> → <code>@bounded</code> → <code>@protect</code>.
+            Enabled by default in
             <code>mycelium init --full</code> and <code>--minimal</code> (file storage).
             Thresholds by <code>side_effect_class</code> (read=5, idempotent_mutate=3,
             mutate/irreversible=2). Demo:
@@ -1332,6 +1344,45 @@ mycelium completion mark &lt;run_id&gt; send_email --status success</pre>
       </p>
     </section>
 
+    <section id="scope">
+      <h2>Scope guard (AF-008, opt-in)</h2>
+      <p>
+            Cascading permission: a narrow tool grant widens mid-run (handoff,
+            dynamic <code>registry.allow</code>, injected tools). Mycelium freezes
+            the run allowlist (from <code>registry</code> / <code>tools:</code>)
+            and re-checks every step. Entity/path/output stay on
+            <code>@bounded</code> — this gate is allowlist-only at the run level.
+          </p>
+          <ul>
+            <li>
+              Tool outside the frozen grant →
+              <code>ToolBoundaryError</code> (<code>violation=scope_escalation_tool</code>)
+              or optional hard <code>LedgerHardBlockError</code>
+            </li>
+            <li>
+              Re-bind may only <strong>narrow</strong> the allowlist — widen is refused
+            </li>
+          </ul>
+          <p>
+            Wrapper order: <code>@state_authority</code> → <code>@scope_guard</code> →
+            <code>@loop_guard</code> → <code>@ledger</code> → <code>@bounded</code> →
+            <code>@protect</code>. Demo:
+            <code>python examples/scope_guard_allowlist.py</code> from <code>sdk/</code>.
+          </p>
+      <pre>scope_guard:
+  storage: file
+  path: ./mycelium-scope.json
+  # allowed_tools: from_registry   # default; or all | [tool_a, tool_b]
+  # on_violation: soft             # soft | hard
+
+mycelium scope status &lt;run_id&gt; --config mycelium.yaml
+mycelium scope bind &lt;run_id&gt; --allowed-tools fetch_customer,search_docs</pre>
+      <p>
+        See the
+        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md#scope-guard-af-008-freeze-run-tool-allowlist">SDK README</a>.
+      </p>
+    </section>
+
     <section id="telemetry">
       <h2>Outcome telemetry &amp; DTTR (v1.20+)</h2>
       <p>
@@ -1372,6 +1423,10 @@ InMemoryLoopGuardStorage, FileLoopGuardStorage
 CompletionContract, CompletionRefusedError, wrap_final_message, gate_graph_end
 InMemoryCompletionStorage, FileCompletionStorage
 
+# Scope guard AF-008 (opt-in)
+ScopeGuard, ScopeGrant, scope_guard, scope_guard_sync, apply_scope_guard
+InMemoryScopeGuardStorage, FileScopeGuardStorage
+
 # Actions (core): duplicate side effects / transition envelope
 ledger, ledger_sync, task_ledger, task_ledger_sync
 ActionLedger, TaskLedger, StateFlush, AuditReceiptEmitter, verify_receipt
@@ -1398,7 +1453,8 @@ MyceliumConfig.apply_tool, apply_named_task             # explicit names (v1.12.
 mycelium run --config PATH -- python ...                 # auto-instrumentation (v1.12.0)
 mycelium transitions list|show|release|mark-dead   # operator triage + release (v1.15.0+)
 mycelium loops status|release                      # AF-003 loop-guard triage + release
-mycelium completion status|mark                    # AF-007 checklist triage</pre>
+mycelium completion status|mark                    # AF-007 checklist triage
+mycelium scope status|bind                         # AF-008 frozen allowlist triage</pre>
     </section>
 
     <section id="common-searches">
