@@ -1440,82 +1440,80 @@ mycelium scope bind &lt;run_id&gt; --allowed-tools fetch_customer,search_docs</p
       <h2>Failure-mode catalog (AF-001…AF-009)</h2>
       <p>
         Stable IDs used in the SDK README, changelogs, and this handbook.
-        <strong>Shipped</strong> = Mycelium has a deterministic guard today.
-        <strong>Roadmap</strong> = catalogued but not in the runtime (often
-        judgment-heavy or gateway-shaped). Full definitions also live in
+        Full definitions also live in
         <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md">sdk/docs/FAILURE_MODE_CATALOG.md</a>.
       </p>
       <table>
         <thead>
-          <tr><th>ID</th><th>Failure mode</th><th>Status</th><th>One line</th><th>Mycelium surface</th></tr>
+          <tr><th>ID</th><th>Failure mode</th><th>One line</th><th>Mycelium surface</th></tr>
         </thead>
         <tbody>
           <tr>
-            <td>AF-001</td><td>Hallucination cascade</td><td>Roadmap</td>
+            <td>AF-001</td><td>Hallucination cascade</td>
             <td>Acts on fabricated facts; errors compound across tool calls</td>
-            <td>— (judgment / evals)</td>
+            <td>(judgment / evals; not in SDK)</td>
           </tr>
           <tr>
-            <td>AF-002</td><td>Observability black hole</td><td><strong>Shipped</strong></td>
-            <td>No durable record — retries double-run; crashes leave unknown commit</td>
+            <td>AF-002</td><td>Observability black hole</td>
+            <td>No durable record: retries double-run; crashes leave unknown commit</td>
             <td>Transition envelope · ledgers · reconcile · receipts</td>
           </tr>
           <tr>
-            <td>AF-003</td><td>Infinite reasoning loops</td><td><strong>Shipped</strong> (v1.21.0)</td>
+            <td>AF-003</td><td>Infinite reasoning loops</td>
             <td>Same tool+args across new <code>tool_call_id</code>s; token burn / repeated effects</td>
             <td><code>loop_guard:</code> · <a href="#loops">Loop guard</a></td>
           </tr>
           <tr>
-            <td>AF-004</td><td>Tool misuse</td><td><strong>Shipped</strong></td>
+            <td>AF-004</td><td>Tool misuse</td>
             <td>Invalid inputs or out-of-scope tools; silent failure or wrong side effects</td>
             <td><code>@bounded</code> · registry · <a href="#tools">Tool boundaries</a></td>
           </tr>
           <tr>
-            <td>AF-005</td><td>Goal misalignment</td><td>Roadmap</td>
+            <td>AF-005</td><td>Goal misalignment</td>
             <td>Optimizes a proxy objective, not user intent</td>
-            <td>— (judgment / evals)</td>
+            <td>(judgment / evals; not in SDK)</td>
           </tr>
           <tr>
-            <td>AF-006</td><td>Context corruption</td><td><strong>Shipped</strong></td>
+            <td>AF-006</td><td>Context corruption</td>
             <td>Stale, truncated, or poisoned context → false picture of the world</td>
             <td><code>@protect</code> · Session · validators · <a href="#context">Context</a></td>
           </tr>
           <tr>
-            <td>AF-007</td><td>Premature termination</td><td><strong>Shipped</strong> (v1.23.0)</td>
+            <td>AF-007</td><td>Premature termination</td>
             <td>Stops early and presents partial work as complete</td>
             <td><code>completion:</code> · <a href="#completion">Completion</a></td>
           </tr>
           <tr>
-            <td>AF-008</td><td>Cascading permission</td><td><strong>Shipped</strong> (v1.25.0)</td>
+            <td>AF-008</td><td>Cascading permission</td>
             <td>Narrow grant escalates transitively beyond intent</td>
             <td><code>scope_guard:</code> · <a href="#scope-guard">Scope guard</a></td>
           </tr>
           <tr>
-            <td>AF-009</td><td>Instruction injection</td><td>Roadmap</td>
+            <td>AF-009</td><td>Instruction injection</td>
             <td>Untrusted content hijacks instructions</td>
-            <td>— (MCP gateway revisit)</td>
+            <td>(MCP gateway revisit; not in SDK)</td>
           </tr>
         </tbody>
       </table>
       <h3>Definitions</h3>
       <dl>
-        <dt>AF-001 — Hallucination cascade</dt>
-        <dd>The agent invents or misstates facts, then treats those fabrications as ground truth for later tool calls. Wrong lookup → wrong write → wrong confirmation. Needs a judge model — outside the deterministic ALLOW/BLOCK chassis.</dd>
-        <dt>AF-002 — Observability black hole</dt>
+        <dt>AF-001 Hallucination cascade</dt>
+        <dd>The agent invents or misstates facts, then treats those fabrications as ground truth for later tool calls. Wrong lookup → wrong write → wrong confirmation. Needs a judge model; outside the deterministic ALLOW/BLOCK chassis.</dd>
+        <dt>AF-002 Observability black hole</dt>
         <dd>Consequential actions leave no durable, trustworthy record. Framework redispatches double a payment/email/write; crashes leave unknown commit. Mycelium’s core answer is the transition envelope (not a tracing product).</dd>
-        <dt>AF-003 — Infinite reasoning loops</dt>
+        <dt>AF-003 Infinite reasoning loops</dt>
         <dd>The model mints a <em>new</em> <code>tool_call_id</code> each turn with the same tool + args. The ledger allows each call (different key); the loop guard halts the streak.</dd>
-        <dt>AF-004 — Tool misuse</dt>
+        <dt>AF-004 Tool misuse</dt>
         <dd>Invalid args, path/entity outside scope, bad return shapes, or tools not on the allowlist. Handled by <code>@bounded</code>, <code>ToolRegistry</code>, and <code>ToolRunner</code>.</dd>
-        <dt>AF-005 — Goal misalignment</dt>
-        <dd>The agent optimizes a proxy (close the ticket, finish a checklist) while missing the user’s real goal. Judgment/evals territory — AF-007 only gates an explicit host checklist.</dd>
-        <dt>AF-006 — Context corruption</dt>
+        <dt>AF-005 Goal misalignment</dt>
+        <dd>The agent optimizes a proxy (close the ticket, finish a checklist) while missing the user’s real goal. Judgment/evals territory; AF-007 only gates an explicit host checklist.</dd>
+        <dt>AF-006 Context corruption</dt>
         <dd>Stale tool state, broken transcripts, truncated history, or cache bleed between runs. Guarded by <code>@protect</code> / Session / message and history validators.</dd>
-        <dt>AF-007 — Premature termination</dt>
+        <dt>AF-007 Premature termination</dt>
         <dd>Emits “done” while a host-declared checklist is still open. Unmarked required → refuse; unmarked optional → warn and allow.</dd>
-        <dt>AF-008 — Cascading permission</dt>
+        <dt>AF-008 Cascading permission</dt>
         <dd>A narrow tool grant widens mid-run (handoff, dynamic registry allow). Scope guard freezes the run allowlist and re-checks every step. Entity/path stay on <code>@bounded</code>.</dd>
-        <dt>AF-009 — Instruction injection</dt>
+        <dt>AF-009 Instruction injection</dt>
         <dd>Untrusted content (tool output, RAG, pasted text) overrides system/developer instructions. Revisit at the MCP gateway for taint isolation.</dd>
       </dl>
     </section>
