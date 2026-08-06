@@ -29,9 +29,21 @@ mycelium run --config mycelium.yaml -- python -m my_app
 
 Langfuse and LangSmith are observability and tracing — they show what happened after an agent runs. Mycelium is runtime prevention: a transition ledger around tool execution (core), plus optional tool-boundary and message/history guards. Use both if you want traces and guards.
 
+## Try in 5 minutes
+
+https://mycelium-labs.github.io/try.html
+
+```
+pip install mycelium-runtime
+mycelium demo
+mycelium init
+mycelium run --config mycelium.yaml -- python -m my_app
+```
+
 ## Links
 
 - Handbook / docs: https://mycelium-labs.github.io/
+- Try in 5 minutes: https://mycelium-labs.github.io/try.html
 - PyPI: https://pypi.org/project/mycelium-runtime/
 - Source: https://github.com/mycelium-labs/mycelium
 - API reference: https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md

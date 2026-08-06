@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Try Mycelium in 5 minutes — reliability layer for AI agents</title>
+  <meta name="description" content="Install mycelium-runtime, run the demo, scaffold a ledgered tool, and wrap your agent in about five minutes. The reliability layer for AI agents.">
+  <link rel="canonical" href="https://mycelium-labs.github.io/try.html">
+  <meta property="og:title" content="Try Mycelium in 5 minutes">
+  <meta property="og:description" content="Install, demo, init, run — prove at-most-once tool calls before your agent double-charges.">
+  <meta property="og:url" content="https://mycelium-labs.github.io/try.html">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://mycelium-labs.github.io/og-image.png">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <style>
+    :root {
+      --ink: #181818;
+      --ink-soft: #3d3d3d;
+      --ink-muted: #6b6b6b;
+      --paper: #f8f7f5;
+      --wash: #f0efec;
+      --line: #d8d6d1;
+      --product: #1c1d14;
+      --product-ink: #eef0e2;
+      --product-muted: #a3a574;
+      --product-brand: #d8c45a;
+      --accent: #c4b04a;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      font-size: 17px;
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Helvetica Neue", Helvetica, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.55;
+    }
+
+    a { color: inherit; }
+
+    .top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.1rem 1.5rem;
+      font-size: 0.85rem;
+    }
+
+    .top a {
+      color: var(--product-muted);
+      text-decoration: none;
+    }
+
+    .top a:hover { color: var(--product-ink); }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      padding: 5.5rem 1.5rem 3.5rem;
+      color: var(--product-ink);
+      background:
+        radial-gradient(900px 480px at 88% -8%, rgba(216, 196, 90, 0.14), transparent 55%),
+        radial-gradient(700px 420px at -5% 110%, rgba(163, 165, 116, 0.12), transparent 50%),
+        linear-gradient(165deg, #14150f 0%, var(--product) 48%, #22241a 100%);
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(238, 240, 226, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(238, 240, 226, 0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 75%);
+      pointer-events: none;
+      animation: grid-drift 28s linear infinite;
+    }
+
+    @keyframes grid-drift {
+      from { transform: translateY(0); }
+      to { transform: translateY(48px); }
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 40rem;
+      width: 100%;
+      margin: 0 auto;
+      animation: rise 0.85s ease-out both;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .brand {
+      margin: 0 0 1.35rem;
+      font-size: clamp(2.4rem, 6vw, 3.4rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: var(--product-brand);
+    }
+
+    .headline {
+      margin: 0 0 0.85rem;
+      font-size: clamp(1.35rem, 3.2vw, 1.75rem);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--product-ink);
+      max-width: 22rem;
+    }
+
+    .support {
+      margin: 0 0 2rem;
+      font-size: 1rem;
+      color: var(--product-muted);
+      max-width: 28rem;
+      line-height: 1.5;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .btn-copy {
+      display: inline-block;
+      padding: 0.7rem 0.95rem;
+      background: #12130c;
+      border: 1px solid rgba(238, 240, 226, 0.2);
+      border-radius: 0;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 0.84rem;
+      color: var(--product-ink);
+      cursor: pointer;
+      transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+    }
+
+    .btn-copy:hover {
+      border-color: rgba(216, 196, 90, 0.45);
+      color: var(--product-brand);
+    }
+
+    .btn-copy.is-copied {
+      border-color: var(--product-brand);
+      color: var(--product-brand);
+    }
+
+    .btn-go {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.7rem 1rem;
+      background: var(--product-brand);
+      color: #1c1d14;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .btn-go:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 1.4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+      color: var(--product-muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      animation: bob 2.4s ease-in-out infinite;
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.7; }
+      50% { transform: translateX(-50%) translateY(5px); opacity: 1; }
+    }
+
+    .steps {
+      max-width: 42rem;
+      margin: 0 auto;
+      padding: 3.5rem 1.5rem 4.5rem;
+    }
+
+    .steps-kicker {
+      margin: 0 0 0.5rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      font-weight: 600;
+    }
+
+    .steps h2 {
+      margin: 0 0 2rem;
+      font-size: 1.55rem;
+      letter-spacing: -0.02em;
+      font-weight: 600;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 2.5rem 1fr;
+      gap: 0.85rem 1rem;
+      padding: 1.35rem 0;
+      border-top: 1px solid var(--line);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .step.is-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .step:last-of-type { border-bottom: 1px solid var(--line); }
+
+    .n {
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 1.1rem;
+      padding-top: 0.15rem;
+    }
+
+    .step h3 {
+      margin: 0 0 0.35rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .step p {
+      margin: 0 0 0.85rem;
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+    }
+
+    pre {
+      margin: 0;
+      padding: 0.85rem 1rem;
+      background: var(--product);
+      color: var(--product-ink);
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      border: 1px solid rgba(28, 29, 20, 0.08);
+    }
+
+    .note {
+      margin: 2rem 0 0;
+      padding: 1.1rem 1.15rem;
+      background: var(--wash);
+      border-left: 3px solid var(--accent);
+      font-size: 0.92rem;
+      color: var(--ink-soft);
+    }
+
+    .note strong { color: var(--ink); }
+
+    .foot {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem 1.75rem;
+      font-size: 0.9rem;
+    }
+
+    .foot a {
+      color: var(--ink-soft);
+      text-decoration: underline;
+      text-underline-offset: 0.18em;
+    }
+
+    .foot a:hover { color: var(--ink); }
+
+    @media (max-width: 560px) {
+      .hero { padding: 5rem 1.15rem 3.25rem; }
+      .headline { max-width: none; }
+      .btn-copy { width: 100%; text-align: left; }
+      .btn-go { width: 100%; justify-content: center; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+      .hero-inner, .step { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="top" aria-label="Site">
+      <a href="/">Handbook</a>
+      <a href="https://github.com/mycelium-labs/mycelium">GitHub</a>
+    </nav>
+
+    <div class="hero-inner">
+      <p class="brand">Mycelium</p>
+      <h1 class="headline">Try it in 5 minutes</h1>
+      <p class="support">
+        Install the reliability layer, watch a duplicate side effect get blocked,
+        then wire one tool. No framework rewrite.
+      </p>
+      <div class="cta-row">
+        <button
+          type="button"
+          class="btn-copy"
+          id="copy-install"
+          data-copy="pip install mycelium-runtime"
+          aria-label="Copy pip install mycelium-runtime"
+        >pip install mycelium-runtime</button>
+        <a class="btn-go" href="#steps">Start the steps <span aria-hidden="true">↓</span></a>
+      </div>
+    </div>
+
+    <a class="scroll-hint" href="#steps">5 minutes</a>
+  </header>
+
+  <main class="steps" id="steps">
+    <p class="steps-kicker">Path</p>
+    <h2>Four commands. One proof.</h2>
+
+    <article class="step">
+      <div class="n" aria-hidden="true">01</div>
+      <div>
+        <h3>Install</h3>
+        <p>Python 3.10+. Optional LangGraph extra maps runtime IDs for you.</p>
+        <pre>pip install mycelium-runtime
+pip install 'mycelium-runtime[langgraph]'   # optional</pre>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="n" aria-hidden="true">02</div>
+      <div>
+        <h3>See the bug get stopped</h3>
+        <p>
+          Feature tour: lease, hard-block, reconcile, operator release.
+          Optional Redis two-worker proof for the Cloud redispatch case.
+        </p>
+        <pre>mycelium demo
+mycelium demo --redis   # needs Redis + mycelium-runtime[redis]</pre>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="n" aria-hidden="true">03</div>
+      <div>
+        <h3>Scaffold one ledgered tool</h3>
+        <p>
+          Writes <code>mycelium.yaml</code> — transition + one mutating tool.
+          Fill in your callable path.
+        </p>
+        <pre>mycelium init
+# edit mycelium.yaml → tools.*.callable</pre>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="n" aria-hidden="true">04</div>
+      <div>
+        <h3>Run your agent under Mycelium</h3>
+        <p>
+          Zero-touch wrap: configured callables are guarded before your app starts.
+          Retries return stored results or hard-block — they do not double-fire.
+        </p>
+        <pre>mycelium run --config mycelium.yaml -- python -m my_app</pre>
+      </div>
+    </article>
+
+    <p class="note">
+      <strong>What you just enabled (AF-002):</strong> any tool, any provider —
+      prove run-or-not and enforce at-most-once. Not tracing. Prevention at the
+      tool boundary. Loop, scope, and completion guards are opt-in later.
+    </p>
+
+    <div class="foot">
+      <a href="/">Full handbook</a>
+      <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md">SDK README</a>
+      <a href="https://pypi.org/project/mycelium-runtime/">PyPI</a>
+      <a href="https://github.com/mycelium-labs/mycelium">Source</a>
+    </div>
+  </main>
+
+  <script>
+  (function () {
+    var btn = document.getElementById("copy-install");
+    if (btn && navigator.clipboard) {
+      var label = btn.textContent;
+      btn.addEventListener("click", function () {
+        navigator.clipboard.writeText(btn.getAttribute("data-copy") || "").then(function () {
+          btn.textContent = "Copied";
+          btn.classList.add("is-copied");
+          window.setTimeout(function () {
+            btn.textContent = label;
+            btn.classList.remove("is-copied");
+          }, 1200);
+        });
+      });
+    }
+
+    var steps = document.querySelectorAll(".step");
+    if (!("IntersectionObserver" in window)) {
+      steps.forEach(function (s) { s.classList.add("is-in"); });
+      return;
+    }
+    var io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-in");
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.15 }
+    );
+    steps.forEach(function (s) { io.observe(s); });
+  })();
+  </script>
+</body>
+</html>

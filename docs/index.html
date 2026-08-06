@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mycelium</title>
-  <meta name="description" content="Runtime guards for agent tools. Stops duplicate side effects on retry and redispatch, blocks bad tool calls, and keeps tool data fresh. Not a tracer. Prevention at the tool boundary.">
+  <meta name="description" content="The reliability layer for AI agents. Failure-mode catalog (AF-00N): stop duplicate side effects, loops, bad tool calls, stale context, early done, and scope creep. Not a tracer. Prevention at the tool boundary.">
   <meta name="keywords" content="agent reliability, runtime guards, LangGraph, CrewAI, duplicate tool execution, tool calling, idempotency, Python agents, mycelium-runtime">
   <meta name="author" content="Mycelium Labs">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
@@ -77,7 +77,7 @@
     "alternateName": "mycelium-runtime",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "OS Independent",
-    "description": "Runtime guards for agent tools. Stops duplicate side effects on retry and redispatch, blocks bad tool calls, and keeps tool data fresh. Framework-agnostic Python.",
+    "description": "The reliability layer for AI agents. AF-00N failure-mode catalog: duplicate side effects, loops, tool misuse, context corruption, premature termination, scope escalation. Framework-agnostic Python.",
     "url": "https://mycelium-labs.github.io/",
     "downloadUrl": "https://pypi.org/project/mycelium-runtime/",
     "codeRepository": "https://github.com/mycelium-labs/mycelium",
@@ -102,7 +102,7 @@
     "@type": "WebSite",
     "name": "Mycelium",
     "url": "https://mycelium-labs.github.io/",
-    "description": "Runtime guards for agent tools: duplicate-side-effect prevention, tool boundaries, and fresh tool data. Framework-agnostic Python.",
+    "description": "The reliability layer for AI agents. AF-00N failure-mode catalog: duplicate-side-effect prevention, tool boundaries, loops, completion, and scope. Framework-agnostic Python.",
     "publisher": {
       "@type": "Organization",
       "name": "Mycelium Labs",
@@ -648,11 +648,12 @@
 <header class="product">
   <div class="product-inner">
     <p class="product-name">Mycelium</p>
-    <p class="product-line">Runtime guards for agent tools.</p>
+    <p class="product-line">The reliability layer for AI agents.</p>
     <p class="product-sub">
-      Sits between your agent loop and your tools. Stops duplicate side effects
-      on retry and redispatch, blocks bad tool calls, and keeps tool data fresh.
-      Not a tracer. Prevention at the tool boundary.
+      Sits between your agent loop and your tools. The AF-00N failure-mode
+      catalog is the promise: stop duplicate side effects, loops, bad tool
+      calls, stale context, early “done,” and scope creep. Not a tracer.
+      Prevention at the tool boundary.
     </p>
     <div class="product-ctas">
       <button
@@ -663,6 +664,10 @@
         title="Click to copy"
         aria-label="Copy pip install mycelium-runtime"
       >pip install mycelium-runtime</button>
+      <a
+        class="product-sandbox"
+        href="/try.html"
+      >Try it in 5 minutes</a>
       <!-- Set SANDBOX_URL in the script at the bottom of this page after Azure deploy. -->
       <a
         class="product-sandbox"
@@ -675,7 +680,7 @@
     </div>
     <p class="product-meta">
       <a href="https://pepy.tech/project/mycelium-runtime"><img src="https://static.pepy.tech/badge/mycelium-runtime" alt="PyPI downloads"></a>
-      <a href="https://pypi.org/project/mycelium-runtime/"><img src="https://img.shields.io/pypi/v/mycelium-runtime.svg?cacheSeconds=60&amp;release=1.24.0" alt="PyPI version"></a>
+      <a href="https://pypi.org/project/mycelium-runtime/"><img src="https://img.shields.io/pypi/v/mycelium-runtime.svg?cacheSeconds=60&amp;release=1.26.2" alt="PyPI version"></a>
     </p>
   </div>
   <a class="product-scroll" href="#how-to-use">
@@ -691,6 +696,7 @@
     <nav class="side-nav">
       <p class="side-group">Start</p>
       <ol>
+        <li><a href="/try.html">Try in 5 minutes</a></li>
         <li><a href="#install">Install</a></li>
         <li><a href="#architecture">How it fits</a></li>
         <li><a href="#scope">What it does</a></li>
@@ -731,11 +737,12 @@
       <a href="https://github.com/mycelium-labs/mycelium"><img src="https://img.shields.io/github/license/mycelium-labs/mycelium.svg" alt="MIT license"></a>
     </p>
     <p class="lede">
-      Start with install and <code>mycelium init</code>. The core path is the transition
-      envelope (class + lease + terminal + gates) via YAML / <code>mycelium run</code>.
-      Opt-in guards come after. API and FAQ are at the end.
-      Latest <strong>v1.25.0</strong>. API-stable; breaking changes only at major versions.
-      AF-00N labels → <a href="#catalog">failure-mode catalog</a>.
+      Mycelium is the <strong>reliability layer for AI agents</strong>. The
+      <a href="#catalog">AF-00N failure-mode catalog</a> is the promise; start with
+      install and <code>mycelium init</code>. Flagship (AF-002): any tool, any
+      provider — prove run-or-not and enforce at-most-once. Opt-in catalog guards
+      come after. API and FAQ are at the end. Latest <strong>v1.26.2</strong>.
+      API-stable; breaking changes only at major versions.
     </p>
 
     <p class="docs-group" id="group-start">Start</p>
@@ -776,9 +783,9 @@ mycelium run --config mycelium.yaml -- python -m my_agent</pre>
       <h2>How it fits</h2>
       <p class="arch-caption">
             Mycelium sits between the agent loop and your tools: after the LLM returns
-            <code>tool_calls</code>, around execution. The transition envelope classifies each
-            tool, hashes a durable key per dispatch, and resolves duplicates through gates
-            and terminal outcomes: not by re-running blindly. Optional message/history
+            <code>tool_calls</code>, around execution. Catalog first: AF-002 proves
+            run-or-not and enforces at-most-once; other AF guards cover loops, bad
+            args, stale context, early done, and scope. Optional message/history
             guards run only when you call them before the next LLM turn.
             <strong>Do not redispatch unless the previous transition is proven terminal or
             safely recoverable.</strong>
@@ -799,21 +806,16 @@ mycelium run --config mycelium.yaml -- python -m my_agent</pre>
     <section id="scope">
       <h2>What it does</h2>
       <p>
-            Four problem areas. <code>mycelium init</code> / <code>mycelium run</code> center on the core path.
+            Catalog classes. <code>mycelium init</code> / <code>mycelium run</code> center on AF-002.
+            Envelope field names are implementation detail under the ledger — not the headline.
           </p>
           <ul>
             <li>
-              <strong>Duplicate side effects on retry</strong> (core): classify tools
-              (<code>read</code>, <code>keyed_mutate</code>, <code>non_idempotent_mutate</code>, …),
-              hash a durable transition key, hold a lease (auto-extended while ledgered tools
-              run), resolve by terminal state and gates
-              (poll / repair / soft-block reads; hard-block or reconcile writes).
-            </li>
-            <li>
-              <strong>Transition envelope fields</strong> (core): <code>side_effect_class</code> → <code>spendability</code> →
-              <code>side_effect_boundary</code> → <code>terminal_outcome</code> →
-              <code>external_operation_ref</code> → <code>retry_permission</code>.
-              Same system as above; payment/write needs the heavier set.
+              <strong>AF-002 Duplicate / untraceable side effects</strong> (core / flagship):
+              any tool, any provider — prove run-or-not and enforce at-most-once.
+              Durable ledger, lease, gates (poll / repair / soft-block reads; hard-block
+              or reconcile writes), operator release. Provider adapters (Gmail, Stripe-shaped
+              examples) are demos of that contract.
             </li>
             <li>
               <strong>Infinite action loops (AF-003)</strong> (opt-in): <code>loop_guard:</code> halts consecutive identical tool + args across
@@ -1010,14 +1012,14 @@ def send_payment(...): ...</pre>
       <code>UNKNOWN</code> / no ref / no reconciler → <code>LedgerHardBlockError</code>.
     </p>
     <p>
-      <strong>Gmail sent-log reconciler (v1.19.0):</strong> email sends fail after the
-      provider accepts the message but before the 250 OK reaches the agent. A
-      <code>GmailReconciler</code> checks the sent-log
-      (<code>users.messages.list(q='in:sent rfc822msgid:&lt;Message-ID&gt;')</code>):
-      one match → <code>COMPLETED</code>; zero matches → <code>UNKNOWN</code> (indexing
-      lag ; never a blind retry); two or more → <code>UNKNOWN</code> (duplicate may
-      already have occurred). The transition stays hard-blocked until reconcile or
-      operator release.
+      <strong>Flagship:</strong> any tool, any provider — prove run-or-not and
+      enforce at-most-once. Wire a read-only <code>Reconciler</code> for your
+      provider (Stripe-shaped example above). <strong>Gmail sent-log
+      (<code>GmailReconciler</code>)</strong> is a shipped <em>demo adapter</em>
+      of that contract, not the headline: one sent-log match →
+      <code>COMPLETED</code>; zero → <code>UNKNOWN</code> (indexing lag; never a
+      blind retry); two or more → <code>UNKNOWN</code>. Hard-block until reconcile
+      or operator release.
     </p>
       <pre>Boundary at failure     Terminal outcome        Redispatch
 not_crossed             FAILED_BEFORE_EFFECT    retry if policy allows

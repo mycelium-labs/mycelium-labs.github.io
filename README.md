@@ -1,6 +1,6 @@
 # mycelium-labs.github.io
 
-Public site for [Mycelium](https://github.com/mycelium-labs/mycelium) (PyPI: `mycelium-runtime`): handbook + interactive sandbox.
+Public site for [Mycelium](https://github.com/mycelium-labs/mycelium) (PyPI: `mycelium-runtime`): handbook, try-in-5-minutes page, interactive sandbox.
 
 The SDK package lives in **[mycelium-labs/mycelium](https://github.com/mycelium-labs/mycelium)**.
 
@@ -8,12 +8,14 @@ The SDK package lives in **[mycelium-labs/mycelium](https://github.com/mycelium-
 
 | Path | What |
 |------|------|
-| `docs/` | Static handbook. Deploys to [GitHub Pages](https://mycelium-labs.github.io/) on push to `main`. |
+| `docs/` | Static site. Deploys to [GitHub Pages](https://mycelium-labs.github.io/) on push to `main`. |
+| `docs/index.html` | Handbook |
+| `docs/try.html` | **Try it in 5 minutes** — install → demo → init → run |
 | `sandbox/` | Interactive no-LLM demo (FastAPI). Run locally or via Docker. |
 
 ## Handbook
 
-Edit `docs/index.html` (and companions). Push to `main` → Pages workflow uploads `docs/`.
+Edit `docs/index.html`, `docs/try.html`, and companions. Push to `main` → Pages workflow uploads `docs/`.
 
 ## Sandbox (local)
 
@@ -40,4 +42,5 @@ docker run --rm -p 7860:7860 mycelium-sandbox
 
 - SDK / PyPI package: https://github.com/mycelium-labs/mycelium
 - Handbook: https://mycelium-labs.github.io/
+- Try in 5 minutes: https://mycelium-labs.github.io/try.html
 - PyPI: https://pypi.org/project/mycelium-runtime/
