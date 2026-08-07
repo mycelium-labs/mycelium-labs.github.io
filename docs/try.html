@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Try Mycelium in 5 minutes — reliability layer for AI agents</title>
+  <title>Try Mycelium in 5 minutes: reliability layer for AI agents</title>
   <meta name="description" content="Install mycelium-runtime, run the demo, scaffold a ledgered tool, and wrap your agent in about five minutes. The reliability layer for AI agents.">
   <link rel="canonical" href="https://mycelium-labs.github.io/try.html">
   <meta property="og:title" content="Try Mycelium in 5 minutes">
-  <meta property="og:description" content="Install, demo, init, run — prove at-most-once tool calls before your agent double-charges.">
+  <meta property="og:description" content="Install, demo, init, run: prove at-most-once tool calls before your agent double-charges.">
   <meta property="og:url" content="https://mycelium-labs.github.io/try.html">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://mycelium-labs.github.io/og-image.png">
@@ -356,7 +356,7 @@
 
   <main class="steps" id="steps">
     <p class="steps-kicker">Path</p>
-    <h2>Four commands. One proof.</h2>
+    <h2>Four commands.</h2>
 
     <article class="step">
       <div class="n" aria-hidden="true">01</div>
@@ -386,7 +386,7 @@ mycelium demo --redis   # needs Redis + mycelium-runtime[redis]</pre>
       <div>
         <h3>Scaffold one ledgered tool</h3>
         <p>
-          Writes <code>mycelium.yaml</code> — transition + one mutating tool.
+          Writes <code>mycelium.yaml</code>: transition + one mutating tool.
           Fill in your callable path.
         </p>
         <pre>mycelium init
@@ -400,14 +400,14 @@ mycelium demo --redis   # needs Redis + mycelium-runtime[redis]</pre>
         <h3>Run your agent under Mycelium</h3>
         <p>
           Zero-touch wrap: configured callables are guarded before your app starts.
-          Retries return stored results or hard-block — they do not double-fire.
+          Retries return stored results or hard-block; they do not double-fire.
         </p>
         <pre>mycelium run --config mycelium.yaml -- python -m my_app</pre>
       </div>
     </article>
 
     <p class="note">
-      <strong>What you just enabled (AF-002):</strong> any tool, any provider —
+      <strong>What you just enabled (AF-002):</strong> any tool, any provider:
       prove run-or-not and enforce at-most-once. Not tracing. Prevention at the
       tool boundary. Loop, scope, and completion guards are opt-in later.
     </p>

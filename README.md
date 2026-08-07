@@ -10,7 +10,7 @@ The SDK package lives in **[mycelium-labs/mycelium](https://github.com/mycelium-
 |------|------|
 | `docs/` | Static site. Deploys to [GitHub Pages](https://mycelium-labs.github.io/) on push to `main`. |
 | `docs/index.html` | Handbook |
-| `docs/try.html` | **Try it in 5 minutes** — install → demo → init → run |
+| `docs/try.html` | **Try it in 5 minutes**: install → demo → init → run |
 | `sandbox/` | Interactive no-LLM demo (FastAPI). Run locally or via Docker. |
 
 ## Handbook
