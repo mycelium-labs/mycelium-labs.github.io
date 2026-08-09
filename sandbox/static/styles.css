@@ -100,6 +100,7 @@ body { padding: 1.25rem 1.25rem 3rem; }
 
 @media (min-width: 960px) {
   .workbench { grid-template-columns: 240px 1fr; align-items: stretch; }
+  .workbench.palette-collapsed { grid-template-columns: auto 1fr; }
 }
 
 .palette {
@@ -128,14 +129,12 @@ body { padding: 1.25rem 1.25rem 3rem; }
   font-weight: 550;
 }
 
-/* Desktop: tools always open; mobile toggle is for small screens */
-@media (min-width: 960px) {
-  #btnTogglePalette { display: none; }
-  .palette-body[hidden] { display: block !important; }
+/* Author styles must not override the UA [hidden] rule. */
+.palette-body[hidden] {
+  display: none !important;
 }
 
 @media (max-width: 959px) {
-  .palette-body[hidden] { display: none !important; }
   .canvas-wrap { min-height: 360px; }
   .canvas { min-height: 300px; }
   .tagline { font-size: 0.95rem; }

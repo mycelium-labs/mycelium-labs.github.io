@@ -1227,31 +1227,33 @@ function clearLayout() {
 function setupPaletteToggle() {
   const btn = document.getElementById("btnTogglePalette");
   const body = document.getElementById("paletteBody");
+  const workbench = document.querySelector(".workbench");
   if (!btn || !body) return;
   const mq = window.matchMedia("(min-width: 960px)");
 
   const sync = () => {
-    if (mq.matches) {
-      body.hidden = false;
-      btn.setAttribute("aria-expanded", "true");
-      btn.textContent = "Hide";
-      return;
-    }
     const open = btn.getAttribute("aria-expanded") === "true";
     body.hidden = !open;
     btn.textContent = open ? "Hide" : "Show";
+    if (workbench) {
+      workbench.classList.toggle("palette-collapsed", !open);
+    }
   };
 
   btn.addEventListener("click", () => {
-    if (mq.matches) return;
     const open = btn.getAttribute("aria-expanded") === "true";
     btn.setAttribute("aria-expanded", open ? "false" : "true");
     sync();
   });
 
-  // Mobile starts collapsed (aria-expanded=false in HTML).
-  mq.addEventListener("change", sync);
-  sync();
+  // Desktop starts open (tools usable immediately); mobile starts collapsed.
+  const applyBreakpointDefault = () => {
+    btn.setAttribute("aria-expanded", mq.matches ? "true" : "false");
+    sync();
+  };
+
+  mq.addEventListener("change", applyBreakpointDefault);
+  applyBreakpointDefault();
 }
 
 document.getElementById("btnRun").addEventListener("click", () => {
