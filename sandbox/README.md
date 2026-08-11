@@ -29,8 +29,8 @@ docker run --rm -p 7860:7860 mycelium-sandbox
 
 Portal-only steps (no Azure CLI): [DEPLOY.md](DEPLOY.md).
 
-After you have the Application Url, set `SANDBOX_URL` in `docs/index.html`
-so the handbook shows **Try interactive sandbox**.
+Live: handbook hero **Try interactive sandbox** → `/sandbox.html` → Azure.
+If the Container App URL changes, update `TARGET` in `docs/sandbox.html`.
 
 ## API
 
