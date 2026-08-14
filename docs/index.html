@@ -121,12 +121,12 @@
         <p>Each failure class maps to an explicit runtime surface. Configure only what your agent needs; inspect the evidence afterward.</p>
       </div>
       <div class="guardrail-list">
-        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-002-observability-black-hole"><code>AF-002</code><strong>Duplicate effects</strong><span>At-most-once execution and ambiguous-outcome reconciliation.</span><i>Action ledger</i></a>
-        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-003-infinite-reasoning-loops"><code>AF-003</code><strong>Runaway loops</strong><span>Recognize repeated action patterns with no progress.</span><i>Loop guard</i></a>
-        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-004-tool-misuse"><code>AF-004</code><strong>Unsafe tool calls</strong><span>Validate inputs, outputs, entities, paths, and allowlists.</span><i>Tool boundary</i></a>
-        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-006-context-corruption"><code>AF-006</code><strong>Stale context</strong><span>Protect message structure, history, and session state.</span><i>Context guards</i></a>
-        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-007-premature-termination"><code>AF-007</code><strong>Early “done”</strong><span>Require declared outcomes before a run can complete.</span><i>Completion contract</i></a>
-        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-008-cascading-permission"><code>AF-008</code><strong>Scope creep</strong><span>Freeze permissions and reject widening during a run.</span><i>Scope guard</i></a>
+        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-002-observability-black-hole"><code>AF-002</code><strong>Observability black hole</strong><span>Stop duplicate effects with at-most-once execution and ambiguous-outcome reconciliation.</span><i>Action ledger</i></a>
+        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-003-infinite-reasoning-loops"><code>AF-003</code><strong>Infinite reasoning loops</strong><span>Stop runaway loops by recognizing repeated action patterns with no progress.</span><i>Loop guard</i></a>
+        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-004-tool-misuse"><code>AF-004</code><strong>Tool misuse</strong><span>Refuse unsafe tool calls by validating inputs, outputs, entities, paths, and allowlists.</span><i>Tool boundary</i></a>
+        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-006-context-corruption"><code>AF-006</code><strong>Context corruption</strong><span>Prevent stale context from compromising messages, history, and session state.</span><i>Context guards</i></a>
+        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-007-premature-termination"><code>AF-007</code><strong>Premature termination</strong><span>Prevent early “done” by requiring declared outcomes before a run can complete.</span><i>Completion contract</i></a>
+        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-008-cascading-permission"><code>AF-008</code><strong>Cascading permission</strong><span>Stop scope creep by freezing permissions and rejecting widening during a run.</span><i>Scope guard</i></a>
       </div>
     </section>
 
