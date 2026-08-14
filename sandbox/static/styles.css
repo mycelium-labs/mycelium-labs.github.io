@@ -99,8 +99,13 @@ body { padding: 1.25rem 1.25rem 3rem; }
 }
 
 @media (min-width: 960px) {
-  .workbench { grid-template-columns: 240px 1fr; align-items: stretch; }
-  .workbench.palette-collapsed { grid-template-columns: auto 1fr; }
+  .workbench { grid-template-columns: 240px minmax(0, 1fr); align-items: stretch; }
+  /* Shrink the Tools column to the header chrome so the canvas reclaims space. */
+  .workbench.palette-collapsed { grid-template-columns: max-content minmax(0, 1fr); }
+  .workbench.palette-collapsed .palette {
+    width: max-content;
+    max-width: 100%;
+  }
 }
 
 .palette {

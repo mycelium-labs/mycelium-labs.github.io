@@ -1238,6 +1238,8 @@ function setupPaletteToggle() {
     if (workbench) {
       workbench.classList.toggle("palette-collapsed", !open);
     }
+    // Canvas width changes when the palette collapses; redraw wires.
+    requestAnimationFrame(() => drawEdges());
   };
 
   btn.addEventListener("click", () => {
@@ -1252,7 +1254,11 @@ function setupPaletteToggle() {
     sync();
   };
 
-  mq.addEventListener("change", applyBreakpointDefault);
+  if (typeof mq.addEventListener === "function") {
+    mq.addEventListener("change", applyBreakpointDefault);
+  } else if (typeof mq.addListener === "function") {
+    mq.addListener(applyBreakpointDefault);
+  }
   applyBreakpointDefault();
 }
 
