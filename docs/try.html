@@ -129,7 +129,10 @@
       line-height: 1.05;
       color: var(--product-brand);
     }
-    .brand img { width: 36px; height: 36px; flex: 0 0 auto; }
+    .brand-mark { width: 28px; height: 28px; flex: 0 0 auto; border: 1px solid currentColor; border-radius: 50%; position: relative; }
+    .brand-mark::before, .brand-mark::after { content: ""; position: absolute; left: -3px; top: 13px; height: 1px; width: 34px; background: currentColor; transform-origin: center; }
+    .brand-mark::before { transform: rotate(-50deg); }
+    .brand-mark::after { transform: rotate(-20deg); }
 
     .headline {
       margin: 0 0 0.85rem;
@@ -354,12 +357,12 @@
   <header class="hero">
     <nav class="top" aria-label="Site">
       <a href="/">Home</a>
-      <a href="https://github.com/mycelium-labs/mycelium/tree/main/sdk/docs">Docs</a>
+      <a href="/handbook.html">Docs</a>
       <a href="https://github.com/mycelium-labs/mycelium">GitHub</a>
     </nav>
 
     <div class="hero-inner">
-      <p class="brand"><img src="/favicon.svg?v=6" alt="">Mycelium</p>
+      <p class="brand"><span class="brand-mark" aria-hidden="true"></span>Mycelium</p>
       <h1 class="headline">Try it in 5 minutes</h1>
       <p class="support">
         Install the reliability layer, watch a duplicate side effect get blocked,
@@ -439,7 +442,7 @@ mycelium demo --redis   # needs Redis + mycelium-runtime[redis]</pre>
     </p>
 
     <div class="foot">
-      <a href="https://github.com/mycelium-labs/mycelium/tree/main/sdk/docs">Full handbook</a>
+      <a href="/handbook.html">Full handbook</a>
       <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md">SDK README</a>
       <a href="https://pypi.org/project/mycelium-runtime/">PyPI</a>
       <a href="https://github.com/mycelium-labs/mycelium">Source</a>
