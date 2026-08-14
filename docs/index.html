@@ -1,1736 +1,230 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mycelium</title>
-  <meta name="description" content="The reliability layer for AI agents. Failure-mode catalog (AF-00N): stop duplicate side effects, loops, bad tool calls, stale context, early done, and scope creep. Not a tracer. Prevention at the tool boundary.">
-  <meta name="keywords" content="agent reliability, runtime guards, LangGraph, CrewAI, duplicate tool execution, tool calling, idempotency, Python agents, mycelium-runtime">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mycelium — the reliability layer for AI agents</title>
+  <meta name="description" content="The second attempt never lands. Mycelium prevents duplicate side effects, loops, bad tool calls, stale context, early completion, and scope creep at the tool boundary.">
+  <meta name="keywords" content="agent reliability, AI guardrails, LangGraph, CrewAI, duplicate tool execution, idempotency, Python agents, mycelium-runtime">
   <meta name="author" content="Mycelium Labs">
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
-  <meta name="theme-color" content="#1c1d14">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+  <meta name="theme-color" content="#0A0E0B">
   <link rel="canonical" href="https://mycelium-labs.github.io/">
-  <link rel="icon" href="/favicon.svg?v=3" type="image/svg+xml">
+  <link rel="icon" href="/favicon.svg?v=4" type="image/svg+xml">
   <link rel="icon" href="/favicon-32.png?v=3" type="image/png" sizes="32x32">
-  <link rel="icon" href="/favicon-16.png?v=3" type="image/png" sizes="16x16">
-  <link rel="icon" href="/favicon-48.png?v=3" type="image/png" sizes="48x48">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3" sizes="180x180">
-  <meta property="og:title" content="Mycelium">
-  <meta property="og:description" content="Stops duplicate side effects on retry and redispatch, blocks bad tool calls, and keeps tool data fresh. Prevention at the tool boundary.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Instrument+Sans:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css?v=1">
+  <meta property="og:title" content="Mycelium — the second attempt never lands">
+  <meta property="og:description" content="One execution, one ledger, no matter how many times the loop fires.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mycelium-labs.github.io/">
   <meta property="og:image" content="https://mycelium-labs.github.io/og-image.png">
   <meta property="og:image:width" content="1536">
   <meta property="og:image:height" content="1024">
-  <meta property="og:image:alt" content="Mycelium">
+  <meta property="og:image:alt" content="Mycelium reliability layer">
   <meta property="og:site_name" content="Mycelium">
-  <meta property="og:locale" content="en_US">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mycelium — the second attempt never lands">
+  <meta name="twitter:description" content="Prevention at the tool boundary for AI agents.">
   <meta name="twitter:image" content="https://mycelium-labs.github.io/og-image.png">
-  <meta name="twitter:title" content="Mycelium">
-  <meta name="twitter:description" content="Stops duplicate side effects on retry and redispatch, blocks bad tool calls, and keeps tool data fresh.">
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How do I build reliable AI agents in production?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Most agent failures in production are not reasoning failures; they are runtime failures: a tool runs twice on retry, context goes stale, or the model emits an invalid tool call. Mycelium's core path wraps tool execution with a transition envelope (classify side effects, durable key, lease, gates). Opt-in helpers cover stale context and bad tool-call boundaries. Framework-agnostic. pip install mycelium-runtime"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How do I prevent duplicate tool execution in LangGraph?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Use a transition envelope, not only an idempotency key plus a cached result. Classify each tool (read vs keyed_mutate vs non_idempotent_mutate, etc.), enable transition: in mycelium.yaml, and use callable paths with mycelium run or @config.apply. Mycelium hashes a durable transition key, holds an execution lease, records terminal state, and resolves duplicates by gates: read tools poll or soft-block UNKNOWN; mutating tools hard-block or reconcile against the provider when you record external_operation_ref. LangGraph Cloud may redispatch long tools around ~180s (BG_JOB_HEARTBEAT sweep). pip install mycelium-runtime && mycelium demo"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Is Mycelium a replacement for Langfuse or LangSmith?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "No. Langfuse and LangSmith are observability and tracing tools. They show what happened after an agent runs. Mycelium is runtime prevention: a transition ledger around tool execution (core), plus optional tool-boundary and message/history guards. Use both if you want traces and guards."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How do I make AI agent tool calls idempotent in Python?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Wrap side-effect tools with a ledger that atomically claims request_id or tool_call_id before execution. On retry or redispatch, return the stored result. Mycelium provides @ledger_sync() for sync tools and @ledger() for async. Framework-agnostic; works with LangGraph, CrewAI, or plain Python loops."
-        }
-      }
-    ]
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Mycelium",
-    "alternateName": "mycelium-runtime",
-    "applicationCategory": "DeveloperApplication",
-    "operatingSystem": "OS Independent",
-    "description": "The reliability layer for AI agents. AF-00N failure-mode catalog: duplicate side effects, loops, tool misuse, context corruption, premature termination, scope escalation. Framework-agnostic Python.",
-    "url": "https://mycelium-labs.github.io/",
-    "downloadUrl": "https://pypi.org/project/mycelium-runtime/",
-    "codeRepository": "https://github.com/mycelium-labs/mycelium",
-    "programmingLanguage": "Python",
-    "license": "https://opensource.org/licenses/MIT",
-    "keywords": "AI agents, LangGraph, CrewAI, idempotency, duplicate tool execution, agent reliability, runtime guards, tool calling",
-    "author": {
-      "@type": "Organization",
-      "name": "Mycelium Labs",
-      "url": "https://github.com/mycelium-labs"
-    },
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Mycelium",
-    "url": "https://mycelium-labs.github.io/",
-    "description": "The reliability layer for AI agents. AF-00N failure-mode catalog: duplicate-side-effect prevention, tool boundaries, loops, completion, and scope. Framework-agnostic Python.",
-    "publisher": {
-      "@type": "Organization",
-      "name": "Mycelium Labs",
-      "url": "https://github.com/mycelium-labs"
-    }
-  }
-  </script>
-  <style>
-   :root {
-      --ink: #181818;
-      --ink-soft: #3d3d3d;
-      --ink-muted: #6b6b6b;
-      --ink-faint: #9a9a9a;
-      --paper: #f8f7f5;
-      --wash: #f0efec;
-      --line: #d8d6d1;
-      --sidebar: 10rem;
-      --product: #1c1d14;
-      --product-ink: #eef0e2;
-      --product-muted: #a3a574;
-      --product-brand: #d8c45a;
-    }
-
-    * { box-sizing: border-box; }
-
-    html {
-      font-size: 17px;
-      -webkit-font-smoothing: antialiased;
-      scroll-behavior: smooth;
-      overflow-x: clip;
-    }
-
-    body {
-      margin: 0;
-      font-family: "Helvetica Neue", Helvetica, "Segoe UI", sans-serif;
-      color: var(--ink);
-      background: var(--paper);
-      line-height: 1.55;
-      overflow-x: clip;
-    }
-
-    /* Product: full first screen; docs below on scroll */
-    .product {
-      position: relative;
-      background: var(--product);
-      color: var(--product-ink);
-      min-height: 100vh;
-      min-height: 100dvh;
-      display: flex;
-      align-items: center;
-      padding: 2rem 2rem 4.5rem;
-      box-sizing: border-box;
-    }
-
-    .product-inner {
-      max-width: 54rem;
-      width: 100%;
-      margin: 0 auto;
-    }
-
-    .product-name {
-      font-size: clamp(2.1rem, 4.5vw, 2.75rem);
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      line-height: 1.1;
-      margin: 0 0 0.85rem;
-      color: var(--product-brand);
-    }
-
-    .product-line {
-      font-size: 1.05rem;
-      font-weight: 500;
-      margin: 0 0 0.5rem;
-      color: var(--product-ink);
-      max-width: 28rem;
-    }
-
-    .product-sub {
-      margin: 0 0 1.75rem;
-      color: var(--product-muted);
-      font-size: 0.95rem;
-      max-width: 28rem;
-      line-height: 1.5;
-    }
-
-    .product-install {
-      margin: 0 0 1.25rem;
-      display: inline-block;
-      padding: 0.65rem 0.9rem;
-      background: #12130c;
-      border: 1px solid rgba(238, 240, 226, 0.18);
-      font-family: ui-monospace, Menlo, Consolas, monospace;
-      font-size: 0.82rem;
-      color: var(--product-ink);
-      cursor: pointer;
-      text-align: left;
-      line-height: 1.4;
-    }
-
-    .product-install:hover {
-      border-color: rgba(238, 240, 226, 0.35);
-    }
-
-    .product-install:focus-visible {
-      outline: 1px solid var(--product-brand);
-      outline-offset: 2px;
-    }
-
-    .product-install.is-copied {
-      color: var(--product-brand);
-    }
-
-    .product-ctas {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.85rem 1.25rem;
-      margin: 0 0 1.25rem;
-    }
-
-    .product-ctas .product-install {
-      margin: 0;
-    }
-
-    .product-sandbox {
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: var(--product-brand);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(216, 196, 90, 0.45);
-    }
-
-    .product-sandbox:hover {
-      border-bottom-color: var(--product-brand);
-    }
-
-    .product-sandbox[hidden] {
-      display: none;
-    }
-
-    .product-meta {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.65rem;
-      margin: 0;
-    }
-
-    .product-meta a {
-      line-height: 0;
-      opacity: 0.95;
-    }
-
-    .product-meta img {
-      height: 22px;
-      vertical-align: middle;
-    }
-
-    .product-scroll {
-      position: absolute;
-      left: 50%;
-      bottom: 1.75rem;
-      transform: translateX(-50%);
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.35rem;
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--product-muted);
-      text-decoration: none;
-      animation: product-blink 1.6s ease-in-out infinite;
-    }
-
-    .product-scroll:hover {
-      color: var(--product-ink);
-    }
-
-    .product-scroll span[aria-hidden="true"] {
-      font-size: 1.1rem;
-      line-height: 1;
-    }
-
-    @keyframes product-blink {
-      0%, 100% { opacity: 0.35; }
-      50% { opacity: 1; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .product-scroll { animation: none; opacity: 0.8; }
-    }
-
-    .docs-label {
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size: 0.62rem;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      margin: 0 0 0.75rem;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: var(--sidebar) 1fr;
-      gap: 3rem;
-      max-width: 54rem;
-      margin: 0 auto;
-      padding: 3rem 2rem 4rem;
-      scroll-margin-top: 1rem;
-    }
-
-    .sidebar {
-      position: sticky;
-      top: 2rem;
-      align-self: start;
-    }
-
-    .sidebar > p {
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size: 0.62rem;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      margin: 0 0 1rem;
-    }
-
-    .sidebar a {
-      color: var(--ink-muted);
-      text-decoration: none;
-      border-left: 2px solid transparent;
-      padding: 0.2rem 0 0.2rem 0.65rem;
-      margin-left: -0.65rem;
-      display: block;
-      transition: color 0.15s, border-color 0.15s, background 0.15s;
-    }
-
-    .sidebar a:hover {
-      color: var(--ink);
-      border-left-color: var(--line);
-    }
-
-    .sidebar a:active {
-      color: var(--ink);
-      background: var(--wash);
-      border-left-color: var(--ink);
-    }
-
-    .sidebar a.active {
-      color: var(--ink);
-      font-weight: 600;
-      background: var(--wash);
-      border-left-color: var(--ink);
-    }
-
-
-    .side-nav { margin: 0; }
-
-    .side-group {
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size: 0.62rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      margin: 1.15rem 0 0.45rem;
-    }
-
-    .side-nav > .side-group:first-child { margin-top: 0; }
-
-    .side-nav ol {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size: 0.78rem;
-      line-height: 1.5;
-    }
-
-    .side-nav li { margin-bottom: 0.35rem; }
-
-    #catalog table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.85rem;
-      margin: 1rem 0 1.5rem;
-    }
-    #catalog th, #catalog td {
-      text-align: left;
-      vertical-align: top;
-      padding: 0.45rem 0.55rem;
-      border-bottom: 1px solid var(--line, #ddd);
-    }
-    #catalog th {
-      font-size: 0.72rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--ink-faint, #666);
-    }
-    #catalog dl { margin: 0.75rem 0 0; }
-    #catalog dt {
-      font-weight: 600;
-      margin-top: 0.85rem;
-    }
-    #catalog dd {
-      margin: 0.25rem 0 0;
-      color: var(--ink-muted, #444);
-    }
-
-    .docs-group {
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      margin: 2.5rem 0 1rem;
-      padding-bottom: 0.4rem;
-      border-bottom: 1px solid var(--line);
-      scroll-margin-top: 2rem;
-    }
-
-    .docs-group:first-of-type { margin-top: 0.5rem; }
-
-    .main {
-      min-width: 0;
-      overflow-wrap: break-word;
-      word-wrap: break-word;
-    }
-
-    .main img,
-    .main svg {
-      max-width: 100%;
-      height: auto;
-    }
-
-    code {
-      word-break: break-word;
-    }
-
-    h1 {
-      font-size: 2.4rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      margin: 0 0 0.75rem;
-      line-height: 1.05;
-    }
-
-    .lede {
-      font-size: 1.05rem;
-      color: var(--ink-soft);
-      margin: 0 0 2rem;
-      padding-bottom: 1.75rem;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin: 0 0 1.25rem;
-    }
-
-    .badges a {
-      line-height: 0;
-    }
-
-    .badges img {
-      height: 20px;
-      vertical-align: middle;
-    }
-
-    section {
-      margin-bottom: 2.75rem;
-      scroll-margin-top: 2rem;
-    }
-
-    h2 {
-      font-size: 1.2rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin: 0 0 0.85rem;
-      padding-bottom: 0.45rem;
-      border-bottom: 1px solid var(--ink);
-    }
-
-    .faq-item {
-      margin-bottom: 1.25rem;
-    }
-
-    .faq-item h3 {
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin: 0 0 0.35rem;
-      color: var(--ink);
-    }
-
-    .faq-item p {
-      margin: 0;
-    }
-
-    .arch-flow {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0;
-      margin: 1rem 0 1.5rem;
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size: 0.78rem;
-    }
-
-    .arch-box {
-      border: 1px solid var(--ink);
-      padding: 0.55rem 1rem;
-      text-align: center;
-      min-width: 11rem;
-      background: var(--paper);
-      color: var(--ink);
-    }
-
-    .arch-box.guard {
-      background: var(--wash);
-      border-width: 2px;
-      font-weight: 600;
-    }
-
-    .arch-box.muted {
-      color: var(--ink-muted);
-      border-color: var(--line);
-      font-size: 0.72rem;
-    }
-
-    .arch-arrow {
-      color: var(--ink-faint);
-      line-height: 1;
-      padding: 0.2rem 0;
-      font-size: 0.85rem;
-    }
-
-    .arch-caption {
-      font-size: 0.82rem;
-      color: var(--ink-muted);
-      margin: 0 0 0.85rem;
-      max-width: 28rem;
-    }
-
-    @media (min-width: 520px) {
-      .arch-flow.horizontal {
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        gap: 0.35rem;
-      }
-      .arch-flow.horizontal .arch-arrow {
-        padding: 0 0.15rem;
-      }
-    }
-
-    p {
-      margin: 0 0 0.85rem;
-      color: var(--ink-soft);
-      font-size: 0.95rem;
-    }
-
-    pre {
-      margin: 0;
-      padding: 1rem 1.1rem;
-      background: var(--wash);
-      border: 1px solid var(--line);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      max-width: 100%;
-      font-family: ui-monospace, Menlo, Consolas, monospace;
-      font-size: 0.73rem;
-      line-height: 1.6;
-      color: var(--ink);
-    }
-
-    pre + pre { margin-top: 0.75rem; }
-
-    @media (max-width: 860px) {
-      .layout {
-        grid-template-columns: 1fr;
-        gap: 1.75rem;
-        padding: 2.25rem 1.5rem 3rem;
-      }
-      .sidebar {
-        position: static;
-        padding-bottom: 1.1rem;
-        border-bottom: 1px solid var(--line);
-      }
-      .side-nav .side-group { margin-top: 0.85rem; }
-      .side-nav > .side-group:first-child { margin-top: 0; }
-      .side-nav ol {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.25rem 1rem;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .layout { padding: 1.75rem 1.1rem 2.75rem; }
-      .side-nav ol { gap: 0.25rem 0.85rem; }
-      h1 { font-size: 1.7rem; letter-spacing: -0.02em; }
-      .lede { font-size: 0.98rem; margin-bottom: 1.5rem; padding-bottom: 1.25rem; }
-      .product {
-        padding: 1.5rem 1.15rem 4.25rem;
-        align-items: flex-start;
-        padding-top: clamp(2.5rem, 12vh, 4.5rem);
-      }
-      .product-line { font-size: 1rem; max-width: none; }
-      .product-sub { font-size: 0.92rem; max-width: none; }
-      .product-install {
-        max-width: 100%;
-        width: 100%;
-        font-size: 0.78rem;
-      }
-      .product-ctas { width: 100%; }
-      .product-scroll { bottom: 1.25rem; }
-      .docs-group { margin-top: 2rem; }
-      pre {
-        padding: 0.85rem 0.9rem;
-        font-size: 0.68rem;
-      }
-      .arch-box { min-width: 0; width: 100%; }
-      .sidebar a { padding: 0.35rem 0 0.35rem 0.65rem; }
-    }
-
-    @media (max-width: 400px) {
-      .side-nav { grid-template-columns: 1fr; }
-      .side-nav ol { grid-template-columns: 1fr; }
-      .product-name { font-size: 1.85rem; }
-    }
-  </style>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Mycelium","alternateName":"mycelium-runtime","applicationCategory":"DeveloperApplication","operatingSystem":"OS Independent","description":"The reliability layer for AI agents: prevention at the tool boundary.","url":"https://mycelium-labs.github.io/","downloadUrl":"https://pypi.org/project/mycelium-runtime/","codeRepository":"https://github.com/mycelium-labs/mycelium","programmingLanguage":"Python","license":"https://opensource.org/licenses/MIT","author":{"@type":"Organization","name":"Mycelium Labs"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
 </head>
-<body>
-
-<header class="product">
-  <div class="product-inner">
-    <p class="product-name">Mycelium</p>
-    <p class="product-line">The reliability layer for AI agents.</p>
-    <p class="product-sub">
-      Sits between your agent loop and your tools. The AF-00N failure-mode
-      catalog is the promise: stop duplicate side effects, loops, bad tool
-      calls, stale context, early “done,” and scope creep. Not a tracer.
-      Prevention at the tool boundary.
-    </p>
-    <div class="product-ctas">
-      <button
-        type="button"
-        class="product-install"
-        id="product-install"
-        data-copy="pip install mycelium-runtime"
-        title="Click to copy"
-        aria-label="Copy pip install mycelium-runtime"
-      >pip install mycelium-runtime</button>
-      <a
-        class="product-sandbox"
-        href="/try.html"
-      >Try it in 5 minutes</a>
-      <a
-        class="product-sandbox"
-        id="product-sandbox"
-        href="/sandbox.html"
-        target="_blank"
-        rel="noopener"
-        hidden
-      >Try interactive sandbox</a>
+<body class="boundary-page">
+  <a class="skip-link" href="#moment">Skip to the demonstration</a>
+  <nav class="site-nav" aria-label="Primary navigation">
+    <a class="nav-mark" href="/" aria-label="Mycelium home">mycelium<span aria-hidden="true">/</span></a>
+    <div class="nav-links">
+      <a href="/try.html">Try</a><a href="/sandbox.html">Sandbox</a>
+      <a href="https://github.com/mycelium-labs/mycelium/tree/main/sdk/docs">Docs</a>
+      <a href="https://github.com/mycelium-labs/mycelium">GitHub</a>
     </div>
-    <p class="product-meta">
-      <a href="https://pepy.tech/project/mycelium-runtime"><img src="https://static.pepy.tech/badge/mycelium-runtime" alt="PyPI downloads"></a>
-      <a href="https://pypi.org/project/mycelium-runtime/"><img src="https://img.shields.io/badge/pypi-v1.28.0-blue.svg" alt="PyPI version 1.28.0"></a>
-    </p>
-  </div>
-  <a class="product-scroll" href="#how-to-use">
-    How to use
-    <span aria-hidden="true">∨</span>
-  </a>
-</header>
+  </nav>
 
-<div class="layout" id="how-to-use">
+  <header class="hero" aria-labelledby="hero-title">
+    <svg class="hero-field" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+      <defs>
+        <path id="root-a" d="M80 0 C110 145 250 170 330 270 S475 420 720 560"/>
+        <path id="root-b" d="M230 0 C180 130 360 180 390 300 S540 465 720 560"/>
+        <path id="root-c" d="M390 0 C450 125 350 205 485 315 S600 480 720 560"/>
+        <path id="root-d" d="M555 0 C505 160 645 210 590 335 S675 485 720 560"/>
+        <path id="root-e" d="M710 0 C670 145 785 250 700 350 S750 475 720 560"/>
+        <path id="root-f" d="M875 0 C930 160 790 220 850 330 S760 475 720 560"/>
+        <path id="root-g" d="M1040 0 C970 145 1090 235 940 345 S825 500 720 560"/>
+        <path id="root-h" d="M1210 0 C1260 165 1080 205 1050 315 S900 450 720 560"/>
+        <path id="root-i" d="M1390 0 C1290 150 1360 245 1140 340 S910 500 720 560"/>
+        <filter id="pulse-glow" x="-400%" y="-400%" width="800%" height="800%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <g class="thread-field">
+        <use class="thread" href="#root-a"/><use class="thread" href="#root-b"/><use class="thread" href="#root-c"/>
+        <use class="thread" href="#root-d"/><use class="thread" href="#root-e"/><use class="thread" href="#root-f"/>
+        <use class="thread" href="#root-g"/><use class="thread" href="#root-h"/><use class="thread" href="#root-i"/>
+        <use class="thread thread--dense" href="#root-a" transform="translate(76 0) scale(.93 1)"/>
+        <use class="thread thread--dense" href="#root-b" transform="translate(-92 0) scale(1.08 1)"/>
+        <use class="thread" href="#root-c" transform="translate(118 0) scale(.82 1)"/>
+        <use class="thread thread--dense" href="#root-d" transform="translate(-125 0) scale(1.16 1)"/>
+        <use class="thread" href="#root-e" transform="translate(42 0) scale(.94 1)"/>
+        <use class="thread thread--dense" href="#root-f" transform="translate(120 0) scale(.86 1)"/>
+        <use class="thread" href="#root-g" transform="translate(-105 0) scale(1.1 1)"/>
+        <use class="thread thread--dense" href="#root-h" transform="translate(80 0) scale(.9 1)"/>
+        <use class="thread" href="#root-i" transform="translate(-75 0) scale(1.05 1)"/>
+        <use class="thread thread--dense" href="#root-a" transform="translate(210 0) scale(.74 1)"/>
+        <use class="thread thread--dense" href="#root-b" transform="translate(155 0) scale(.78 1)"/>
+        <use class="thread" href="#root-c" transform="translate(-170 0) scale(1.23 1)"/>
+        <use class="thread thread--dense" href="#root-d" transform="translate(205 0) scale(.72 1)"/>
+        <use class="thread" href="#root-f" transform="translate(-180 0) scale(1.2 1)"/>
+        <use class="thread thread--dense" href="#root-g" transform="translate(175 0) scale(.8 1)"/>
+        <use class="thread thread--dense" href="#root-h" transform="translate(-145 0) scale(1.14 1)"/>
+        <use class="thread" href="#root-i" transform="translate(-210 0) scale(1.18 1)"/>
+        <use class="thread thread--dense" href="#root-e" transform="translate(-100 0) scale(1.12 1)"/>
+        <use class="thread thread--dense" href="#root-a" transform="translate(330 0) scale(.55 1)"/>
+      </g>
+      <line class="seam seam--glow" x1="0" x2="1440" y1="560" y2="560"/>
+      <line class="seam seam--solid" x1="0" x2="1440" y1="560" y2="560"/>
+      <circle class="pulse pulse--accepted" r="3" aria-hidden="true">
+        <animateMotion dur="9s" repeatCount="indefinite" path="M720 0 C670 145 785 250 700 350 S750 475 720 560" keyTimes="0;.02;.31;.35;1" keyPoints="0;0;1;1;1" calcMode="linear"/>
+        <animate attributeName="opacity" dur="9s" repeatCount="indefinite" values="0;1;1;0;0" keyTimes="0;.02;.31;.35;1"/>
+      </circle>
+      <circle class="pulse pulse--denied" r="3" aria-hidden="true">
+        <animateMotion dur="9s" repeatCount="indefinite" path="M720 0 C670 145 785 250 700 350 S750 475 720 560" keyTimes="0;.13;.15;.44;.49;1" keyPoints="0;0;0;1;1;1" calcMode="linear"/>
+        <animate attributeName="opacity" dur="9s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;.13;.15;.44;.49;1"/>
+      </circle>
+      <circle class="pulse pulse--static" cx="720" cy="557" r="3" aria-hidden="true"/>
+    </svg>
+    <div class="hero-radiance" aria-hidden="true"></div>
+    <div class="hero-copy">
+      <p class="hero-kicker">reliability at the tool boundary</p>
+      <div class="wordmark-wrap" aria-label="Mycelium">
+        <h1 class="wordmark" id="hero-title">Mycelium</h1>
+        <span class="wordmark-root" aria-hidden="true">Mycelium</span>
+      </div>
+      <div class="hero-promise">
+        <p class="headline">The second attempt never lands.</p>
+        <p class="support">Mycelium holds the tool boundary for AI agents: one execution, one ledger, no matter how many times the loop fires.</p>
+        <div class="cta-row">
+          <button class="cta cta-install" type="button" data-copy="pip install mycelium-runtime"><code>pip install mycelium-runtime</code><span class="copy-state" aria-live="polite"></span></button>
+          <a class="cta cta-try" href="/try.html">Try it in 5 minutes <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </div>
+    <p class="ledger-line"><span aria-hidden="true">●</span> af-002 · duplicate suppressed · ledger sealed</p>
+  </header>
 
-  <aside class="sidebar">
-    <p>How to use</p>
-    <nav class="side-nav">
-      <p class="side-group">Start</p>
-      <ol>
-        <li><a href="/try.html">Try in 5 minutes</a></li>
-        <li><a href="#install">Install</a></li>
-        <li><a href="#architecture">How it fits</a></li>
-        <li><a href="#scope">What it does</a></li>
-      </ol>
-      <p class="side-group">Core</p>
-      <ol>
-        <li><a href="#actions">Actions</a></li>
-        <li><a href="#resolution">Resolution</a></li>
-        <li><a href="#envelope">Envelope</a></li>
-        <li><a href="#yaml">YAML</a></li>
-      </ol>
-      <p class="side-group">Opt-in</p>
-      <ol>
-        <li><a href="#context">Context</a></li>
-        <li><a href="#tools">Tool boundaries</a></li>
-        <li><a href="#loops">Loop guard</a></li>
-        <li><a href="#completion">Completion</a></li>
-        <li><a href="#scope-guard">Scope guard</a></li>
-        <li><a href="#telemetry">Telemetry</a></li>
-      </ol>
-      <p class="side-group">Reference</p>
-      <ol>
-        <li><a href="#catalog">Failure catalog</a></li>
-        <li><a href="#api">API</a></li>
-        <li><a href="#common-searches">FAQ</a></li>
-      </ol>
-    </nav>
-  </aside>
+  <main>
+    <section class="moment section-dark" id="moment" data-reveal>
+      <div class="section-shell moment-grid">
+        <div>
+          <p class="eyebrow">The moment</p>
+          <h2>This is the call<br>you’re afraid of.</h2>
+          <p class="section-intro">The provider timed out. The agent retries. The customer should not pay for your uncertainty.</p>
+        </div>
+        <pre class="terminal" aria-label="Duplicate charge suppression example"><code><span class="dim">14:07:03.112</span> agent → charge_customer(order="ORD-42", amount=89)
+<span class="dim">14:07:03.114</span> ledger   claim  <span class="ok">ACQUIRED</span>
+<span class="dim">14:07:03.721</span> provider charge <span class="bone">$89.00</span>
+<span class="dim">14:07:33.722</span> network  timeout after provider commit
 
-  <div class="main">
+<span class="dim">14:07:34.931</span> agent → charge_customer(order="ORD-42", amount=89)
+<span class="dim">14:07:34.933</span> ledger   same request_id found
+<span class="dim">14:07:34.934</span> boundary <span class="denied">AF-002 · DUPLICATE SUPPRESSED</span>
+<span class="dim">14:07:34.935</span> receipt  prior result returned
 
-    <p class="docs-label">How to use</p>
-    <h1>Start with install, then the core path</h1>
-    <p class="badges">
-      <a href="https://pypi.org/project/mycelium-runtime/"><img src="https://img.shields.io/badge/pypi-v1.28.0-blue.svg" alt="PyPI version 1.28.0"></a>
-      <a href="https://pypi.org/project/mycelium-runtime/"><img src="https://img.shields.io/pypi/pyversions/mycelium-runtime.svg" alt="Python versions"></a>
-      <a href="https://pepy.tech/project/mycelium-runtime"><img src="https://static.pepy.tech/badge/mycelium-runtime" alt="PyPI downloads"></a>
-      <a href="https://github.com/mycelium-labs/mycelium"><img src="https://img.shields.io/github/license/mycelium-labs/mycelium.svg" alt="MIT license"></a>
-    </p>
-    <p class="lede">
-      Mycelium is the <strong>reliability layer for AI agents</strong>. The
-      <a href="#catalog">AF-00N failure-mode catalog</a> is the promise; start with
-      install and <code>mycelium init</code>. Flagship (AF-002): any tool, any
-      provider — prove run-or-not and enforce at-most-once. Opt-in catalog guards
-      come after. API and FAQ are at the end. Latest <strong>v1.28.0</strong>.
-      API-stable; breaking changes only at major versions.
-    </p>
-
-    <p class="docs-group" id="group-start">Start</p>
-
-    <section id="install">
-      <h2>Install</h2>
-      <p>Requires Python 3.10 or later.</p>
-      <pre>pip install mycelium-runtime
-pip install 'mycelium-runtime[langgraph]'   # automatic ToolRuntime IDs
-pip install 'mycelium-runtime[redis]'   # optional
-pip install 'mycelium-runtime[postgres]'
-
-mycelium init              # on-ramp (transition + one ledgered tool)
-mycelium init --full       # reference: all guards (fill TODOs; not default)
-mycelium init --minimal    # smaller multi-guard scaffold
-mycelium demo              # feature tour: unguarded vs ledgered + gates / hard-block / release
-mycelium demo --redis      # optional Cloud-style 2-worker Redis proof
-mycelium run --config mycelium.yaml -- python -m my_agent</pre>
-      <p>
-        <strong>Zero-touch command mode:</strong> add a unique
-        <code>callable: module:function</code> to every configured tool/task.
-        <code>mycelium run</code> validates and wraps those functions before
-        the application starts, then preserves native argv, signals, working
-        directory, and exit status. Existing <code>@config.apply</code> and
-        <code>config.instrument</code> flows remain supported.
-      </p>
-      <p>
-        <strong>LangGraph runtime IDs (v1.11.0):</strong> the default LangGraph on-ramp enables
-        <code>integrations.langgraph</code>. With command mode or <code>@config.apply</code>,
-        Mycelium adds LangGraph’s trusted, hidden <code>ToolRuntime</code>
-        parameter and maps its tool-call, thread, run, and node identifiers into
-        the generic transition key. Explicit IDs still override captured values;
-        custom tool executors may pass them manually.
-      </p>
+<span class="ok">executions: 1</span>  <span class="bone">charges: 1</span></code></pre>
+      </div>
     </section>
 
-    <section id="architecture">
-      <h2>How it fits</h2>
-      <p class="arch-caption">
-            Mycelium sits between the agent loop and your tools: after the LLM returns
-            <code>tool_calls</code>, around execution. Catalog first: AF-002 proves
-            run-or-not and enforces at-most-once; other AF guards cover loops, bad
-            args, stale context, early done, and scope. Optional message/history
-            guards run only when you call them before the next LLM turn.
-            <strong>Do not redispatch unless the previous transition is proven terminal or
-            safely recoverable.</strong>
-            Not a framework. Not observability.
-            <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md#what-mycelium-does-not-do">Not an approvals inbox, not hosted observability, not on-chain trails, not a webhook hub, not a recovery tool. Full boundaries &amp; compose line.</a>
-          </p>
-          <div class="arch-flow">
-            <div class="arch-box">Your agent loop<br><span style="font-weight:400;color:var(--ink-muted)">LangGraph · CrewAI · Python</span></div>
-            <div class="arch-arrow">↓</div>
-            <div class="arch-box">LLM returns tool_calls</div>
-            <div class="arch-arrow">↓</div>
-            <div class="arch-box guard">Mycelium guards<br><span style="font-weight:400;font-size:0.72rem">claim · gate · lease · settle</span></div>
-            <div class="arch-arrow">↓</div>
-            <div class="arch-box">Side-effect tools<br><span style="font-weight:400;color:var(--ink-muted)">payments · email · APIs</span></div>
-          </div>
-        </section>
-
-    <section id="scope">
-      <h2>What it does</h2>
-      <p>
-            Catalog classes. <code>mycelium init</code> / <code>mycelium run</code> center on AF-002.
-            Envelope field names are implementation detail under the ledger — not the headline.
-          </p>
-          <ul>
-            <li>
-              <strong>AF-002 Observability black hole</strong> (core / flagship):
-              any tool, any provider — prove run-or-not and enforce at-most-once.
-              Durable ledger, lease, gates (poll / repair / soft-block reads; hard-block
-              or reconcile writes), operator release. Provider adapters (Gmail, Stripe-shaped
-              examples) are demos of that contract.
-            </li>
-            <li>
-              <strong>Infinite action loops (AF-003)</strong> (opt-in): <code>loop_guard:</code> halts consecutive identical tool + args across
-              <em>new</em> <code>tool_call_id</code>s (the ledger only dedupes the same
-              dispatch). Soft <code>ToolBoundaryError</code>, then hard
-              <code>LedgerHardBlockError</code> for the whole run; operator
-              <code>mycelium loops release</code>.
-            </li>
-            <li>
-              <strong>Premature termination (AF-007)</strong> (opt-in): <code>completion:</code> host checklist; unmarked <strong>required</strong>
-              subtasks refuse terminal (<code>CompletionRefusedError</code>); unmarked
-              <strong>optional</strong> warn and allow. Gate via
-              <code>complete_run()</code>, LangGraph END, or final-message wrap.
-            </li>
-            <li>
-              <strong>Scope escalation (AF-008)</strong> (opt-in): <code>scope_guard:</code> freezes the run
-              tool allowlist and re-checks every step so handoffs cannot silently add tools.
-              Soft <code>ToolBoundaryError</code> (<code>scope_escalation_tool</code>).
-              Entity/path stay on <code>@bounded</code>.
-            </li>
-            <li>
-              <strong>Stale or broken context</strong> (opt-in): TTL cache
-              (<code>@protect</code> / <code>Session</code>); optional
-              <code>MessageValidator</code> / <code>HistoryGuard</code> before the next LLM turn.
-            </li>
-            <li>
-              <strong>Bad tool calls</strong> (opt-in): <code>@bounded</code> input/output/scope checks; optional
-              <code>ToolRegistry</code> allowlist: block before the tool runs.
-            </li>
-          </ul>
-        </section>
-
-    <p class="docs-group" id="group-core">Core</p>
-
-    <section id="actions">
-      <h2>Actions (core)</h2>
-      <p>
-            Transition ledger for duplicate side-effect prevention: the default
-            <code>mycelium init</code> / <code>mycelium run</code> path.
-          </p>
-          <p>
-            Each ledgered tool gets a <code>side_effect_class</code> and a
-            <code>transition_key</code> (scope, tool, args, class, policy version).
-            Duplicate dispatches resolve through <a href="#resolution">gates</a> and
-            terminal outcomes: not blind re-execution.
-          </p>
-      <pre>from mycelium import load_config
-
-config = load_config("mycelium.yaml")
-
-@config.apply
-def send_payment(amount: float, recipient: str) -> dict:
-    return gateway.charge(amount, recipient)
-
-@config.apply
-def search_docs(query: str) -> dict:
-    return {"query": query, "hits": 3}
-
-# read: second call polls or soft-blocks UNKNOWN (safe retry by default)
-search_docs(query="billing", tool_call_id="call_read")
-
-# payment: duplicate resolves existing transition; won't charge twice
-send_payment(amount=100.0, recipient="acct_123", tool_call_id="call_pay")</pre>
-      <pre>from mycelium import task_ledger_sync
-
-@task_ledger_sync(id_from=["invoice_id"])
-def process_invoice(invoice_id: str, amount: float) -> dict:
-    ...
-    return {"invoice_id": invoice_id, "status": "paid"}
-
-process_invoice(invoice_id="inv-42", amount=100.0)
-process_invoice(invoice_id="inv-42", amount=200.0)  # returns first result</pre>
-      <p>
-        <strong>Manual integration (v1.20.1):</strong> if you own the tool runner and
-        can't take a decorator or YAML wrap (custom loop, PROCEED/SKIP-style host), call
-        the two phases yourself: <code>claim_side_effecting(...)</code> then
-        <code>complete(...)</code> / <code>fail(...)</code> ; same ledger, same gates,
-        same hard-block rules. There is no YAML switch; see the SDK README's
-        <em>Manual integration (claim → execute → complete)</em> section.
-      </p>
-      <p>
-        <strong>Webhook event dedupe (v1.20.3):</strong> the same ledger can claim inbound
-        provider events on the provider event id (Stripe <code>event.id</code> /
-        GitHub <code>X-GitHub-Delivery</code> / Twilio SID) for at-most-once handler side
-        effects. Recipe + runnable examples:
-        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/examples/webhooks/stripe.md">sdk/examples/webhooks/</a>.
-      </p>
+    <section class="catalog section-dark" id="catalog" data-reveal>
+      <div class="section-shell">
+        <p class="eyebrow">The AF-00N field guide</p>
+        <h2>Know what you’re stopping.</h2>
+        <p class="section-intro">Six production failures. Each one has a boundary, a record, and a refusal mode.</p>
+        <div class="af-list" role="list">
+          <a class="af-row" role="listitem" href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-002-observability-black-hole"><code class="af">AF-002</code><strong>Duplicate side effects</strong><span>A retry becomes a second real-world action.</span><em>Durable claim; execute once; reconcile uncertainty.</em></a>
+          <a class="af-row" role="listitem" href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-003-infinite-reasoning-loops"><code class="af">AF-003</code><strong>Infinite loops</strong><span>The agent repeats without making progress.</span><em>Detect the action streak; stop the next step.</em></a>
+          <a class="af-row" role="listitem" href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-004-tool-misuse"><code class="af">AF-004</code><strong>Bad tool calls</strong><span>Wrong input, entity, path, or return shape.</span><em>Validate at the boundary before execution.</em></a>
+          <a class="af-row" role="listitem" href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-006-context-corruption"><code class="af">AF-006</code><strong>Stale context</strong><span>Old or malformed state becomes the truth.</span><em>Protect messages, history, and session state.</em></a>
+          <a class="af-row" role="listitem" href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-007-premature-termination"><code class="af">AF-007</code><strong>Early “done”</strong><span>The run declares success with work unresolved.</span><em>Refuse completion until required outcomes exist.</em></a>
+          <a class="af-row" role="listitem" href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-008-cascading-permission"><code class="af">AF-008</code><strong>Scope creep</strong><span>A narrow grant silently widens mid-run.</span><em>Freeze scope; reject transitive escalation.</em></a>
+        </div>
+      </div>
     </section>
 
-    <section id="resolution">
-      <h2>Resolution</h2>
-      <p>
-            <strong>Invariant:</strong> do not redispatch unless the previous transition is
-            proven terminal (e.g. <code>COMPLETED</code> → return stored) or safely
-            recoverable (poll in-flight, soft-block/retry a read <code>UNKNOWN</code>, or
-            reconcile via <code>external_operation_ref</code>). Otherwise hard-block: never blind re-execute a side effect.
-          </p>
-          <p>
-            Each duplicate dispatch is classified to a <strong>gate</strong>. Read-only and
-            side-effecting tools use different resolvers.
-          </p>
-      <pre>Gate          Typical trigger                    Effect
-ALLOW         fresh claim / policy allows retry    tool runs
-RETURN        COMPLETED                          return stored result
-POLL          IN_FLIGHT (valid lease)            wait for other worker
-RECLAIM       read EXPIRED / FAILED_*            take over stale lease
-REPAIR        incomplete durable key/boundary/terminal  heal, re-resolve (v1.13.0)
-SOFT_BLOCK    read UNKNOWN / BLOCKED only        retry by default (v1.9.0)
-HARD_BLOCK    ambiguous mutating transition      stop; reconcile if ref present</pre>
-    <p id="sufficiency-gates">
-      <strong>Public transition-sufficiency language:</strong> discussions of
-      redispatch (e.g. langgraph#7417) often use a four-gate vocabulary: <code>ALLOW</code> / <code>REPAIR</code> / <code>SOFT_BLOCK</code> /
-      <code>HARD_BLOCK</code> (sometimes just <code>BLOCK</code>). Mycelium
-      implements that public set and adds finer internal gates for the same
-      decisions:
-    </p>
-      <pre>Public          Mycelium internal                         Notes
-ALLOW           ALLOW                                     run / safe retry
-REPAIR          REPAIR                                    heal durable context; owner auto-renew / renew_lease for live lease
-SOFT_BLOCK      SOFT_BLOCK                                read-only defer / safe retry
-HARD_BLOCK      HARD_BLOCK                                stop; reconcile if ref present
-(must not run)  RETURN / POLL                             already done, or wait on held lease
-(read reclaim)  RECLAIM                                   take over expired read lease and run</pre>
-    <p>
-      So: public <code>BLOCK</code> ≈ Mycelium <code>HARD_BLOCK</code>, while
-      <code>RETURN</code> and <code>POLL</code> are also “do not execute again”
-      outcomes under a richer internal taxonomy. Use the public four words when
-      talking to platforms; use the full Mycelium table when implementing or
-      debugging a ledgered tool.
-    </p>
-    <p>
-      <strong>Lease validity (v1.10.0) / auto-renew (v1.14.0):</strong> <code>lease_until</code> is resolution
-      metadata: not part of <code>transition_key</code>. Resolution checks
-      <code>LeaseValidity</code> (<code>HELD</code> → poll, <code>EXPIRED</code> →
-      reclaim / hard-block by class) before allowing another attempt.
-      <code>@ledger</code> / <code>@ledger_sync</code> auto-extend the lease while the
-      tool body runs (default every <code>lease_ttl / 3</code>). Set
-      <code>lease_renew_interval: 0</code> to disable; call
-      <code>renew_lease()</code> for an extra bump or when claiming outside the
-      decorator.
-    </p>
-    <p>
-      <strong>REPAIR (v1.13.0):</strong> when the durable record is incomplete but
-      healable, claim loops call <code>repair_transition()</code> then re-resolve ; never a second side effect. A held lease is still <code>POLL</code> for peers.
-    </p>
-    <p>
-      <strong>LangGraph Cloud (~180s):</strong> long tool calls may be redispatched
-      on the order of ~180 seconds, aligned with the platform’s
-      <code>BG_JOB_HEARTBEAT</code> sweep
-      (<a href="https://github.com/langchain-ai/langgraph/issues/7417">#7417</a>).
-      Pitch Mycelium as a <strong>transition envelope</strong> (class + lease +
-      terminal state + hard-block / reconcile), not only “idempotency key + cached
-      result.” Lease / poll / hard-block is the operator-side guard for that window.
-      Prove multi-worker behavior with <code>mycelium demo --redis</code> (two OS
-      processes + real Redis shared ledger).
-    </p>
-    <p>
-      <strong>Read</strong> (<code>side_effect_class: read</code>): poll, reclaim,
-      retry failed-before-effect. Ambiguous <code>UNKNOWN</code> →
-      <code>SOFT_BLOCK</code> (safe retry). Opt into deferral with
-      <code>defer_read_only_unknown=True</code> → <code>LedgerSoftBlockError</code>.
-    </p>
-    <p>
-      <strong>Mutating</strong> (payment, email, subagent, irreversible): return
-      completed, poll in-flight, hard-block ambiguity. Stale lease
-      (<code>EXPIRED + not_crossed</code>): hard-block until reconcile proves
-      <code>NOT_EXECUTED</code> (fail-closed without <code>external_operation_ref</code>).
-    </p>
-      <pre>from mycelium import ledger_sync, side_effect, record_external_operation
-from mycelium import Reconciler, ReconcileResult
-
-@ledger_sync(transition_binding=binding)
-def send_payment(amount, recipient, *, idempotency_key: str):
-    with side_effect():                              # maybe_crossed → UNKNOWN on crash
-        record_external_operation(idempotency_key)   # handle for provider lookup
-        return gateway.charge(amount, recipient, idempotency_key=idempotency_key)
-
-class StripeReconciler:  # read-only: never charges
-    def reconcile(self, entry) -> ReconcileResult:
-        pi = stripe.PaymentIntent.retrieve(entry.external_operation_ref)
-        if pi.status == "succeeded":
-            return ReconcileResult.completed(pi)
-        if pi.status in ("canceled", "requires_payment_method"):
-            return ReconcileResult.not_executed()
-        return ReconcileResult.unknown()
-
-@ledger_sync(transition_binding=binding, reconciler=StripeReconciler())
-def send_payment(...): ...</pre>
-    <p>
-      <code>external_operation_ref</code> is the provider handle (id or idempotency key),
-      not proof by itself. The <code>Reconciler</code> does a read-only lookup:
-      <code>COMPLETED</code> → return result;
-      <code>NOT_EXECUTED</code> → run exactly once more;
-      <code>UNKNOWN</code> / no ref / no reconciler → <code>LedgerHardBlockError</code>.
-    </p>
-    <p>
-      <strong>Flagship:</strong> any tool, any provider — prove run-or-not and
-      enforce at-most-once. Wire a read-only <code>Reconciler</code> for your
-      provider (Stripe-shaped example above). <strong>Gmail sent-log
-      (<code>GmailReconciler</code>)</strong> is a shipped <em>demo adapter</em>
-      of that contract, not the headline: one sent-log match →
-      <code>COMPLETED</code>; zero → <code>UNKNOWN</code> (indexing lag; never a
-      blind retry); two or more → <code>UNKNOWN</code>. Hard-block until reconcile
-      or operator release.
-    </p>
-      <pre>Boundary at failure     Terminal outcome        Redispatch
-not_crossed             FAILED_BEFORE_EFFECT    retry if policy allows
-maybe_crossed           UNKNOWN                 hard-block → reconcile
-crossed                 FAILED_AFTER_EFFECT     hard-block
-
-EXPIRED + not_crossed + ref + NOT_EXECUTED   → reclaim (v1.9.2)
-EXPIRED + not_crossed, no ref                → hard-block (not provable)
-EXPIRED + maybe_crossed / crossed            → hard-block</pre>
-    <p>
-      <strong>Operator release (v1.15.0):</strong> when no <code>Reconciler</code>
-      can settle a hard-block, a human verifies with the provider and records
-      the outcome ; <code>release(verified="completed", result=...)</code>
-      returns the recorded result on redispatch;
-      <code>release(verified="not_executed")</code> grants exactly one
-      re-execution, consumed through the same machinery as a reconciler
-      <code>NOT_EXECUTED</code>. One-shot (never overwritten), fail-closed
-      (unknown id / already <code>COMPLETED</code> / held lease refused),
-      audit-stamped on the durable entry: backend access is release
-      authority. Triage with <code>list_transitions(stuck=True)</code> or the
-      CLI:
-    </p>
-      <pre>mycelium transitions list --stuck --config mycelium.yaml
-mycelium transitions show &lt;request_id&gt;
-mycelium transitions release &lt;request_id&gt; --verified not-executed \
-  --by ops@example.com --reason "provider shows no charge"</pre>
+    <section class="how surface-bone" id="how" data-reveal>
+      <div class="section-shell">
+        <p class="eyebrow">How it holds</p>
+        <h2>Prevention, not tracing.</h2>
+        <div class="hold-line" aria-label="Claim, execute once, then record in the ledger">
+          <article><span>01</span><h3>Claim</h3><p>The agent declares a stable business intent before the side effect.</p></article>
+          <article><span>02</span><h3>Execute once</h3><p>The boundary admits one owner. Every matching attempt meets the same truth.</p></article>
+          <article><span>03</span><h3>Ledger</h3><p>A durable terminal record survives retries, redispatch, and worker failure.</p></article>
+        </div>
+        <p class="manifesto">Tracers tell you what went wrong. <strong>Mycelium refuses to let it happen.</strong></p>
+      </div>
     </section>
 
-    <section id="envelope">
-      <h2>Envelope fields (core)</h2>
-      <p>
-            Six fields decide whether an unresolved prior execution is merely
-            <strong>wasteful</strong> (safe to retry or poll) or <strong>unsafe</strong>
-            (must not re-run). Listed in priority order:
-          </p>
-      <pre>#  Field                    Role
-1  side_effect_class        kind of effect (read, keyed_mutate, …)
-2  spendability             how many times this intent may spend
-3  side_effect_boundary     not_crossed / maybe_crossed / crossed
-4  terminal_outcome         IN_FLIGHT, COMPLETED, UNKNOWN, EXPIRED, …
-5  external_operation_ref   provider handle for read-only reconcile
-6  retry_permission         whether auto-retry is allowed (same-key opt-in)</pre>
-      <p>
-        <strong>Invariant:</strong> for a given tool class, the fields that class
-        <em>requires</em> must already be <em>supported and recorded</em> on the
-        transition before a redispatch is treated as a safe retry. Reads need a
-        lighter set (class + terminal + lease). Payment, write, email, and subagent
-        tools need spendability, boundary, terminal outcome, and usually an external
-        receipt or ref. Without them, a second dispatch is an
-        <strong>unsupported second transition</strong>, not a retry.
-      </p>
-      <p>
-        Also on the durable record: <code>transition_key</code>,
-        <code>idempotency_key</code>, <code>owner</code>, <code>lease_until</code>,
-        <code>receipt_ref</code>. Resolution gates above decide what to do once
-        those fields are present.
-      </p>
+    <section class="stack section-dark" id="stack" data-reveal>
+      <div class="section-shell stack-grid">
+        <div>
+          <p class="eyebrow">Fits your stack</p>
+          <h2>Your tools stay yours.</h2>
+          <p class="stack-names">LangGraph <i>·</i> CrewAI <i>·</i> plain Python</p>
+          <p class="section-intro">Mycelium wraps the Python callable at the boundary. Supported integrations automate wiring; any Python tool can use the same ledger contract.</p>
+        </div>
+        <pre class="snippet" aria-label="Mycelium Python integration example"><code>from mycelium import ledger_sync
+from mycelium.transition import SideEffectClass, ToolTransitionBinding
+binding = ToolTransitionBinding.for_tool(agent_id=<span class="spore">"payments"</span>,
+  policy_version=<span class="spore">"v1"</span>, side_effect_class=SideEffectClass.KEYED_MUTATE)
+<span class="rust">@ledger_sync</span>(transition_binding=binding)
+def charge_customer(order_id, amount): return provider.charge(order_id, amount)</code></pre>
+      </div>
     </section>
 
-    <section id="yaml">
-      <h2>YAML</h2>
-      <pre>transition:
-  agent_id: payment-agent
-  policy_version: "2026.07.1"
-  lease_ttl: 3600
-  # lease_renew_interval: 1200   # default = lease_ttl/3; 0 disables auto-renew
-
-action_ledger:
-  storage: file          # memory | file | redis | postgres
-  path: ./mycelium-ledger.json
-  unclassified_policy: strict   # warn (default) or strict
-  tools: [send_payment, delete_file, search_docs]
-
-task_ledger:
-  storage: file
-  path: ./mycelium-task-ledger.json
-  tasks: [process_invoice]
-
-state_flush:
-  storage: file
-  path: ./mycelium-state.json
-  flush_on: [cancel, disconnect, error]
-
-audit_receipt:
-  signing_key_env: MYCELIUM_SIGNING_KEY
-  storage: file
-  path: ./mycelium-receipts.jsonl
-  auto: true
-
-tools:
-  fetch_customer:
-    callable: my_agent.tools:fetch_customer
-    side_effect_class: read
-    protect: {entity_param: customer_id, ttl: 60}
-    bounded:
-      schema:
-        customer_id: {type: string, required: true, pattern: "^c\\d+$"}
-      output_schema:
-        customer_id: {type: string, required: true}
-        name: {type: string, required: true}
-
-  delete_file:
-    callable: my_agent.tools:delete_file
-    side_effect_class: non_idempotent_mutate
-    bounded:
-      schema:
-        path: {type: string, required: true}
-      allowed_paths: [/workspace/src/]
-      path_param: path
-
-  send_payment:
-    callable: my_agent.tools:send_payment
-    side_effect_class: keyed_mutate
-    retry_permission: manual_reconciliation_required
-    bounded:
-      schema:
-        amount: {type: number, required: true}
-        recipient: {type: string, required: true}
-
-  search_docs:
-    callable: my_agent.tools:search_docs
-    side_effect_class: read
-    bounded:
-      schema:
-        query: {type: string, required: true}
-
-tasks:
-  process_invoice:
-    callable: my_agent.tasks:process_invoice
-    ledger: true
-    id_from: [invoice_id]
-
-registry:
-  auto: true
-
-runner:
-  max_llm_retries: 2
-  max_tool_retries: 3
-
-loop_guard:
-  storage: file
-  path: ./mycelium-loop.json
-
-# scope_guard:                # AF-008 opt-in — freeze run tool allowlist
-#   storage: file
-#   path: ./mycelium-scope.json
-
-# completion:                 # AF-007 opt-in
-#   storage: file
-#   path: ./mycelium-completion.json
-#   required: [{id: send_email}]
-
-history_guard:
-  max_tokens: 100000
-  max_messages: 1000
-
-message_validator:
-  enabled: true</pre>
-      <pre># option A: zero-touch command mode
-mycelium run --config mycelium.yaml -- python -m my_agent</pre>
-      <pre>from mycelium import load_config
-import my_tools
-
-config = load_config("mycelium.yaml")
-
-# option B: instrument a module
-tools = config.instrument(my_tools)
-
-# option C: decorate one function (name must match tools: key)
-@config.apply
-def send_payment(amount: float, recipient: str) -> dict:
-    return gateway.charge(amount, recipient)
-
-@config.apply_task
-def process_invoice(invoice_id: str) -> dict:
-    ...
-
-with config.run(thread_id):
-    messages = config.prepare_messages(messages)
-    runner = config.build_runner(registry=config.registry)</pre>
-      <p>
-        Command mode fails closed for missing targets and partial wrappers, and
-        skips fully configured explicit wrappers. Keep target modules
-        import-safe. Registration performed inside a target module before its
-        import completes cannot be retroactively replaced; move that
-        registration to the entrypoint or use explicit instrumentation.
-      </p>
+    <section class="final-seam section-dark" id="start" data-reveal>
+      <div class="closing-boundary" aria-hidden="true"></div>
+      <div class="section-shell final-inner">
+        <p class="eyebrow">One truth beneath the chaos</p>
+        <h2>Hold the boundary.</h2>
+        <div class="cta-row">
+          <button class="cta cta-install" type="button" data-copy="pip install mycelium-runtime"><code>pip install mycelium-runtime</code><span class="copy-state" aria-live="polite"></span></button>
+          <a class="cta cta-try" href="/try.html">Try it in 5 minutes <span aria-hidden="true">→</span></a>
+        </div>
+        <p class="final-links"><a href="/sandbox.html">Open sandbox</a><a href="https://github.com/mycelium-labs/mycelium/tree/main/sdk/docs">Read the handbook</a></p>
+      </div>
     </section>
+  </main>
 
-    <p class="docs-group" id="group-opt-in">Opt-in</p>
-
-    <section id="context">
-      <h2>Context (opt-in)</h2>
-      <p>
-            TTL cache and message/history helpers. Not part of the default
-            <code>mycelium init</code> on-ramp: enable in YAML or call from code.
-          </p>
-      <pre>from mycelium import protect, protect_sync, Session
-from mycelium import MessageValidator, HistoryGuard
-
-# async
-@protect(entity_param="customer_id", ttl=60)
-async def fetch_customer(customer_id: str) -> dict:
-    return await db.get(customer_id)
-
-async def run(customer_id: str, messages: list):
-    async with Session():
-        await fetch_customer(customer_id=customer_id)
-        messages = MessageValidator().repair(messages)
-        guard = HistoryGuard(max_tokens=100_000)
-        messages = guard.validate(messages)
-        guard.check_for_drops(messages)  # after framework trimming
-        return await llm.ainvoke(messages)
-
-# sync (CrewAI, Smolagents)
-@protect_sync(entity_param="customer_id", ttl=60)
-def fetch_customer(customer_id: str) -> dict:
-    return db.get(customer_id)
-
-with Session():
-    fetch_customer(customer_id="c1")</pre>
-    </section>
-
-    <section id="tools">
-      <h2>Tool boundaries (opt-in)</h2>
-      <p>
-            Input/output/scope validation and allowlists. Opt-in via YAML
-            <code>bounded</code> / <code>registry</code> or decorators: not the default on-ramp.
-          </p>
-      <pre>from mycelium import bounded, bounded_sync, ToolRegistry, ToolRunner
-
-registry = ToolRegistry(allowed=["fetch_customer", "delete_file"])
-
-@registry.register
-@bounded(
-    schema={"customer_id": {"type": "string", "required": True, "pattern": r"^c\d+$"}},
-    output_schema={"customer_id": {"type": "string", "required": True}, "name": {"type": "string", "required": True}},
-    allowed_paths=["/workspace/src/"],
-    path_param="path",
-)
-async def fetch_customer(customer_id: str) -> dict:
-    return await db.get(customer_id)
-
-runner = ToolRunner(registry=registry, max_llm_retries=2, max_tool_retries=3)
-result = await runner.call(fetch_customer, customer_id="c1")
-
-# with LLM retry loop
-result, messages = await runner.run_with_llm_retry(
-    fetch_customer,
-    messages=messages,
-    tool_call_id="call_1",
-    kwargs={"customer_id": "c1"},
-    invoke_llm=llm.ainvoke,
-    parse_tool_kwargs=extract_tool_args,
-)
-
-# sync
-@bounded_sync(schema={"customer_id": {"type": "string", "required": True}})
-def fetch_customer(customer_id: str) -> dict:
-    return db.get(customer_id)</pre>
-    </section>
-
-    <section id="loops">
-      <h2>Loop guard (AF-003, opt-in)</h2>
-      <p>
-            The action ledger deduplicates <strong>retries of the same dispatch</strong>
-            (<code>tool_call_id</code>). If the LLM emits a <em>new</em> id each turn with
-            the same tool + args, that is a new transition: the ledger allows it.
-            Optional <code>loop_guard:</code> detects that thrash before claim:
-          </p>
-          <ol>
-            <li>
-              <strong>Soft</strong> ; <code>ToolBoundaryError</code>
-              (<code>violation=loop_detected</code>) with an <code>llm_message</code>;
-              body does not run.
-            </li>
-            <li>
-              <strong>Hard</strong> ; <code>LedgerHardBlockError</code>; the
-              <strong>entire run</strong> is frozen until an operator releases it.
-            </li>
-          </ol>
-          <p>
-            Wrapper order: <code>@scope_guard</code> → <code>@loop_guard</code> →
-            <code>@ledger</code> → <code>@bounded</code> → <code>@protect</code>.
-            Enabled by default in
-            <code>mycelium init --full</code> and <code>--minimal</code> (file storage).
-            Thresholds by <code>side_effect_class</code> (read=5, idempotent_mutate=3,
-            mutate/irreversible=2). Demo:
-            <code>python examples/loop_guard_db_search.py</code> from <code>sdk/</code>.
-          </p>
-      <pre>loop_guard:
-  storage: file
-  path: ./mycelium-loop.json
-  escalate_after_soft: 1
-  consecutive_soft:
-    read: 5
-    idempotent_mutate: 3
-    keyed_mutate: 2
-    non_idempotent_mutate: 2
-    irreversible: 2
-
-mycelium loops status --stuck --config mycelium.yaml
-mycelium loops release &lt;run_id&gt; --verified clear|allow-once|abort-run \
-  --by ops@example.com --reason "..."</pre>
-      <p>
-        <code>clear</code> wipes counters; <code>allow-once</code> permits exactly one
-        matching action hash then re-arms; <code>abort-run</code> keeps the run frozen.
-        Full detail in the
-        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md#loop-guard-af-003-identical-actions-across-new-tool_call_ids">SDK README</a>.
-      </p>
-    </section>
-
-    <section id="completion">
-      <h2>Completion contract (AF-007, opt-in)</h2>
-      <p>
-            Premature termination: the agent presents work as done while a
-            <strong>host-declared</strong> checklist is still open. Mycelium does
-            not judge open-ended goals (AF-005) ; only an explicit contract.
-          </p>
-          <ul>
-            <li>
-              <strong>required</strong> still pending →
-              <strong>refuse</strong> terminal (<code>CompletionRefusedError</code>)
-            </li>
-            <li>
-              <strong>optional</strong> still pending →
-              <strong>warn and allow</strong>
-            </li>
-          </ul>
-          <p>
-            Marks: <code>success</code> | <code>failed</code> |
-            <code>abandoned</code> (reason required). Scope: <code>run_id</code>
-            (fallback <code>thread_id</code>). Entry points:
-            <code>complete_run()</code>, LangGraph
-            <code>completion_gate_end</code> before END, or
-            <code>wrap_final_message</code>. Wire at least one. Demo:
-            <code>python examples/completion_contract_checklist.py</code> from
-            <code>sdk/</code>.
-          </p>
-      <pre>completion:
-  storage: file
-  path: ./mycelium-completion.json
-  required:
-    - id: send_email
-    - id: write_pr
-  optional:
-    - id: post_slack
-
-mycelium completion status &lt;run_id&gt; --config mycelium.yaml
-mycelium completion mark &lt;run_id&gt; send_email --status success</pre>
-      <p>
-        See the
-        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md#completion-contract-af-007-refuse-terminal-while-required-subtasks-pending">SDK README</a>.
-      </p>
-    </section>
-
-    <section id="scope-guard">
-      <h2>Scope guard (AF-008, opt-in)</h2>
-      <p>
-            Cascading permission: a narrow tool grant widens mid-run (handoff,
-            dynamic <code>registry.allow</code>, injected tools). Mycelium freezes
-            the run allowlist (from <code>registry</code> / <code>tools:</code>)
-            and re-checks every step. Entity/path/output stay on
-            <code>@bounded</code> — this gate is allowlist-only at the run level.
-          </p>
-          <ul>
-            <li>
-              Tool outside the frozen grant →
-              <code>ToolBoundaryError</code> (<code>violation=scope_escalation_tool</code>)
-              or optional hard <code>LedgerHardBlockError</code>
-            </li>
-            <li>
-              Re-bind may only <strong>narrow</strong> the allowlist — widen is refused
-            </li>
-          </ul>
-          <p>
-            Wrapper order: <code>@state_authority</code> → <code>@scope_guard</code> →
-            <code>@loop_guard</code> → <code>@ledger</code> → <code>@bounded</code> →
-            <code>@protect</code>. Demo:
-            <code>python examples/scope_guard_allowlist.py</code> from <code>sdk/</code>.
-          </p>
-      <pre>scope_guard:
-  storage: file
-  path: ./mycelium-scope.json
-  # allowed_tools: from_registry   # default; or all | [tool_a, tool_b]
-  # on_violation: soft             # soft | hard
-
-mycelium scope status &lt;run_id&gt; --config mycelium.yaml
-mycelium scope bind &lt;run_id&gt; --allowed-tools fetch_customer,search_docs</pre>
-      <p>
-        See the
-        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md#scope-guard-af-008-freeze-run-tool-allowlist">SDK README</a>.
-      </p>
-    </section>
-
-    <section id="telemetry">
-      <h2>Outcome telemetry &amp; DTTR (v1.20+)</h2>
-      <p>
-            Opt-in <code>OutcomeEmitter</code> writes flat, append-only rows (one JSON object
-            per line) only on resolution events: a dispatch resolving to a gate
-            (<code>ALLOW</code> / <code>RETURN</code> / <code>HARD_BLOCK</code> /
-            <code>SOFT_BLOCK</code>), tool-body start/complete/fail, and operator release.
-            Poll ticks never emit. Off by default; memory or file storage only in v1 (no
-            analytics dependency); a storage failure is logged and swallowed so telemetry can
-            never break the tool path or alter claim / CAS / reconcile semantics.
-          </p>
-          <p>
-            From those rows you compute the <strong>Duplicate Tool Transition Rate (DTTR)</strong>
-            ; a single number that makes the no-double-execute guarantee observable in production
-            and regresses loudly the day it doesn't. Enable via <code>outcome_emit:</code> in YAML
-            or the <code>outcome_emitter=</code> kwarg on <code>@ledger</code> /
-            <code>@ledger_sync</code>; compute the metric with the CLI or the library. See the
-            SDK README's <em>Outcome telemetry &amp; DTTR</em> section.
-          </p>
-        </section>
-
-    <p class="docs-group" id="group-reference">Reference</p>
-
-    <section id="catalog">
-      <h2>Failure-mode catalog (AF-001…AF-009)</h2>
-      <p>
-        Stable IDs used in the SDK README, changelogs, and this handbook.
-        Full definitions also live in
-        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md">sdk/docs/FAILURE_MODE_CATALOG.md</a>.
-      </p>
-      <table>
-        <thead>
-          <tr><th>ID</th><th>Failure mode</th><th>One line</th><th>Mycelium surface</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>AF-001</td><td>Hallucination cascade</td>
-            <td>Acts on fabricated facts; errors compound across tool calls</td>
-            <td>(judgment / evals; not in SDK)</td>
-          </tr>
-          <tr>
-            <td>AF-002</td><td>Observability black hole</td>
-            <td>No durable record: retries double-run; crashes leave unknown commit</td>
-            <td>Transition envelope · ledgers · reconcile · receipts</td>
-          </tr>
-          <tr>
-            <td>AF-003</td><td>Infinite reasoning loops</td>
-            <td>Same tool+args across new <code>tool_call_id</code>s; token burn / repeated effects</td>
-            <td><code>loop_guard:</code> · <a href="#loops">Loop guard</a></td>
-          </tr>
-          <tr>
-            <td>AF-004</td><td>Tool misuse</td>
-            <td>Invalid inputs or out-of-scope tools; silent failure or wrong side effects</td>
-            <td><code>@bounded</code> · registry · <a href="#tools">Tool boundaries</a></td>
-          </tr>
-          <tr>
-            <td>AF-005</td><td>Goal misalignment</td>
-            <td>Optimizes a proxy objective, not user intent</td>
-            <td>(judgment / evals; not in SDK)</td>
-          </tr>
-          <tr>
-            <td>AF-006</td><td>Context corruption</td>
-            <td>Stale, truncated, or poisoned context → false picture of the world</td>
-            <td><code>@protect</code> · Session · validators · <a href="#context">Context</a></td>
-          </tr>
-          <tr>
-            <td>AF-007</td><td>Premature termination</td>
-            <td>Stops early and presents partial work as complete</td>
-            <td><code>completion:</code> · <a href="#completion">Completion</a></td>
-          </tr>
-          <tr>
-            <td>AF-008</td><td>Cascading permission</td>
-            <td>Narrow grant escalates transitively beyond intent</td>
-            <td><code>scope_guard:</code> · <a href="#scope-guard">Scope guard</a></td>
-          </tr>
-          <tr>
-            <td>AF-009</td><td>Instruction injection</td>
-            <td>Untrusted content hijacks instructions</td>
-            <td>(MCP gateway revisit; not in SDK)</td>
-          </tr>
-        </tbody>
-      </table>
-      <h3>Definitions</h3>
-      <dl>
-        <dt>AF-001 Hallucination cascade</dt>
-        <dd>The agent invents or misstates facts, then treats those fabrications as ground truth for later tool calls. Wrong lookup → wrong write → wrong confirmation. Needs a judge model; outside the deterministic ALLOW/BLOCK chassis.</dd>
-        <dt>AF-002 Observability black hole</dt>
-        <dd>Consequential actions leave no durable, trustworthy record. Framework redispatches double a payment/email/write; crashes leave unknown commit. Mycelium’s core answer is the transition envelope (not a tracing product).</dd>
-        <dt>AF-003 Infinite reasoning loops</dt>
-        <dd>The model mints a <em>new</em> <code>tool_call_id</code> each turn with the same tool + args. The ledger allows each call (different key); the loop guard halts the streak.</dd>
-        <dt>AF-004 Tool misuse</dt>
-        <dd>Invalid args, path/entity outside scope, bad return shapes, or tools not on the allowlist. Handled by <code>@bounded</code>, <code>ToolRegistry</code>, and <code>ToolRunner</code>.</dd>
-        <dt>AF-005 Goal misalignment</dt>
-        <dd>The agent optimizes a proxy (close the ticket, finish a checklist) while missing the user’s real goal. Judgment/evals territory; AF-007 only gates an explicit host checklist.</dd>
-        <dt>AF-006 Context corruption</dt>
-        <dd>Stale tool state, broken transcripts, truncated history, or cache bleed between runs. Guarded by <code>@protect</code> / Session / message and history validators.</dd>
-        <dt>AF-007 Premature termination</dt>
-        <dd>Emits “done” while a host-declared checklist is still open. Unmarked required → refuse; unmarked optional → warn and allow.</dd>
-        <dt>AF-008 Cascading permission</dt>
-        <dd>A narrow tool grant widens mid-run (handoff, dynamic registry allow). Scope guard freezes the run allowlist and re-checks every step. Entity/path stay on <code>@bounded</code>.</dd>
-        <dt>AF-009 Instruction injection</dt>
-        <dd>Untrusted content (tool output, RAG, pasted text) overrides system/developer instructions. Revisit at the MCP gateway for taint isolation.</dd>
-      </dl>
-    </section>
-
-    <section id="api">
-      <h2>API</h2>
-      <pre># Context (opt-in)
-protect, protect_sync, Session
-MessageValidator, HistoryGuard
-
-# Tool boundaries (opt-in)
-bounded, bounded_sync, ToolRegistry, ToolRunner
-
-# Loop guard AF-003 (opt-in)
-LoopGuard, loop_guard, loop_guard_sync, apply_loop_guard
-InMemoryLoopGuardStorage, FileLoopGuardStorage
-
-# Completion contract AF-007 (opt-in)
-CompletionContract, CompletionRefusedError, wrap_final_message, gate_graph_end
-InMemoryCompletionStorage, FileCompletionStorage
-
-# Scope guard AF-008 (opt-in)
-ScopeGuard, ScopeGrant, scope_guard, scope_guard_sync, apply_scope_guard
-InMemoryScopeGuardStorage, FileScopeGuardStorage
-
-# Actions (core): duplicate side effects / transition envelope
-ledger, ledger_sync, task_ledger, task_ledger_sync
-ActionLedger, TaskLedger, StateFlush, AuditReceiptEmitter, verify_receipt
-LedgerHardBlockError, LedgerPollTimeoutError
-LedgerSoftBlockError                                 # read-only UNKNOWN defer (v1.9.0)
-side_effect, mark_maybe_crossed, mark_crossed        # boundary markers (v1.5.0)
-record_external_operation                            # provider handle (v1.6.0)
-renew_lease, LeaseValidity, resolve_lease_validity   # lease window (v1.10.0); auto-renew in @ledger (v1.14.0)
-Reconciler, ReconcileResult, ReconcileStatus         # provider reconcile (v1.7.0)
-ActionLedger.list_transitions, ActionLedger.release  # operator release (v1.15.0)
-mark_worker_dead_for  # worker-death signal (v1.16.0)
-LedgerReleaseRefusedError, LedgerAlreadyResolvedError
-
-# Transition envelope (core)
-TransitionConfig, SideEffectClass, SideEffectBoundary, RetryPermission
-TerminalOutcome, Spendability, ToolTransitionBinding, execution_scope
-derive_transition_key_for_call
-
-# Config
-load_config, load_config_from_string, MyceliumConfig
-MyceliumConfig.apply_tool, apply_named_task             # explicit names (v1.12.0)
-
-# CLI
-mycelium run --config PATH -- python ...                 # auto-instrumentation (v1.12.0)
-mycelium transitions list|show|release|mark-dead   # operator triage + release (v1.15.0+)
-mycelium loops status|release                      # AF-003 loop-guard triage + release
-mycelium completion status|mark                    # AF-007 checklist triage
-mycelium scope status|bind                         # AF-008 frozen allowlist triage</pre>
-    </section>
-
-    <section id="common-searches">
-      <h2>Common searches</h2>
-      <div class="faq-item">
-            <h3>How do I build reliable AI agents in production?</h3>
-            <p>
-              Most agent failures in production aren't reasoning failures; they're
-              <strong>runtime failures</strong>: a tool runs twice on retry, context goes stale,
-              or the model emits an invalid tool call. Mycelium's <strong>core</strong> path wraps
-              tool execution with a transition envelope (classify side effects, durable key,
-              lease, gates / reconcile). <strong>Opt-in</strong> helpers cover stale context
-              (<code>@protect</code>, message/history guards) and bad tool-call boundaries
-              (<code>@bounded</code>, registry). Framework-agnostic: LangGraph, CrewAI, or plain
-              Python. <code>pip install mycelium-runtime</code>
-            </p>
-          </div>
-
-          <div class="faq-item">
-            <h3>How do I prevent duplicate tool execution in LangGraph?</h3>
-            <p>
-              Use a <strong>transition envelope</strong>, not only an idempotency key plus a
-              cached result. Add <code>transition:</code> and <code>side_effect_class</code>
-              per tool in <code>mycelium.yaml</code>. Mycelium hashes a durable transition
-              key (scope, tool, args, class, policy), holds an execution
-              <strong>lease</strong> while work is in flight, records
-              <strong>terminal state</strong>, and resolves duplicates through gates: return
-              completed, poll in-flight, soft-block ambiguous reads, hard-block or reconcile
-              mutating tools when <code>external_operation_ref</code> is recorded.
-              LangGraph Cloud can redispatch long tool calls on the order of
-              <strong>~180s</strong> (aligned with <code>BG_JOB_HEARTBEAT</code> sweep) while
-              the first is still in flight
-              (<a href="https://github.com/langchain-ai/langgraph/issues/7417">langgraph#7417</a>);
-              Mycelium’s lease / auto-renew / poll / hard-block path is the operator-side guard for that
-              window. <code>pip install mycelium-runtime &amp;&amp; mycelium demo</code>
-            </p>
-          </div>
-
-          <div class="faq-item">
-            <h3>Is Mycelium a replacement for Langfuse or LangSmith?</h3>
-            <p>
-              No. Langfuse and LangSmith are <strong>observability and tracing</strong>. They show
-              what happened after an agent runs. Mycelium is <strong>runtime prevention</strong>:
-              a transition ledger around tool execution (core), plus optional tool-boundary and
-              message/history guards. Use both if you want traces and guards.
-            </p>
-          </div>
-
-          <div class="faq-item">
-            <h3>How do I make AI agent tool calls idempotent in Python?</h3>
-            <p>
-              Classify each tool (<code>read</code>, <code>keyed_mutate</code>, <code>non_idempotent_mutate</code>, etc.), enable
-              <code>transition:</code> in YAML, and wrap with <code>@config.apply</code>.
-              On framework retry or worker redispatch, Mycelium resolves the existing
-              transition: return completed, poll in-flight, soft-block ambiguous reads,
-              or raise <code>LedgerHardBlockError</code> / reconcile via
-              <code>Reconciler</code> when <code>external_operation_ref</code> is present.
-              Framework-agnostic.
-            </p>
-          </div>
-        </section>
-
-  </div>
-</div>
-
-<script>
-  (function () {
-    // Wake page polls Azure health, then redirects (handles cold start wait).
-    const SANDBOX_WAKE_URL = "/sandbox.html";
-
-    const sandbox = document.getElementById("product-sandbox");
-    if (sandbox && SANDBOX_WAKE_URL) {
-      sandbox.href = SANDBOX_WAKE_URL;
-      sandbox.hidden = false;
-    }
-
-    const install = document.getElementById("product-install");
-    if (install) {
-      const label = install.getAttribute("data-copy") || install.textContent.trim();
-
-      function copyText(text) {
-        if (navigator.clipboard && window.isSecureContext) {
-          return navigator.clipboard.writeText(text);
-        }
-        return new Promise(function (resolve, reject) {
-          const ta = document.createElement("textarea");
-          ta.value = text;
-          ta.setAttribute("readonly", "");
-          ta.style.position = "fixed";
-          ta.style.top = "0";
-          ta.style.left = "0";
-          ta.style.width = "1px";
-          ta.style.height = "1px";
-          ta.style.padding = "0";
-          ta.style.border = "none";
-          ta.style.outline = "none";
-          ta.style.boxShadow = "none";
-          ta.style.background = "transparent";
-          ta.style.opacity = "0";
-          document.body.appendChild(ta);
-          ta.focus();
-          ta.select();
-          ta.setSelectionRange(0, text.length);
-          const ok = document.execCommand("copy");
-          document.body.removeChild(ta);
-          if (ok) resolve();
-          else reject(new Error("copy failed"));
-        });
+  <footer class="site-footer"><span>Mycelium Labs</span><span>Prevention at the boundary.</span><a href="https://github.com/mycelium-labs/mycelium">MIT · GitHub</a></footer>
+  <script>
+  (() => {
+    const copy = async button => {
+      const code = button.querySelector("code");
+      const state = button.querySelector(".copy-state");
+      try { await navigator.clipboard.writeText(button.dataset.copy); }
+      catch (_) {
+        const area = document.createElement("textarea");
+        area.value = button.dataset.copy; document.body.append(area); area.select();
+        document.execCommand("copy"); area.remove();
       }
-
-      install.addEventListener("click", function () {
-        copyText(label).then(function () {
-          install.textContent = "Copied";
-          install.classList.add("is-copied");
-          window.setTimeout(function () {
-            install.textContent = label;
-            install.classList.remove("is-copied");
-          }, 1200);
-        }).catch(function () {
-          install.textContent = "Select & copy";
-          window.setTimeout(function () {
-            install.textContent = label;
-          }, 1600);
-        });
-      });
+      code.hidden = true; state.textContent = "copied ✓";
+      setTimeout(() => { code.hidden = false; state.textContent = ""; }, 1500);
+    };
+    document.querySelectorAll("[data-copy]").forEach(b => b.addEventListener("click", () => copy(b)));
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reveals = document.querySelectorAll("[data-reveal]");
+    if (reduce || !("IntersectionObserver" in window)) reveals.forEach(x => x.classList.add("is-settled"));
+    else {
+      const observer = new IntersectionObserver(entries => entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add("is-settled"); observer.unobserve(e.target); }
+      }), { threshold: .15 });
+      reveals.forEach(x => observer.observe(x));
     }
-
-    const links = Array.from(document.querySelectorAll(".sidebar a"));
-    const sections = links
-      .map((link) => document.querySelector(link.getAttribute("href")))
-      .filter(Boolean);
-
-    function setActive(id) {
-      links.forEach((link) => {
-        link.classList.toggle("active", link.getAttribute("href") === "#" + id);
-      });
-    }
-
-    links.forEach((link) => {
-      link.addEventListener("click", () => {
-        setActive(link.getAttribute("href").slice(1));
-      });
+    const field = document.querySelector(".hero-field");
+    document.addEventListener("visibilitychange", () => {
+      document.documentElement.classList.toggle("motion-paused", document.hidden);
+      if (field.pauseAnimations) document.hidden ? field.pauseAnimations() : field.unpauseAnimations();
     });
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible.length) setActive(visible[0].target.id);
-      },
-      { rootMargin: "-20% 0px -60% 0px", threshold: [0, 0.25, 0.5, 1] }
-    );
-
-    sections.forEach((section) => observer.observe(section));
-
-    if (location.hash) {
-      setActive(location.hash.slice(1));
-    } else if (sections.length) {
-      setActive(sections[0].id);
-    }
   })();
-</script>
-
+  </script>
 </body>
 </html>
