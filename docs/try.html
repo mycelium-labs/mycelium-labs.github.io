@@ -241,6 +241,11 @@
       transition: opacity 0.55s ease, transform 0.55s ease;
     }
 
+    /* Let pre overflow-x scroll instead of widening the page on mobile. */
+    .step > div:not(.n) {
+      min-width: 0;
+    }
+
     .step.is-in {
       opacity: 1;
       transform: translateY(0);
