@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Instrument+Sans:wght@400;500&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=4">
+  <link rel="stylesheet" href="/style.css?v=5">
   <link rel="icon" href="/favicon.svg?v=4" type="image/svg+xml">
   <style>
     :root {
@@ -107,6 +107,16 @@
     }
     .links a:hover { border-bottom-color: var(--brand); }
     .error { color: #e0b0a0; }
+    @media (max-width: 480px) {
+      body { align-items: flex-start; padding: max(2rem, env(safe-area-inset-top)) 1rem max(2rem, env(safe-area-inset-bottom)); }
+      .card { margin: auto 0; }
+      .brand { font-size: 1.2rem; }
+      h1 { font-size: 1.25rem; }
+      .sub { font-size: 0.9rem; }
+      .meta { gap: .6rem; }
+      .links { flex-direction: column; gap: .4rem; }
+      .links a { min-height: 44px; display: inline-flex; align-items: center; width: fit-content; }
+    }
   </style>
 </head>
 <body>

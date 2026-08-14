@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Instrument+Sans:wght@400;500&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=4">
+  <link rel="stylesheet" href="/style.css?v=5">
   <link rel="icon" href="/favicon.svg?v=4" type="image/svg+xml">
   <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -318,10 +318,22 @@
     .foot a:hover { color: var(--ink); }
 
     @media (max-width: 560px) {
-      .hero { padding: 5rem 1.15rem 3.25rem; }
+      body { overflow-x: hidden; }
+      .top { padding: 0.7rem 1rem; }
+      .top a { min-height: 44px; display: inline-flex; align-items: center; }
+      .hero { min-height: 100svh; padding: 4.75rem 1rem 4.25rem; align-items: flex-start; }
+      .hero-inner { margin-top: clamp(1.5rem, 9vh, 4rem); }
+      .brand { font-size: clamp(2.35rem, 13vw, 3rem); }
       .headline { max-width: none; }
-      .btn-copy { width: 100%; text-align: left; }
-      .btn-go { width: 100%; justify-content: center; }
+      .support { font-size: 0.95rem; }
+      .btn-copy, .btn-go { width: 100%; min-height: 48px; }
+      .btn-copy { text-align: left; overflow-wrap: anywhere; }
+      .btn-go { justify-content: center; }
+      .steps { padding: 3rem 1rem 4rem; }
+      .step { grid-template-columns: 2rem minmax(0, 1fr); gap: .7rem; }
+      pre { width: 100%; font-size: .72rem; -webkit-overflow-scrolling: touch; }
+      .foot { flex-direction: column; gap: .75rem; }
+      .foot a { min-height: 44px; display: inline-flex; align-items: center; }
     }
 
     @media (prefers-reduced-motion: reduce) {
