@@ -36,5 +36,6 @@ body.calm-page{margin:0;background:var(--paper);color:var(--forest);font-family:
 .calm-page .flow-section{padding-block:clamp(80px,8vw,116px)}
 .calm-page .final-cta{padding-block:clamp(82px,9vw,124px)}
 @media(max-width:1405px){.scroll-garden{display:none}}
+@media(max-width:1100px){.sentinel--sandbox{display:none}}
 @media(max-width:620px){.sentinel{display:none}.calm-page .section,.calm-page .flow-section,.calm-page .final-cta{padding-block:72px}.calm-page .pillars,.calm-page .flow,.calm-page .guardrail-list{margin-top:3rem}}
-@media(prefers-reduced-motion:reduce){.garden-stem,.garden-branch{stroke-dashoffset:0;transition:none}.garden-leaf,.garden-spore{opacity:.65;transform:none;transition:none}}
+@media(prefers-reduced-motion:reduce){.garden-stem,.garden-branch{stroke-dashoffset:0;transition:none}.garden-leaf,.garden-spore{opacity:.65;transform:none;transition:none}.garden-vein{transition:none}}
