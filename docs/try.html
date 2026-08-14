@@ -11,22 +11,26 @@
   <meta property="og:url" content="https://mycelium-labs.github.io/try.html">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://mycelium-labs.github.io/og-image.png">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Instrument+Sans:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="/favicon.svg?v=4" type="image/svg+xml">
   <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <style>
     :root {
-      --ink: #181818;
-      --ink-soft: #3d3d3d;
-      --ink-muted: #6b6b6b;
-      --paper: #f8f7f5;
-      --wash: #f0efec;
-      --line: #d8d6d1;
-      --product: #1c1d14;
-      --product-ink: #eef0e2;
-      --product-muted: #a3a574;
-      --product-brand: #d8c45a;
-      --accent: #c4b04a;
+      --ink: #0a0e0b;
+      --ink-soft: #2a332c;
+      --ink-muted: #5a6b5e;
+      --paper: #ede9de;
+      --wash: #e8e4d9;
+      --line: rgba(10, 14, 11, 0.14);
+      --product: #141b15;
+      --product-ink: #ede9de;
+      --product-muted: #9caa9e;
+      --product-brand: #6be59b;
+      --accent: #d9f26e;
     }
 
     * { box-sizing: border-box; }
@@ -39,7 +43,7 @@
 
     body {
       margin: 0;
-      font-family: "Helvetica Neue", Helvetica, "Segoe UI", sans-serif;
+      font-family: var(--font-body);
       color: var(--ink);
       background: var(--paper);
       line-height: 1.55;
@@ -333,7 +337,8 @@
 
   <header class="hero">
     <nav class="top" aria-label="Site">
-      <a href="/">Handbook</a>
+      <a href="/">Home</a>
+      <a href="https://github.com/mycelium-labs/mycelium/tree/main/sdk/docs">Docs</a>
       <a href="https://github.com/mycelium-labs/mycelium">GitHub</a>
     </nav>
 
@@ -418,7 +423,7 @@ mycelium demo --redis   # needs Redis + mycelium-runtime[redis]</pre>
     </p>
 
     <div class="foot">
-      <a href="/">Full handbook</a>
+      <a href="https://github.com/mycelium-labs/mycelium/tree/main/sdk/docs">Full handbook</a>
       <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md">SDK README</a>
       <a href="https://pypi.org/project/mycelium-runtime/">PyPI</a>
       <a href="https://github.com/mycelium-labs/mycelium">Source</a>

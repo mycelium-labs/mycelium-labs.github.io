@@ -42,7 +42,7 @@ mycelium run --config mycelium.yaml -- python -m my_app
 
 ## Links
 
-- Handbook / docs: https://mycelium-labs.github.io/
+- Handbook / docs: https://github.com/mycelium-labs/mycelium/tree/main/sdk/docs
 - Try in 5 minutes: https://mycelium-labs.github.io/try.html
 - PyPI: https://pypi.org/project/mycelium-runtime/
 - Source: https://github.com/mycelium-labs/mycelium
