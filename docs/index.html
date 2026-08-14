@@ -49,12 +49,14 @@
     <svg class="garden-plant garden-plant--left" viewBox="0 0 120 720" focusable="false">
       <path class="garden-stem" pathLength="1" d="M83 720C79 642 88 583 73 516C58 452 75 389 62 326C51 271 65 208 55 147C50 111 55 72 42 18"/>
       <path class="garden-branch" pathLength="1" d="M73 516C47 493 30 468 22 436M64 394C88 365 101 335 104 301M58 292C34 271 22 246 17 218M55 170C77 151 91 124 98 94"/>
-      <path class="garden-leaf" style="--at:.18" d="M24 438C5 420 5 395 13 378C34 388 44 409 24 438Z"/><path class="garden-leaf" style="--at:.35" d="M103 302C118 281 115 258 105 243C86 255 81 279 103 302Z"/><path class="garden-leaf" style="--at:.53" d="M18 220C-1 203 0 179 9 163C29 174 38 196 18 220Z"/><path class="garden-leaf" style="--at:.72" d="M97 96C114 79 114 56 107 41C88 50 80 72 97 96Z"/><circle class="garden-spore" style="--at:.9" cx="42" cy="18" r="7"/>
+      <path class="garden-leaf" style="--at:.18" d="M24 438C8 433 2 419 8 407C12 399 19 397 25 392C31 387 31 379 38 375C49 391 47 417 24 438Z"/><path class="garden-leaf" style="--at:.35" d="M103 302C91 292 89 278 97 268C102 262 109 262 114 257C120 252 120 246 125 242C134 260 126 286 103 302Z"/><path class="garden-leaf" style="--at:.53" d="M18 220C4 214 0 200 6 189C11 181 18 181 23 176C29 171 28 164 35 160C46 178 41 204 18 220Z"/><path class="garden-leaf" style="--at:.72" d="M97 96C85 86 84 72 92 62C97 55 104 55 110 50C116 45 115 39 121 35C130 54 121 81 97 96Z"/>
+      <path class="garden-vein" d="M24 438L29 390M29 402L15 410M28 414L42 402M103 302L115 256M112 270L100 274M109 282L123 276M18 220L25 175M23 187L10 193M21 199L34 189M97 96L109 50M106 63L94 68M103 76L118 69"/>
     </svg>
     <svg class="garden-plant garden-plant--right" viewBox="0 0 120 720" focusable="false">
       <path class="garden-stem" pathLength="1" d="M37 720C41 642 32 583 47 516C62 452 45 389 58 326C69 271 55 208 65 147C70 111 65 72 78 18"/>
       <path class="garden-branch" pathLength="1" d="M47 516C73 493 90 468 98 436M56 394C32 365 19 335 16 301M62 292C86 271 98 246 103 218M65 170C43 151 29 124 22 94"/>
-      <path class="garden-leaf" style="--at:.18" d="M96 438C115 420 115 395 107 378C86 388 76 409 96 438Z"/><path class="garden-leaf" style="--at:.35" d="M17 302C2 281 5 258 15 243C34 255 39 279 17 302Z"/><path class="garden-leaf" style="--at:.53" d="M102 220C121 203 120 179 111 163C91 174 82 196 102 220Z"/><path class="garden-leaf" style="--at:.72" d="M23 96C6 79 6 56 13 41C32 50 40 72 23 96Z"/><circle class="garden-spore" style="--at:.9" cx="78" cy="18" r="7"/>
+      <path class="garden-leaf" style="--at:.18" d="M96 438C112 433 118 419 112 407C108 399 101 397 95 392C89 387 89 379 82 375C71 391 73 417 96 438Z"/><path class="garden-leaf" style="--at:.35" d="M17 302C29 292 31 278 23 268C18 262 11 262 6 257C0 252 0 246-5 242C-14 260-6 286 17 302Z"/><path class="garden-leaf" style="--at:.53" d="M102 220C116 214 120 200 114 189C109 181 102 181 97 176C91 171 92 164 85 160C74 178 79 204 102 220Z"/><path class="garden-leaf" style="--at:.72" d="M23 96C35 86 36 72 28 62C23 55 16 55 10 50C4 45 5 39-1 35C-10 54-1 81 23 96Z"/>
+      <path class="garden-vein" d="M96 438L91 390M91 402L105 410M92 414L78 402M17 302L5 256M8 270L20 274M11 282L-3 276M102 220L95 175M97 187L110 193M99 199L86 189M23 96L11 50M14 63L26 68M17 76L2 69"/>
     </svg>
   </aside>
 
@@ -73,13 +75,12 @@
 
       <div class="integrity-wrap" aria-label="Run integrity summary">
         <svg class="sentinel sentinel--hero" viewBox="0 0 150 210" aria-hidden="true" focusable="false">
-          <path class="sentinel-stem" d="M75 199C77 161 73 127 77 91C80 65 92 43 111 24"/>
-          <path class="sentinel-leaf" d="M78 116C48 111 30 93 27 65C56 67 77 84 78 116Z"/>
-          <path class="sentinel-leaf" d="M79 88C87 59 105 43 132 40C129 68 109 87 79 88Z"/>
-          <path class="sentinel-leaf sentinel-leaf--small" d="M74 147C54 143 42 132 39 113C59 114 72 126 74 147Z"/>
-          <ellipse class="sentinel-seed" cx="77" cy="90" rx="13" ry="18"/>
-          <circle class="sentinel-eye" cx="77" cy="88" r="3.5"/>
-          <path class="sentinel-ground" d="M43 200C59 194 89 194 106 200"/>
+          <path class="sentinel-stem" d="M74 202C73 169 74 132 77 98M76 139C61 123 50 109 39 89M77 112C91 94 103 76 112 54"/>
+          <path class="sentinel-leaf" d="M39 89C24 84 15 72 18 58C22 39 44 28 61 35C72 40 76 52 70 61C66 67 58 69 53 72C49 75 48 84 39 89Z"/>
+          <path class="sentinel-leaf" d="M112 54C99 57 89 51 87 40C84 24 99 9 116 11C133 13 142 29 134 41C130 47 121 48 112 54Z"/>
+          <path class="sentinel-leaf" d="M76 139C62 142 50 135 48 123C45 110 56 98 70 100C83 102 91 115 86 126C83 132 79 135 76 139Z"/>
+          <path class="monstera-rib" d="M39 89L55 49M55 49L33 48M51 59L68 53M47 68L27 64M112 54L113 22M113 29L99 23M113 37L128 29M108 44L96 40M76 139L70 108M70 116L58 112M72 124L82 116"/>
+          <path class="sentinel-ground" d="M44 203C59 198 89 198 105 203"/>
         </svg>
         <svg class="contour" viewBox="0 0 600 600" aria-hidden="true" focusable="false">
           <path d="M63 94c98-72 235-66 322-18 91 51 158 158 118 263-45 119-194 199-329 154C39 448-26 323 21 211 33 181 46 128 63 94Z"/>
