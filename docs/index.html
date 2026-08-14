@@ -140,9 +140,7 @@
       </div>
       <div class="code-window">
         <header><span></span><span></span><span></span><p>mycelium.yaml</p></header>
-        <pre><code><b>profile:</b> production
-
-<b>integrations:</b>
+        <pre><code><b>integrations:</b>
   <b>langgraph:</b>
     <b>enabled:</b> <em>true</em>
 
@@ -151,9 +149,11 @@
   <b>missing_run_id_policy:</b> error
 
 <b>completion:</b>
+  <b>storage:</b> file
+  <b>path:</b> ./mycelium-completion.json
   <b>required:</b>
     - <b>id:</b> charge_customer</code></pre>
-        <footer><span>mycelium doctor --strict</span><i>PASS</i></footer>
+        <footer><span>mycelium doctor --config mycelium.yaml</span><i>READ-ONLY CHECK</i></footer>
       </div>
     </section>
 
