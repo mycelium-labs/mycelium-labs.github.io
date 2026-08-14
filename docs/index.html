@@ -122,13 +122,16 @@
         </div>
         <pre class="terminal" aria-label="Duplicate charge suppression example"><code><span class="dim">14:07:03.112</span> agent → charge_customer(order="ORD-42", amount=89)
 <span class="dim">14:07:03.114</span> ledger   claim  <span class="ok">ACQUIRED</span>
+<span class="dim">14:07:03.116</span> ledger   external ref pi_7KQ recorded
 <span class="dim">14:07:03.721</span> provider charge <span class="bone">$89.00</span>
 <span class="dim">14:07:33.722</span> network  timeout after provider commit
 
 <span class="dim">14:07:34.931</span> agent → charge_customer(order="ORD-42", amount=89)
 <span class="dim">14:07:34.933</span> ledger   same request_id found
-<span class="dim">14:07:34.934</span> boundary <span class="denied">AF-002 · DUPLICATE SUPPRESSED</span>
-<span class="dim">14:07:34.935</span> receipt  prior result returned
+<span class="dim">14:07:34.934</span> reconcile provider ref pi_7KQ → <span class="ok">COMPLETED</span>
+<span class="dim">14:07:34.936</span> ledger   terminal result sealed
+<span class="dim">14:07:34.937</span> boundary <span class="denied">AF-002 · DUPLICATE SUPPRESSED</span>
+<span class="dim">14:07:34.938</span> receipt  reconciled result returned
 
 <span class="ok">executions: 1</span>  <span class="bone">charges: 1</span></code></pre>
       </div>
@@ -176,7 +179,12 @@ from mycelium.transition import SideEffectClass, ToolTransitionBinding
 binding = ToolTransitionBinding.for_tool(agent_id=<span class="spore">"payments"</span>,
   policy_version=<span class="spore">"v1"</span>, side_effect_class=SideEffectClass.KEYED_MUTATE)
 <span class="rust">@ledger_sync</span>(transition_binding=binding)
-def charge_customer(order_id, amount): return provider.charge(order_id, amount)</code></pre>
+def charge_customer(order_id, amount, request_id):
+  return provider.charge(order_id, amount)
+
+request_id = host.request_id_for(<span class="spore">"charge:ORD-42"</span>)
+charge_customer(<span class="spore">"ORD-42"</span>, 89, request_id=request_id)
+charge_customer(<span class="spore">"ORD-42"</span>, 89, request_id=request_id)  <span class="dim"># matching retry</span></code></pre>
       </div>
     </section>
 
