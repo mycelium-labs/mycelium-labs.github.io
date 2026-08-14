@@ -35,12 +35,12 @@
 <body class="calm-page">
   <a class="skip-link" href="#proof">Skip to product</a>
   <nav class="site-nav" aria-label="Primary navigation">
-    <a class="brand" href="/" aria-label="Mycelium home"><img class="brand-mark" src="/favicon.svg?v=6" alt="">Mycelium</a>
+    <a class="brand" href="/" aria-label="Mycelium home"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a>
     <div class="nav-links">
       <a href="#guardrails">Guardrails</a>
       <a href="/try.html">Try</a>
       <a href="/sandbox.html">Sandbox</a>
-      <a href="https://github.com/mycelium-labs/mycelium/tree/main/sdk/docs">Docs</a>
+      <a href="/handbook.html">Docs</a>
     </div>
     <a class="nav-github" href="https://github.com/mycelium-labs/mycelium">GitHub <span aria-hidden="true">↗</span></a>
   </nav>
@@ -94,9 +94,9 @@
         <p>Mycelium acts before the side effect, records what crossed the boundary, and tests whether production safeguards are actually wired.</p>
       </div>
       <div class="pillars">
-        <article><p class="pillar-number">01</p><div class="pillar-symbol prevent-symbol" aria-hidden="true"><i></i></div><h3>Prevent</h3><p>Refuse duplicate, invalid, out-of-scope, or over-budget actions before they touch the real world.</p><a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_AND_THREAT_MODEL.md">Explore prevention <span>→</span></a></article>
-        <article><p class="pillar-number">02</p><div class="pillar-symbol resolve-symbol" aria-hidden="true"><i></i><i></i></div><h3>Resolve</h3><p>Reconcile ambiguous provider outcomes instead of guessing whether a crashed operation ran.</p><a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_AND_THREAT_MODEL.md">See resolution gates <span>→</span></a></article>
-        <article><p class="pillar-number">03</p><div class="pillar-symbol verify-symbol" aria-hidden="true"><i>✓</i></div><h3>Verify</h3><p>Inspect configuration with Doctor, then exercise synthetic redispatch, crash, contention, and outage scenarios.</p><a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md">Read about Verify <span>→</span></a></article>
+        <article><p class="pillar-number">01</p><div class="pillar-symbol prevent-symbol" aria-hidden="true"><i></i></div><h3>Prevent</h3><p>Refuse duplicate, invalid, out-of-scope, or over-budget actions before they touch the real world.</p><a href="/handbook.html#catalog">Explore prevention <span>→</span></a></article>
+        <article><p class="pillar-number">02</p><div class="pillar-symbol resolve-symbol" aria-hidden="true"><i></i><i></i></div><h3>Resolve</h3><p>Reconcile ambiguous provider outcomes instead of guessing whether a crashed operation ran.</p><a href="/handbook.html#resolution">See resolution gates <span>→</span></a></article>
+        <article><p class="pillar-number">03</p><div class="pillar-symbol verify-symbol" aria-hidden="true"><i>✓</i></div><h3>Verify</h3><p>Inspect configuration with Doctor, then exercise synthetic redispatch, crash, contention, and outage scenarios.</p><a href="/handbook.html#common-searches">Read about Verify <span>→</span></a></article>
       </div>
     </section>
 
@@ -122,12 +122,12 @@
         <p>Each failure class maps to an explicit runtime surface. Configure only what your agent needs; inspect the evidence afterward.</p>
       </div>
       <div class="guardrail-list">
-        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-002-observability-black-hole"><code>AF-002</code><strong>Observability black hole</strong><span>Stop duplicate effects with at-most-once execution and ambiguous-outcome reconciliation.</span><i>Action ledger</i></a>
-        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-003-infinite-reasoning-loops"><code>AF-003</code><strong>Infinite reasoning loops</strong><span>Stop runaway loops by recognizing repeated action patterns with no progress.</span><i>Loop guard</i></a>
-        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-004-tool-misuse"><code>AF-004</code><strong>Tool misuse</strong><span>Refuse unsafe tool calls by validating inputs, outputs, entities, paths, and allowlists.</span><i>Tool boundary</i></a>
-        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-006-context-corruption"><code>AF-006</code><strong>Context corruption</strong><span>Prevent stale context from compromising messages, history, and session state.</span><i>Context guards</i></a>
-        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-007-premature-termination"><code>AF-007</code><strong>Premature termination</strong><span>Prevent early “done” by requiring declared outcomes before a run can complete.</span><i>Completion contract</i></a>
-        <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/FAILURE_MODE_CATALOG.md#af-008-cascading-permission"><code>AF-008</code><strong>Cascading permission</strong><span>Stop scope creep by freezing permissions and rejecting widening during a run.</span><i>Scope guard</i></a>
+        <a href="/handbook.html#actions"><code>AF-002</code><strong>Observability black hole</strong><span>Stop duplicate effects with at-most-once execution and ambiguous-outcome reconciliation.</span><i>Action ledger</i></a>
+        <a href="/handbook.html#loops"><code>AF-003</code><strong>Infinite reasoning loops</strong><span>Stop runaway loops by recognizing repeated action patterns with no progress.</span><i>Loop guard</i></a>
+        <a href="/handbook.html#tools"><code>AF-004</code><strong>Tool misuse</strong><span>Refuse unsafe tool calls by validating inputs, outputs, entities, paths, and allowlists.</span><i>Tool boundary</i></a>
+        <a href="/handbook.html#context"><code>AF-006</code><strong>Context corruption</strong><span>Prevent stale context from compromising messages, history, and session state.</span><i>Context guards</i></a>
+        <a href="/handbook.html#completion"><code>AF-007</code><strong>Premature termination</strong><span>Prevent early “done” by requiring declared outcomes before a run can complete.</span><i>Completion contract</i></a>
+        <a href="/handbook.html#scope-guard"><code>AF-008</code><strong>Cascading permission</strong><span>Stop scope creep by freezing permissions and rejecting widening during a run.</span><i>Scope guard</i></a>
       </div>
     </section>
 
@@ -138,7 +138,7 @@
         <h2>Your agent stays yours.</h2>
         <p>Wrap Python callables directly, enable automatic LangGraph boundaries, or register adapters for a custom runtime.</p>
         <div class="stack-tags"><span>LangGraph</span><span>Plain Python</span><span>Custom runtimes</span></div>
-        <p class="stack-note">Configured guards are enforced only where their boundary or supported adapter is wired. <a href="https://github.com/mycelium-labs/mycelium/tree/main/sdk/docs">Read the integration guide →</a></p>
+        <p class="stack-note">Configured guards are enforced only where their boundary or supported adapter is wired. <a href="/handbook.html#architecture">Read the integration guide →</a></p>
       </div>
       <div class="code-window">
         <header><span></span><span></span><span></span><p>mycelium.yaml</p></header>
@@ -170,7 +170,7 @@
     </section>
   </main>
 
-  <footer class="site-footer"><a class="brand" href="/"><img class="brand-mark" src="/favicon.svg?v=6" alt="">Mycelium</a><p>Reliability infrastructure for AI agents.</p><div><a href="/sandbox.html">Sandbox</a><a href="https://github.com/mycelium-labs/mycelium/tree/main/sdk/docs">Docs</a><a href="https://github.com/mycelium-labs/mycelium">GitHub</a></div></footer>
+  <footer class="site-footer"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a><p>Reliability infrastructure for AI agents.</p><div><a href="/sandbox.html">Sandbox</a><a href="/handbook.html">Docs</a><a href="https://github.com/mycelium-labs/mycelium">GitHub</a></div></footer>
   <script>
   (() => {
     const copy = async button => {

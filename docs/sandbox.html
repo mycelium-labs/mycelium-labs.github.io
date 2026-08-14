@@ -48,7 +48,10 @@
       letter-spacing: -0.02em;
       color: var(--brand);
     }
-    .brand img { width: 30px; height: 30px; flex: 0 0 auto; }
+    .brand-mark { width: 24px; height: 24px; flex: 0 0 auto; border: 1px solid currentColor; border-radius: 50%; position: relative; }
+    .brand-mark::before, .brand-mark::after { content: ""; position: absolute; left: -3px; top: 11px; height: 1px; width: 30px; background: currentColor; transform-origin: center; }
+    .brand-mark::before { transform: rotate(-50deg); }
+    .brand-mark::after { transform: rotate(-20deg); }
     h1 {
       margin: 0 0 0.5rem;
       font-size: 1.35rem;
@@ -125,7 +128,7 @@
 </head>
 <body>
   <div class="card">
-    <p class="brand"><img src="/favicon.svg?v=6" alt="">Mycelium</p>
+    <p class="brand"><span class="brand-mark" aria-hidden="true"></span>Mycelium</p>
     <h1 id="title">Starting sandbox</h1>
     <p class="sub" id="sub">
       If the demo was idle, Azure may need 10–30 seconds to wake the container.
@@ -138,7 +141,7 @@
     </div>
     <div class="links">
       <a id="open" href="#">Open anyway</a>
-      <a href="/">Back to handbook</a>
+      <a href="/handbook.html">Back to handbook</a>
     </div>
   </div>
   <script>
