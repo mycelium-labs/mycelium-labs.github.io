@@ -45,10 +45,10 @@
         <h2>Read-only first.<br><em>Then a hostile retry.</em></h2>
       </div>
       <ul class="gate-list">
-        <li><code>doctor</code><p>Inspect mycelium.yaml without executing tools. Missing IDs and unwired guards fail closed in the report.</p></li>
-        <li><code>demo</code><p>Compare an unguarded path with a ledgered one. See hard-block, return, and release on purpose.</p></li>
-        <li><code>redis</code><p>Optional two-worker proof: one claimer wins, the other waits or returns the stored result.</p></li>
-        <li><code>report</code><p>Label every figure as observed in production, synthetically verified, operator asserted, or not verifiable.</p></li>
+        <li><code>doctor</code><p>Inspect mycelium.yaml without executing tools. Missing IDs and unwired guards show up in the report.</p></li>
+        <li><code>verify</code><p>Exercise synthetic redispatch, crash, contention, and outage against the configured backend. Never hits application tools, LLMs, or real providers.</p></li>
+        <li><code>demo</code><p>Compare an unguarded path with a ledgered one. See hard-block, return, repair, reconcile, and operator release.</p></li>
+        <li><code>demo --redis</code><p>Two OS processes against a real Redis ledger. One claimer wins; the other polls or returns the stored result.</p></li>
       </ul>
     </section>
 
@@ -62,9 +62,9 @@
       <div class="code-window">
         <header><span></span><span></span><span></span><p>terminal</p></header>
         <pre><code>mycelium doctor --config mycelium.yaml
+mycelium verify --config mycelium.yaml
 mycelium demo
 mycelium demo --redis
-mycelium init
 mycelium run --config mycelium.yaml -- python -m my_agent</code></pre>
         <footer><span>doctor is read-only</span><i>NO SIDE EFFECTS</i></footer>
       </div>

@@ -54,7 +54,7 @@
         <div class="hero-actions">
           <a class="cta-button" href="/try.html">Protect your first workflow — free</a>
         </div>
-        <p class="compatibility">Open-source runtime <span>·</span> local storage <span>·</span> fail-closed when the host is down</p>
+        <p class="compatibility">Python 3.10+ <span>·</span> file, SQLite, Redis, or Postgres ledger <span>·</span> fail-closed when storage is unavailable</p>
       </div>
 
       <div class="integrity-wrap" id="report" aria-label="Verification report">
@@ -143,8 +143,8 @@
         <p class="eyebrow"><span></span> Fits your stack</p>
         <h2>Your agent stays yours.</h2>
         <p>Wrap Python callables directly, enable automatic LangGraph boundaries, or register adapters for a custom runtime.</p>
-        <div class="stack-tags"><span>LangGraph</span><span>Plain Python</span><span>Custom runtimes</span></div>
-        <p class="stack-note">Configured guards are enforced only where their boundary or supported adapter is wired. Local protection must never be silently bypassed if the hosted control plane is down. <a href="/handbook.html#architecture">Read the integration guide →</a></p>
+        <div class="stack-tags"><span>LangGraph</span><span>CrewAI</span><span>Plain Python</span></div>
+        <p class="stack-note">Configured guards are enforced only where their boundary or supported adapter is wired. If the ledger cannot claim or complete, a consequential tool fails closed. <a href="/handbook.html#architecture">Read the integration guide →</a></p>
       </div>
       <div class="code-window">
         <header><span></span><span></span><span></span><p>mycelium.yaml</p></header>
@@ -181,22 +181,22 @@
 
     <section class="pricing section" id="pricing" data-reveal data-contour="left" data-contour-ring="b">
       <div class="section-heading">
-        <p class="eyebrow"><span></span> Start free</p>
-        <h2>Open source enforces safety.<br><em>The team plan operates it.</em></h2>
-        <p>Exact price is an experiment until interviews establish willingness to pay.</p>
+        <p class="eyebrow"><span></span> What you can run today</p>
+        <h2>The kernel is open.<br><em>Hosted operation is next.</em></h2>
+        <p>What is shipped is the local runtime. A hosted team control plane is the planned paid surface, not a live subscribe path.</p>
       </div>
       <div class="price-grid">
         <article>
-          <h3>Open source</h3>
-          <p>Local enforcement and local storage. Audit every mechanism that blocks a side effect.</p>
+          <h3>Open source · shipped</h3>
+          <p>Local enforcement and local storage: claim, gate, fail-closed, reconcile, and record. File, SQLite, Redis, or Postgres.</p>
         </article>
         <article>
-          <h3>Free hosted</h3>
-          <p>One production workflow with limited evidence retention. Enough to prove the control plane.</p>
+          <h3>Free hosted · planned</h3>
+          <p>One production workflow with limited evidence retention. Not available yet.</p>
         </article>
         <article>
-          <h3>Team</h3>
-          <p>One monthly plan for shared durable storage, longer retention, alerts, visibility, and team access.</p>
+          <h3>Team · planned</h3>
+          <p>Shared durable storage, longer retention, alerts, visibility, and team access. Price stays experimental until someone pays.</p>
         </article>
       </div>
     </section>
@@ -204,7 +204,7 @@
     <section class="final-cta" data-reveal data-contour="both">
       <p class="eyebrow light"><span></span> Protect one consequential tool</p>
       <h2>Let agents act.<br><em>Keep the consequences controlled.</em></h2>
-      <p>Install the open-source kernel, protect a workflow, see the evidence, then subscribe when the team needs shared durability.</p>
+      <p>Install the open-source kernel, protect one consequential tool, and keep a labeled report of what was allowed, blocked, or left uncertain.</p>
       <div class="hero-actions centered">
         <a class="cta-button light-cta" href="/try.html">Protect your first workflow — free</a>
         <a class="text-link light-link" href="#report">View a real verification report <span aria-hidden="true">→</span></a>

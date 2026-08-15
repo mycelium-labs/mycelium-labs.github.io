@@ -43,14 +43,15 @@
       <div class="section-heading">
         <p class="eyebrow"><span></span> Invariant</p>
         <h2>Proven terminal,<br><em>or do not fire again.</em></h2>
-        <p>Tracers explain the incident afterward. Resolution decides whether a retry is a second side effect.</p>
+        <p>Tracers explain the incident afterward. Resolution decides whether a retry is a second side effect. An operator can later <code>mycelium transitions release</code> a blocked record. That is not a gate that re-runs the tool.</p>
       </div>
       <ul class="gate-list">
+        <li><code>ALLOW</code><p>No prior transition, or policy permits a safe retry. The tool may run.</p></li>
         <li><code>RETURN</code><p>The transition already completed. Replay the stored result.</p></li>
         <li><code>POLL</code><p>A valid lease is still held. Wait instead of executing.</p></li>
-        <li><code>HARD_BLOCK</code><p>The outcome is unknown on a consequential tool. Do not retry.</p></li>
-        <li><code>RECONCILE</code><p>Ask the provider whether the effect landed, then complete or release.</p></li>
-        <li><code>RELEASE</code><p>An operator clears a blocked transition after review.</p></li>
+        <li><code>REPAIR</code><p>The durable record is incomplete but healable. Fix it and re-resolve. No second side effect.</p></li>
+        <li><code>SOFT_BLOCK</code><p>Read-only UNKNOWN. Retry by default; mutating tools never use this gate.</p></li>
+        <li><code>HARD_BLOCK</code><p>Ambiguous mutating transition. Stop. Reconcile if an external_operation_ref exists, else fail closed.</p></li>
       </ul>
     </section>
 
@@ -63,7 +64,7 @@
       <div class="flow" aria-label="Retry asks the ledger before the provider">
         <div class="flow-node"><small>01</small><strong>Retry</strong><code>charge:ORD-42</code></div>
         <div class="flow-arrow" aria-hidden="true"><span></span></div>
-        <div class="flow-node boundary-node"><small>02 · resolve</small><strong>Mycelium</strong><code>return · poll · block · reconcile</code><p>completed <b>↳ stored result</b></p><p>ambiguous <b>↳ hard-block</b></p></div>
+        <div class="flow-node boundary-node"><small>02 · resolve</small><strong>Mycelium</strong><code>return · poll · repair · hard-block</code><p>completed <b>↳ stored result</b></p><p>ambiguous mutate <b>↳ hard-block</b></p></div>
         <div class="flow-arrow" aria-hidden="true"><span></span></div>
         <div class="flow-node"><small>03</small><strong>Provider</strong><code>only if unrecovered</code></div>
       </div>
