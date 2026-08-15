@@ -61,6 +61,7 @@
           <li><a href="#loops">Loop guard</a></li>
           <li><a href="#completion">Completion</a></li>
           <li><a href="#scope-guard">Scope guard</a></li>
+          <li><a href="#secret-in-args">Secret-in-args</a></li>
           <li><a href="#telemetry">Telemetry</a></li>
         </ol>
         <p class="side-group">Reference</p>
@@ -140,10 +141,11 @@ action_ledger:
       <section id="loops"><h2>Loop guard (AF-003, opt-in)</h2><p>Detects identical tool+args across new <code>tool_call_id</code>s.</p></section>
       <section id="completion"><h2>Completion contract (AF-007, opt-in)</h2><p>Refuses terminal while required subtasks are pending.</p></section>
       <section id="scope-guard"><h2>Scope guard (AF-008, opt-in)</h2><p>Freezes the run tool allowlist and re-checks every step.</p></section>
+      <section id="secret-in-args"><h2>Secret-in-args (AF-010, opt-in)</h2><p>Blocks raw credentials before claim. Pass <code>secret://</code> references instead of API keys. Fail-closed pre-execution blocking is the primary protection; redaction is defense-in-depth. Mycelium cannot sanitize logs created inside application or provider code.</p></section>
       <section id="telemetry"><h2>Outcome telemetry &amp; DTTR (v1.20+)</h2><p>Opt-in flat append-only outcome rows for production observability.</p></section>
       <p class="docs-group" id="group-reference">Reference</p>
       <section id="catalog">
-        <h2>Failure-mode catalog (AF-001…AF-009)</h2>
+        <h2>Failure-mode catalog (AF-001…AF-010)</h2>
         <p>Stable IDs used in the SDK README, changelogs, and this handbook. The public story leads with outcomes, not a guardrail count. <a href="/prevent.html">Browse the prevention catalog →</a></p>
       </section>
       <section id="api"><h2>API</h2><p>See SDK README for the full export list.</p></section>
