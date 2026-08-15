@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Resolve — Mycelium</title>
+  <meta name="description" content="Reconcile ambiguous provider outcomes instead of guessing whether a crashed operation ran.">
+  <meta name="theme-color" content="#f3f1ea">
+  <link rel="canonical" href="https://mycelium-labs.github.io/resolve.html">
+  <link rel="icon" href="/favicon.svg?v=6" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css?v=7">
+  <meta property="og:title" content="Resolve — Mycelium">
+  <meta property="og:description" content="Do not redispatch unless the previous transition is proven terminal or safely recoverable.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mycelium-labs.github.io/resolve.html">
+  <meta property="og:image" content="https://mycelium-labs.github.io/og-image.png">
+</head>
+<body class="calm-page">
+  <a class="skip-link" href="#content">Skip to content</a>
+  <nav class="site-nav" aria-label="Primary navigation">
+    <a class="brand" href="/" aria-label="Mycelium home"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a>
+    <div class="nav-links">
+      <a href="/#report">Report</a>
+      <a href="/#guardrails">Guardrails</a>
+      <a href="/try.html">Try</a>
+      <a href="/handbook.html">Docs</a>
+    </div>
+    <a class="nav-github" href="https://github.com/mycelium-labs/mycelium">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+
+  <main id="content">
+    <header class="page-hero" aria-labelledby="page-title">
+      <p class="eyebrow"><span></span> 02 · Resolve</p>
+      <h1 id="page-title">Do not guess<br><em>what the crash did.</em></h1>
+      <p class="hero-support">If the previous transition is not proven terminal or safely recoverable, Mycelium will not redispatch. Ambiguous payments stay blocked until reconciliation.</p>
+      <p class="page-trail"><a href="/">Home</a><span>→</span><a href="/prevent.html">Prevent</a><span>→</span><span>Resolve</span><span>·</span><a href="/verify.html">Verify</a></p>
+    </header>
+
+    <section class="section" data-reveal>
+      <div class="section-heading">
+        <p class="eyebrow"><span></span> Invariant</p>
+        <h2>Proven terminal,<br><em>or do not fire again.</em></h2>
+        <p>Tracers explain the incident afterward. Resolution decides whether a retry is a second side effect.</p>
+      </div>
+      <ul class="gate-list">
+        <li><code>RETURN</code><p>The transition already completed. Replay the stored result.</p></li>
+        <li><code>POLL</code><p>A valid lease is still held. Wait instead of executing.</p></li>
+        <li><code>HARD_BLOCK</code><p>The outcome is unknown on a consequential tool. Do not retry.</p></li>
+        <li><code>RECONCILE</code><p>Ask the provider whether the effect landed, then complete or release.</p></li>
+        <li><code>RELEASE</code><p>An operator clears a blocked transition after review.</p></li>
+      </ul>
+    </section>
+
+    <section class="flow-section contour-section" data-reveal>
+      <div class="flow-copy">
+        <p class="eyebrow light"><span></span> After a crash</p>
+        <h2>Claim again.<br><em>Then ask the ledger.</em></h2>
+        <p>The second attempt is not a new payment. It is a question: did the first one finish?</p>
+      </div>
+      <div class="flow" aria-label="Retry asks the ledger before the provider">
+        <div class="flow-node"><small>01</small><strong>Retry</strong><code>charge:ORD-42</code></div>
+        <div class="flow-arrow" aria-hidden="true"><span></span></div>
+        <div class="flow-node boundary-node"><small>02 · resolve</small><strong>Mycelium</strong><code>return · poll · block · reconcile</code><p>completed <b>↳ stored result</b></p><p>ambiguous <b>↳ hard-block</b></p></div>
+        <div class="flow-arrow" aria-hidden="true"><span></span></div>
+        <div class="flow-node"><small>03</small><strong>Provider</strong><code>only if unrecovered</code></div>
+      </div>
+    </section>
+
+    <section class="final-cta" data-reveal>
+      <p class="eyebrow light"><span></span> Next</p>
+      <h2>Then prove<br><em>the wiring holds.</em></h2>
+      <div class="hero-actions centered">
+        <a class="cta-button light-cta" href="/verify.html">Read about Verify</a>
+        <a class="text-link light-link" href="/handbook.html#resolution">Handbook resolution notes <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a><p>Let agents act. Keep the consequences controlled.</p><div><a href="/verify.html">Verify</a><a href="/handbook.html">Docs</a><a href="https://github.com/mycelium-labs/mycelium">GitHub</a></div></footer>
+  <script src="/site.js" defer></script>
+</body>
+</html>
