@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=7">
+  <link rel="stylesheet" href="/style.css?v=8">
   <meta property="og:title" content="Resolve — Mycelium">
   <meta property="og:description" content="Do not redispatch unless the previous transition is proven terminal or safely recoverable.">
   <meta property="og:type" content="website">
@@ -32,14 +32,14 @@
   </nav>
 
   <main id="content">
-    <header class="page-hero" aria-labelledby="page-title">
+    <header class="page-hero" aria-labelledby="page-title" data-contour="left" data-contour-ring="b">
       <p class="eyebrow"><span></span> 02 · Resolve</p>
       <h1 id="page-title">Do not guess<br><em>what the crash did.</em></h1>
       <p class="hero-support">If the previous transition is not proven terminal or safely recoverable, Mycelium will not redispatch. Ambiguous payments stay blocked until reconciliation.</p>
       <p class="page-trail"><a href="/">Home</a><span>→</span><a href="/prevent.html">Prevent</a><span>→</span><span>Resolve</span><span>·</span><a href="/verify.html">Verify</a></p>
     </header>
 
-    <section class="section" data-reveal>
+    <section class="section" data-reveal data-contour="right">
       <div class="section-heading">
         <p class="eyebrow"><span></span> Invariant</p>
         <h2>Proven terminal,<br><em>or do not fire again.</em></h2>
@@ -54,7 +54,7 @@
       </ul>
     </section>
 
-    <section class="flow-section contour-section" data-reveal>
+    <section class="flow-section contour-section" data-reveal data-contour="both">
       <div class="flow-copy">
         <p class="eyebrow light"><span></span> After a crash</p>
         <h2>Claim again.<br><em>Then ask the ledger.</em></h2>
@@ -69,7 +69,7 @@
       </div>
     </section>
 
-    <section class="final-cta" data-reveal>
+    <section class="final-cta" data-reveal data-contour="both">
       <p class="eyebrow light"><span></span> Next</p>
       <h2>Then prove<br><em>the wiring holds.</em></h2>
       <div class="hero-actions centered">
@@ -80,6 +80,6 @@
   </main>
 
   <footer class="site-footer"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a><p>Let agents act. Keep the consequences controlled.</p><div><a href="/verify.html">Verify</a><a href="/handbook.html">Docs</a><a href="https://github.com/mycelium-labs/mycelium">GitHub</a></div></footer>
-  <script src="/site.js" defer></script>
+  <script src="/site.js?v=2" defer></script>
 </body>
 </html>
