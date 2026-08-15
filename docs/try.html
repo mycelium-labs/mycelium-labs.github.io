@@ -402,11 +402,14 @@ pip install 'mycelium-runtime[langgraph]'   # optional</pre>
       <div>
         <h3>See the bug get stopped</h3>
         <p>
-          Feature tour: lease, hard-block, reconcile, operator release.
-          Optional Redis two-worker proof for the Cloud redispatch case.
+          Feature tour: lease, hard-block, repair, reconcile, operator release.
+          Doctor inspects config. Verify exercises synthetic failures against
+          the ledger backend only.
         </p>
         <pre>mycelium demo
-mycelium demo --redis   # needs Redis + mycelium-runtime[redis]</pre>
+mycelium demo --redis   # needs Redis + mycelium-runtime[redis]
+mycelium doctor --config mycelium.yaml
+mycelium verify --config mycelium.yaml</pre>
       </div>
     </article>
 
