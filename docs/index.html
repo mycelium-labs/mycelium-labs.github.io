@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=7">
+  <link rel="stylesheet" href="/style.css?v=8">
   <meta property="og:title" content="Mycelium — let agents act, keep the consequences controlled">
   <meta property="og:description" content="Prevent duplicate and unsafe side effects before production tools execute. Then record the evidence.">
   <meta property="og:type" content="website">
@@ -46,7 +46,7 @@
   </nav>
 
   <main>
-    <header class="hero" aria-labelledby="hero-title">
+    <header class="hero" aria-labelledby="hero-title" data-contour="left" data-contour-ring="b">
       <div class="hero-copy">
         <p class="eyebrow"><span></span> Reliability for production agents</p>
         <h1 id="hero-title">Let agents act.<br><em>Keep the consequences controlled.</em></h1>
@@ -93,7 +93,7 @@
       <div><span>Duplicate effects</span><span>Runaway loops</span><span>Tool misuse</span><span>Stale context</span><span>Early “done”</span><span>Scope creep</span></div>
     </section>
 
-    <section class="proof section" id="proof" data-reveal>
+    <section class="proof section" id="proof" data-reveal data-contour="right">
       <div class="section-heading">
         <p class="eyebrow"><span></span> Reliability you can prove</p>
         <h2>Not another layer of logs.<br><em>A layer of control.</em></h2>
@@ -106,7 +106,7 @@
       </div>
     </section>
 
-    <section class="flow-section contour-section" data-reveal>
+    <section class="flow-section contour-section" data-reveal data-contour="left" data-contour-ring="b">
       <svg class="section-contour" viewBox="0 0 600 600" aria-hidden="true" focusable="false"><path d="M63 94c98-72 235-66 322-18 91 51 158 158 118 263-45 119-194 199-329 154C39 448-26 323 21 211 33 181 46 128 63 94Z"/><path d="M100 128c77-55 190-56 268-16 83 43 132 127 104 213-32 98-151 163-258 132C97 423 39 325 71 235c13-37 15-78 29-107Z"/><path d="M145 165c61-42 143-41 201-9 65 36 98 96 80 162-22 77-112 124-193 103-89-24-128-101-106-169 10-32 5-62 18-87Z"/></svg>
       <div class="flow-copy">
         <p class="eyebrow light"><span></span> The control path</p>
@@ -122,7 +122,7 @@
       </div>
     </section>
 
-    <section class="catalog section" id="guardrails" data-reveal>
+    <section class="catalog section" id="guardrails" data-reveal data-contour="left" data-contour-ring="b">
       <div class="section-heading catalog-heading">
         <div><p class="eyebrow"><span></span> Failure-mode field guide</p><h2>Outcomes you can name,<br><em>not a guardrail count.</em></h2></div>
         <p>Lead with recognizable failures. The catalog supports credibility; it is not the pitch.</p>
@@ -137,7 +137,7 @@
       </div>
     </section>
 
-    <section class="stack-section section contour-section contour-section--light" data-reveal>
+    <section class="stack-section section contour-section contour-section--light" data-reveal data-contour="left" data-contour-ring="b">
       <svg class="section-contour" viewBox="0 0 600 600" aria-hidden="true" focusable="false"><path d="M63 94c98-72 235-66 322-18 91 51 158 158 118 263-45 119-194 199-329 154C39 448-26 323 21 211 33 181 46 128 63 94Z"/><path d="M100 128c77-55 190-56 268-16 83 43 132 127 104 213-32 98-151 163-258 132C97 423 39 325 71 235c13-37 15-78 29-107Z"/><path d="M145 165c61-42 143-41 201-9 65 36 98 96 80 162-22 77-112 124-193 103-89-24-128-101-106-169 10-32 5-62 18-87Z"/></svg>
       <div class="stack-copy">
         <p class="eyebrow"><span></span> Fits your stack</p>
@@ -165,7 +165,7 @@
       </div>
     </section>
 
-    <section class="examples section" id="examples" data-reveal>
+    <section class="examples section" id="examples" data-reveal data-contour="right">
       <div class="section-heading">
         <p class="eyebrow"><span></span> What this stops</p>
         <h2>Prevent the expensive mistake.<br><em>Not the wrong answer.</em></h2>
@@ -179,7 +179,7 @@
       </ul>
     </section>
 
-    <section class="pricing section" id="pricing" data-reveal>
+    <section class="pricing section" id="pricing" data-reveal data-contour="left" data-contour-ring="b">
       <div class="section-heading">
         <p class="eyebrow"><span></span> Start free</p>
         <h2>Open source enforces safety.<br><em>The team plan operates it.</em></h2>
@@ -201,7 +201,7 @@
       </div>
     </section>
 
-    <section class="final-cta" data-reveal>
+    <section class="final-cta" data-reveal data-contour="both">
       <p class="eyebrow light"><span></span> Protect one consequential tool</p>
       <h2>Let agents act.<br><em>Keep the consequences controlled.</em></h2>
       <p>Install the open-source kernel, protect a workflow, see the evidence, then subscribe when the team needs shared durability.</p>
@@ -213,6 +213,6 @@
   </main>
 
   <footer class="site-footer"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a><p>Let agents act. Keep the consequences controlled.</p><div><a href="#report">Report</a><a href="/handbook.html">Docs</a><a href="https://github.com/mycelium-labs/mycelium">GitHub</a></div></footer>
-  <script src="/site.js" defer></script>
+  <script src="/site.js?v=2" defer></script>
 </body>
 </html>
