@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Mycelium — reliability for AI agents</title>
-  <meta name="description" content="Keep AI agents in control. Mycelium prevents duplicate effects, runaway loops, unsafe tool calls, stale context, premature completion, and scope creep.">
+  <title>Mycelium — let agents act, keep the consequences controlled</title>
+  <meta name="description" content="Mycelium prevents duplicate and unsafe side effects before production tools execute, then records what was allowed, blocked, resolved, or left uncertain.">
   <meta name="keywords" content="agent reliability, AI guardrails, LangGraph, duplicate tool execution, idempotency, Python agents, mycelium-runtime">
   <meta name="author" content="Mycelium Labs">
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
@@ -16,9 +16,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=5">
-  <meta property="og:title" content="Mycelium — reliability for AI agents">
-  <meta property="og:description" content="Let agents improvise. Keep the system in control.">
+  <link rel="stylesheet" href="/style.css?v=6">
+  <meta property="og:title" content="Mycelium — let agents act, keep the consequences controlled">
+  <meta property="og:description" content="Prevent duplicate and unsafe side effects before production tools execute. Then record the evidence.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mycelium-labs.github.io/">
   <meta property="og:image" content="https://mycelium-labs.github.io/og-image.png">
@@ -27,19 +27,19 @@
   <meta property="og:image:alt" content="Mycelium reliability layer">
   <meta property="og:site_name" content="Mycelium">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Mycelium — reliability for AI agents">
-  <meta name="twitter:description" content="Let agents improvise. Keep the system in control.">
+  <meta name="twitter:title" content="Mycelium — let agents act, keep the consequences controlled">
+  <meta name="twitter:description" content="Prevent duplicate and unsafe side effects before production tools execute. Then record the evidence.">
   <meta name="twitter:image" content="https://mycelium-labs.github.io/og-image.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Mycelium","alternateName":"mycelium-runtime","applicationCategory":"DeveloperApplication","operatingSystem":"OS Independent","description":"The reliability layer for AI agents.","url":"https://mycelium-labs.github.io/","downloadUrl":"https://pypi.org/project/mycelium-runtime/","codeRepository":"https://github.com/mycelium-labs/mycelium","programmingLanguage":"Python","license":"https://opensource.org/licenses/MIT","author":{"@type":"Organization","name":"Mycelium Labs"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Mycelium","alternateName":"mycelium-runtime","applicationCategory":"DeveloperApplication","operatingSystem":"OS Independent","description":"Let agents act. Keep the consequences controlled. Mycelium prevents duplicate and unsafe side effects before production tools execute.","url":"https://mycelium-labs.github.io/","downloadUrl":"https://pypi.org/project/mycelium-runtime/","codeRepository":"https://github.com/mycelium-labs/mycelium","programmingLanguage":"Python","license":"https://opensource.org/licenses/MIT","author":{"@type":"Organization","name":"Mycelium Labs"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
 </head>
 <body class="calm-page">
-  <a class="skip-link" href="#proof">Skip to product</a>
+  <a class="skip-link" href="#report">Skip to verification report</a>
   <nav class="site-nav" aria-label="Primary navigation">
     <a class="brand" href="/" aria-label="Mycelium home"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a>
     <div class="nav-links">
+      <a href="#report">Report</a>
       <a href="#guardrails">Guardrails</a>
       <a href="/try.html">Try</a>
-      <a href="/sandbox.html">Sandbox</a>
       <a href="/handbook.html">Docs</a>
     </div>
     <a class="nav-github" href="https://github.com/mycelium-labs/mycelium">GitHub <span aria-hidden="true">↗</span></a>
@@ -48,36 +48,43 @@
   <main>
     <header class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <p class="eyebrow"><span></span> Runtime reliability for AI agents</p>
-        <h1 id="hero-title">Let agents improvise.<br><em>Keep the system in control.</em></h1>
-        <p class="hero-support">Mycelium stops duplicate effects, runaway loops, unsafe tool calls, stale context, premature completion, and scope creep <strong>before they reach production.</strong></p>
+        <p class="eyebrow"><span></span> Reliability for production agents</p>
+        <h1 id="hero-title">Let agents act.<br><em>Keep the consequences controlled.</em></h1>
+        <p class="hero-support">Mycelium prevents duplicate and unsafe side effects <strong>before production tools execute</strong>, then records evidence of what was allowed, blocked, resolved, or left uncertain.</p>
         <div class="hero-actions">
-          <button class="install-button" type="button" data-copy="pip install mycelium-runtime"><span class="prompt" aria-hidden="true">$</span><code>pip install mycelium-runtime</code><span class="copy-state" aria-live="polite">Copy</span></button>
-          <a class="text-link" href="/try.html">Try it in 5 minutes <span aria-hidden="true">→</span></a>
+          <a class="cta-button" href="/try.html">Protect your first workflow — free</a>
+          <a class="text-link" href="#report">View a real verification report <span aria-hidden="true">→</span></a>
         </div>
-        <p class="compatibility">Framework-agnostic Python <span>·</span> automatic LangGraph wiring <span>·</span> custom runtime APIs</p>
+        <p class="compatibility">Open-source runtime <span>·</span> local storage <span>·</span> fail-closed when the host is down</p>
       </div>
 
-      <div class="integrity-wrap" aria-label="Run integrity summary">
+      <div class="integrity-wrap" id="report" aria-label="Verification report">
         <svg class="contour" viewBox="0 0 600 600" aria-hidden="true" focusable="false">
           <path d="M63 94c98-72 235-66 322-18 91 51 158 158 118 263-45 119-194 199-329 154C39 448-26 323 21 211 33 181 46 128 63 94Z"/>
           <path d="M100 128c77-55 190-56 268-16 83 43 132 127 104 213-32 98-151 163-258 132C97 423 39 325 71 235c13-37 15-78 29-107Z"/>
           <path d="M145 165c61-42 143-41 201-9 65 36 98 96 80 162-22 77-112 124-193 103-89-24-128-101-106-169 10-32 5-62 18-87Z"/>
         </svg>
-        <section class="integrity-panel">
+        <section class="integrity-panel report-panel">
           <header class="panel-head">
-            <div><p>Run integrity</p><code>run_01J8M4A</code></div>
-            <span class="live"><i></i> protected</span>
+            <div><p>Verification report</p><code>review · 0 silently bypassed</code></div>
+            <span class="live"><i></i> observed in production</span>
           </header>
-          <div class="check-list">
-            <div><span class="check-icon">✓</span><p><strong>Stable intent</strong><small>server-owned request identity</small></p><code>sealed</code></div>
-            <div><span class="check-icon">✓</span><p><strong>Duplicate effects</strong><small>durable execution claim</small></p><code>clear</code></div>
-            <div><span class="check-icon">✓</span><p><strong>Loop ceiling</strong><small>progress and spend bounded</small></p><code>within limit</code></div>
-            <div><span class="check-icon">✓</span><p><strong>Tool boundary</strong><small>input, output, entity, path</small></p><code>valid</code></div>
-            <div><span class="check-icon">✓</span><p><strong>Completion</strong><small>required outcomes recorded</small></p><code>complete</code></div>
-            <div><span class="check-icon">✓</span><p><strong>Scope</strong><small>permissions did not widen</small></p><code>unchanged</code></div>
+          <div class="report-summary">
+            <p class="report-stat">25 <small>protected actions</small></p>
+            <p class="report-line">0 duplicate sends · 0 failed before effect · 0 need review</p>
+            <p class="report-line">0 silent bypasses observed</p>
           </div>
-          <footer><span>6 boundaries checked</span><span>0 unresolved</span></footer>
+          <div class="check-list">
+            <div><span class="check-icon">✓</span><p><strong>Workflow</strong><small>outbound email lane</small></p><code>live</code></div>
+            <div><span class="check-icon">✓</span><p><strong>Tool</strong><small>send</small></p><code>side effect</code></div>
+            <div><span class="check-icon">✓</span><p><strong>Guardrail</strong><small>AF-002 duplicate side effects</small></p><code>enforced</code></div>
+            <div><span class="check-icon">✓</span><p><strong>Window</strong><small>29 Jul–5 Aug 2026</small></p><code>7 days</code></div>
+            <div><span class="check-icon">✓</span><p><strong>Failure class</strong><small>duplicate send</small></p><code>0 observed</code></div>
+          </div>
+          <footer>
+            <span>42 send attempts · 30 unique recipients</span>
+            <span>Evidence: observed in production</span>
+          </footer>
         </section>
       </div>
     </header>
@@ -105,12 +112,12 @@
       <div class="flow-copy">
         <p class="eyebrow light"><span></span> The control path</p>
         <h2>Before the tool call.<br><em>Not after the incident.</em></h2>
-        <p>Tracers explain what happened. Mycelium decides what is allowed to happen—and leaves a durable record of the decision.</p>
+        <p>Your agent can retry, crash, loop, or lose context. Mycelium places an auditable boundary before consequential tools. Tracers explain incidents afterward. Mycelium prevents or contains them at execution time.</p>
       </div>
-      <div class="flow" aria-label="Agent intent passes through Mycelium before reaching the provider">
+      <div class="flow" aria-label="Claim, validate, execute or refuse, reconcile, then record evidence">
         <div class="flow-node"><small>01</small><strong>Agent intent</strong><code>charge:ORD-42</code></div>
         <div class="flow-arrow" aria-hidden="true"><span></span></div>
-        <div class="flow-node boundary-node"><small>02 · control</small><strong>Mycelium</strong><code>claim · check · record</code><p>matching retry <b>↳ stored result</b></p><p>unsafe action <b>↳ refused</b></p></div>
+        <div class="flow-node boundary-node"><small>02 · control</small><strong>Mycelium</strong><code>claim → validate → execute or refuse → reconcile → record</code><p>matching retry <b>↳ stored result</b></p><p>unsafe or ambiguous <b>↳ refused</b></p></div>
         <div class="flow-arrow" aria-hidden="true"><span></span></div>
         <div class="flow-node"><small>03</small><strong>Provider</strong><code>one admitted effect</code></div>
       </div>
@@ -118,8 +125,8 @@
 
     <section class="catalog section" id="guardrails" data-reveal>
       <div class="section-heading catalog-heading">
-        <div><p class="eyebrow"><span></span> Failure-mode field guide</p><h2>Guardrails with names,<br><em>not vague promises.</em></h2></div>
-        <p>Each failure class maps to an explicit runtime surface. Configure only what your agent needs; inspect the evidence afterward.</p>
+        <div><p class="eyebrow"><span></span> Failure-mode field guide</p><h2>Outcomes you can name,<br><em>not a guardrail count.</em></h2></div>
+        <p>Lead with recognizable failures. The catalog supports credibility; it is not the pitch.</p>
       </div>
       <div class="guardrail-list">
         <a href="/handbook.html#actions"><code>AF-002</code><strong>Observability black hole</strong><span>Stop duplicate effects with at-most-once execution and ambiguous-outcome reconciliation.</span><i>Action ledger</i></a>
@@ -138,7 +145,7 @@
         <h2>Your agent stays yours.</h2>
         <p>Wrap Python callables directly, enable automatic LangGraph boundaries, or register adapters for a custom runtime.</p>
         <div class="stack-tags"><span>LangGraph</span><span>Plain Python</span><span>Custom runtimes</span></div>
-        <p class="stack-note">Configured guards are enforced only where their boundary or supported adapter is wired. <a href="/handbook.html#architecture">Read the integration guide →</a></p>
+        <p class="stack-note">Configured guards are enforced only where their boundary or supported adapter is wired. Local protection must never be silently bypassed if the hosted control plane is down. <a href="/handbook.html#architecture">Read the integration guide →</a></p>
       </div>
       <div class="code-window">
         <header><span></span><span></span><span></span><p>mycelium.yaml</p></header>
@@ -159,18 +166,54 @@
       </div>
     </section>
 
+    <section class="examples section" id="examples" data-reveal>
+      <div class="section-heading">
+        <p class="eyebrow"><span></span> What this stops</p>
+        <h2>Prevent the expensive mistake.<br><em>Not the wrong answer.</em></h2>
+      </div>
+      <ul class="example-list">
+        <li>Prevent charging an order twice after a timeout.</li>
+        <li>Stop duplicate emails or tickets during redispatch.</li>
+        <li>Refuse destructive calls outside the approved scope.</li>
+        <li>Hard-block an ambiguous payment until reconciliation.</li>
+        <li>Stop runaway loops and premature “done.”</li>
+      </ul>
+    </section>
+
+    <section class="pricing section" id="pricing" data-reveal>
+      <div class="section-heading">
+        <p class="eyebrow"><span></span> Start free</p>
+        <h2>Open source enforces safety.<br><em>The team plan operates it.</em></h2>
+        <p>Exact price is an experiment until interviews establish willingness to pay.</p>
+      </div>
+      <div class="price-grid">
+        <article>
+          <h3>Open source</h3>
+          <p>Local enforcement and local storage. Audit every mechanism that blocks a side effect.</p>
+        </article>
+        <article>
+          <h3>Free hosted</h3>
+          <p>One production workflow with limited evidence retention. Enough to prove the control plane.</p>
+        </article>
+        <article>
+          <h3>Team</h3>
+          <p>One monthly plan for shared durable storage, longer retention, alerts, visibility, and team access.</p>
+        </article>
+      </div>
+    </section>
+
     <section class="final-cta" data-reveal>
-      <p class="eyebrow light"><span></span> Start with one boundary</p>
-      <h2>Give your agents freedom.<br><em>Keep the consequences controlled.</em></h2>
-      <p>Open source, framework-agnostic, and designed to fail closed where the real world begins.</p>
+      <p class="eyebrow light"><span></span> Protect one consequential tool</p>
+      <h2>Let agents act.<br><em>Keep the consequences controlled.</em></h2>
+      <p>Install the open-source kernel, protect a workflow, see the evidence, then subscribe when the team needs shared durability.</p>
       <div class="hero-actions centered">
-        <button class="install-button light-button" type="button" data-copy="pip install mycelium-runtime"><span class="prompt" aria-hidden="true">$</span><code>pip install mycelium-runtime</code><span class="copy-state" aria-live="polite">Copy</span></button>
-        <a class="text-link light-link" href="/try.html">Try it in 5 minutes <span aria-hidden="true">→</span></a>
+        <a class="cta-button light-cta" href="/try.html">Protect your first workflow — free</a>
+        <a class="text-link light-link" href="#report">View a real verification report <span aria-hidden="true">→</span></a>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a><p>Reliability infrastructure for AI agents.</p><div><a href="/sandbox.html">Sandbox</a><a href="/handbook.html">Docs</a><a href="https://github.com/mycelium-labs/mycelium">GitHub</a></div></footer>
+  <footer class="site-footer"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a><p>Let agents act. Keep the consequences controlled.</p><div><a href="#report">Report</a><a href="/handbook.html">Docs</a><a href="https://github.com/mycelium-labs/mycelium">GitHub</a></div></footer>
   <script>
   (() => {
     const copy = async button => {

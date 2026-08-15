@@ -59,4 +59,31 @@ body.calm-page{margin:0;background:var(--paper);color:var(--forest);font-family:
   .calm-page .code-window pre{padding:1rem;font-size:.61rem;line-height:1.65}
   .calm-page .code-window footer{display:grid;gap:.35rem;overflow-wrap:anywhere}
   .calm-page .site-footer>div{width:100%;justify-content:space-between;gap:.75rem}
+  .calm-page .cta-button{width:100%;min-width:0;justify-content:center;text-align:center}
+  .calm-page .report-stat{font-size:2.4rem}
+  .calm-page .example-list,.calm-page .price-grid{grid-template-columns:1fr}
+}
+
+.calm-page #report{scroll-margin-top:88px}
+.calm-page .boundary-node code{white-space:normal;overflow-wrap:anywhere}
+.calm-page .cta-button{min-height:52px;min-width:335px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--forest);border-radius:8px;background:var(--forest);color:var(--white)!important;padding:0 1.2rem;font:600 .9rem var(--font-body);text-decoration:none;letter-spacing:-.02em}
+.calm-page .cta-button:hover{background:var(--forest-2)}
+.calm-page .light-cta{background:var(--white);color:var(--forest)!important;border-color:var(--white)}
+.calm-page .light-cta:hover{background:#e9eee7}
+.calm-page .report-summary{padding:1.25rem 1.35rem 1.1rem;border-bottom:1px solid var(--line)}
+.calm-page .report-stat{margin:0 0 .55rem;font:500 clamp(2.4rem,4vw,3.1rem)/1 var(--font-body);letter-spacing:-.05em}
+.calm-page .report-stat small{display:block;margin-top:.35rem;color:#526057;font:500 .72rem var(--font-mono);letter-spacing:.06em;text-transform:uppercase}
+.calm-page .report-line{margin:.2rem 0 0;color:#526057;font:400 .78rem var(--font-mono)}
+.calm-page .example-list{margin:3.5rem 0 0;padding:0;list-style:none;display:grid;gap:0;border-top:1px solid var(--line)}
+.calm-page .example-list li{padding:1.15rem 0;border-bottom:1px solid var(--line);font-size:1.08rem}
+.calm-page .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:4rem;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.calm-page .price-grid article{padding:2rem 1.6rem 2.2rem;border-right:1px solid var(--line)}
+.calm-page .price-grid article:first-child{padding-left:0}
+.calm-page .price-grid article:last-child{border-right:0;padding-right:0}
+.calm-page .price-grid h3{margin:0 0 .7rem;font-size:1.25rem}
+.calm-page .price-grid p{margin:0;color:#59655d}
+@media(max-width:900px){
+  .calm-page .price-grid{grid-template-columns:1fr}
+  .calm-page .price-grid article,.calm-page .price-grid article:first-child,.calm-page .price-grid article:last-child{padding:1.6rem 0;border-right:0;border-bottom:1px solid var(--line)}
+  .calm-page .price-grid article:last-child{border-bottom:0}
 }
