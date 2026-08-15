@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Prevent — Mycelium</title>
+  <meta name="description" content="Refuse duplicate, invalid, out-of-scope, or over-budget actions before they touch the real world.">
+  <meta name="theme-color" content="#f3f1ea">
+  <link rel="canonical" href="https://mycelium-labs.github.io/prevent.html">
+  <link rel="icon" href="/favicon.svg?v=6" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css?v=7">
+  <meta property="og:title" content="Prevent — Mycelium">
+  <meta property="og:description" content="Refuse duplicate and unsafe side effects before production tools execute.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mycelium-labs.github.io/prevent.html">
+  <meta property="og:image" content="https://mycelium-labs.github.io/og-image.png">
+</head>
+<body class="calm-page">
+  <a class="skip-link" href="#content">Skip to content</a>
+  <nav class="site-nav" aria-label="Primary navigation">
+    <a class="brand" href="/" aria-label="Mycelium home"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a>
+    <div class="nav-links">
+      <a href="/#report">Report</a>
+      <a href="/#guardrails">Guardrails</a>
+      <a href="/try.html">Try</a>
+      <a href="/handbook.html">Docs</a>
+    </div>
+    <a class="nav-github" href="https://github.com/mycelium-labs/mycelium">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+
+  <main id="content">
+    <header class="page-hero" aria-labelledby="page-title">
+      <p class="eyebrow"><span></span> 01 · Prevent</p>
+      <h1 id="page-title">Refuse the action<br><em>before it lands.</em></h1>
+      <p class="hero-support">Mycelium claims the transition, validates the tool, and either executes once or returns the stored result. Duplicate charges, emails, and writes stop at the boundary.</p>
+      <p class="page-trail"><a href="/">Home</a><span>→</span><span>Prevent</span><span>·</span><a href="/resolve.html">Resolve</a><span>·</span><a href="/verify.html">Verify</a></p>
+    </header>
+
+    <section class="section" data-reveal>
+      <div class="section-heading">
+        <p class="eyebrow"><span></span> What this stops</p>
+        <h2>The expensive mistake,<br><em>not the wrong answer.</em></h2>
+      </div>
+      <ul class="example-list">
+        <li>Prevent charging an order twice after a timeout.</li>
+        <li>Stop duplicate emails or tickets during redispatch.</li>
+        <li>Refuse destructive calls outside the approved scope.</li>
+        <li>Stop runaway loops and premature “done.”</li>
+      </ul>
+    </section>
+
+    <section class="catalog section" data-reveal>
+      <div class="section-heading catalog-heading">
+        <div><p class="eyebrow"><span></span> Failure catalog</p><h2>Named boundaries.<br><em>Not a count.</em></h2></div>
+        <p>Each class maps to a runtime surface. Configure only what the workflow needs.</p>
+      </div>
+      <div class="guardrail-list">
+        <a href="/handbook.html#actions"><code>AF-002</code><strong>Duplicate side effects</strong><span>At-most-once execution and durable claims before the tool runs.</span><i>Action ledger</i></a>
+        <a href="/handbook.html#tools"><code>AF-004</code><strong>Unsafe tool access</strong><span>Validate inputs, outputs, entities, paths, and allowlists.</span><i>Tool boundary</i></a>
+        <a href="/handbook.html#scope-guard"><code>AF-008</code><strong>Permission escalation</strong><span>Freeze the run allowlist and reject widening mid-flight.</span><i>Scope guard</i></a>
+        <a href="/handbook.html#loops"><code>AF-003</code><strong>Runaway loops</strong><span>Recognize repeated action patterns with no progress.</span><i>Loop guard</i></a>
+        <a href="/handbook.html#completion"><code>AF-007</code><strong>Premature completion</strong><span>Require declared outcomes before a run can finish.</span><i>Completion</i></a>
+        <a href="/handbook.html#context"><code>AF-006</code><strong>Stale context</strong><span>Keep messages, history, and session state from going stale.</span><i>Context</i></a>
+      </div>
+    </section>
+
+    <section class="stack-section section" data-reveal>
+      <div class="stack-copy">
+        <p class="eyebrow"><span></span> Core path</p>
+        <h2>Claim, then execute.</h2>
+        <p>A ledgered tool gets a side-effect class and a transition key. The next dispatch resolves the existing transition instead of charging again.</p>
+        <p class="stack-note"><a href="/handbook.html#actions">Full actions reference →</a></p>
+      </div>
+      <div class="code-window">
+        <header><span></span><span></span><span></span><p>send_payment.py</p></header>
+        <pre><code><b>from</b> mycelium <b>import</b> load_config
+
+config = load_config(<em>"mycelium.yaml"</em>)
+
+@config.apply
+<b>def</b> send_payment(amount: float, recipient: str) -> dict:
+    <b>return</b> gateway.charge(amount, recipient)
+
+send_payment(amount=<em>100.0</em>, recipient=<em>"acct_123"</em>, tool_call_id=<em>"call_pay"</em>)</code></pre>
+        <footer><span>duplicate dispatch returns the stored result</span><i>NO SECOND CHARGE</i></footer>
+      </div>
+    </section>
+
+    <section class="final-cta" data-reveal>
+      <p class="eyebrow light"><span></span> Next</p>
+      <h2>Then resolve<br><em>what the crash left open.</em></h2>
+      <div class="hero-actions centered">
+        <a class="cta-button light-cta" href="/resolve.html">See resolution gates</a>
+        <a class="text-link light-link" href="/try.html">Protect your first workflow — free <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a><p>Let agents act. Keep the consequences controlled.</p><div><a href="/resolve.html">Resolve</a><a href="/handbook.html">Docs</a><a href="https://github.com/mycelium-labs/mycelium">GitHub</a></div></footer>
+  <script src="/site.js" defer></script>
+</body>
+</html>

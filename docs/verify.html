@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Verify — Mycelium</title>
+  <meta name="description" content="Inspect configuration with Doctor, then exercise synthetic redispatch, crash, contention, and outage scenarios.">
+  <meta name="theme-color" content="#f3f1ea">
+  <link rel="canonical" href="https://mycelium-labs.github.io/verify.html">
+  <link rel="icon" href="/favicon.svg?v=6" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css?v=7">
+  <meta property="og:title" content="Verify — Mycelium">
+  <meta property="og:description" content="Prove the boundary is wired before a consequential tool goes live.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mycelium-labs.github.io/verify.html">
+  <meta property="og:image" content="https://mycelium-labs.github.io/og-image.png">
+</head>
+<body class="calm-page">
+  <a class="skip-link" href="#content">Skip to content</a>
+  <nav class="site-nav" aria-label="Primary navigation">
+    <a class="brand" href="/" aria-label="Mycelium home"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a>
+    <div class="nav-links">
+      <a href="/#report">Report</a>
+      <a href="/#guardrails">Guardrails</a>
+      <a href="/try.html">Try</a>
+      <a href="/handbook.html">Docs</a>
+    </div>
+    <a class="nav-github" href="https://github.com/mycelium-labs/mycelium">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+
+  <main id="content">
+    <header class="page-hero" aria-labelledby="page-title">
+      <p class="eyebrow"><span></span> 03 · Verify</p>
+      <h1 id="page-title">Prove the wiring<br><em>before production.</em></h1>
+      <p class="hero-support">Doctor inspects the config. Demo and synthetic runs exercise redispatch, crash, contention, and outage. Reports stay labeled so a number is never a manufactured before.</p>
+      <p class="page-trail"><a href="/">Home</a><span>→</span><a href="/prevent.html">Prevent</a><span>→</span><a href="/resolve.html">Resolve</a><span>→</span><span>Verify</span></p>
+    </header>
+
+    <section class="section" data-reveal>
+      <div class="section-heading">
+        <p class="eyebrow"><span></span> How to check</p>
+        <h2>Read-only first.<br><em>Then a hostile retry.</em></h2>
+      </div>
+      <ul class="gate-list">
+        <li><code>doctor</code><p>Inspect mycelium.yaml without executing tools. Missing IDs and unwired guards fail closed in the report.</p></li>
+        <li><code>demo</code><p>Compare an unguarded path with a ledgered one. See hard-block, return, and release on purpose.</p></li>
+        <li><code>redis</code><p>Optional two-worker proof: one claimer wins, the other waits or returns the stored result.</p></li>
+        <li><code>report</code><p>Label every figure as observed in production, synthetically verified, operator asserted, or not verifiable.</p></li>
+      </ul>
+    </section>
+
+    <section class="stack-section section" data-reveal>
+      <div class="stack-copy">
+        <p class="eyebrow"><span></span> Commands</p>
+        <h2>Start with Doctor.</h2>
+        <p>Verification is not a dashboard. It is a command that tells you whether the boundary is actually attached to the tool.</p>
+        <p class="stack-note"><a href="/#report">View the live email-lane report →</a></p>
+      </div>
+      <div class="code-window">
+        <header><span></span><span></span><span></span><p>terminal</p></header>
+        <pre><code>mycelium doctor --config mycelium.yaml
+mycelium demo
+mycelium demo --redis
+mycelium init
+mycelium run --config mycelium.yaml -- python -m my_agent</code></pre>
+        <footer><span>doctor is read-only</span><i>NO SIDE EFFECTS</i></footer>
+      </div>
+    </section>
+
+    <section class="section" data-reveal>
+      <div class="section-heading">
+        <p class="eyebrow"><span></span> Evidence labels</p>
+        <h2>Never invent<br><em>a historical before.</em></h2>
+      </div>
+      <ul class="example-list">
+        <li>Observed in production — a live lane, like the outbound email report on the homepage.</li>
+        <li>Synthetic verification — demo, crash, contention, or outage fixtures.</li>
+        <li>Operator asserted — a human confirmed the outcome.</li>
+        <li>Not verifiable — residual risk stays visible.</li>
+      </ul>
+    </section>
+
+    <section class="final-cta" data-reveal>
+      <p class="eyebrow light"><span></span> Protect one tool</p>
+      <h2>Let agents act.<br><em>Keep the consequences controlled.</em></h2>
+      <div class="hero-actions centered">
+        <a class="cta-button light-cta" href="/try.html">Protect your first workflow — free</a>
+        <a class="text-link light-link" href="/#report">View a real verification report <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a><p>Let agents act. Keep the consequences controlled.</p><div><a href="/#report">Report</a><a href="/handbook.html">Docs</a><a href="https://github.com/mycelium-labs/mycelium">GitHub</a></div></footer>
+  <script src="/site.js" defer></script>
+</body>
+</html>

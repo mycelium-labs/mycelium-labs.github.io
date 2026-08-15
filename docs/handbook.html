@@ -1,284 +1,85 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Handbook · Mycelium</title>
-  <meta name="description" content="The reliability layer for AI agents. Failure-mode catalog (AF-00N): stop duplicate side effects, loops, bad tool calls, stale context, early done, and scope creep. Not a tracer. Prevention at the tool boundary.">
-  <meta name="keywords" content="agent reliability, runtime guards, LangGraph, CrewAI, duplicate tool execution, tool calling, idempotency, Python agents, mycelium-runtime">
-  <meta name="author" content="Mycelium Labs">
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
-  <meta name="theme-color" content="#1c1d14">
+  <meta name="description" content="How to install Mycelium, prevent duplicate side effects, resolve ambiguous outcomes, and verify the boundary is wired.">
+  <meta name="theme-color" content="#f3f1ea">
   <link rel="canonical" href="https://mycelium-labs.github.io/handbook.html">
-  <link rel="icon" href="/favicon.svg?v=3" type="image/svg+xml">
-  <link rel="icon" href="/favicon-32.png?v=3" type="image/png" sizes="32x32">
-  <link rel="icon" href="/favicon-16.png?v=3" type="image/png" sizes="16x16">
-  <link rel="icon" href="/favicon-48.png?v=3" type="image/png" sizes="48x48">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3" sizes="180x180">
-  <meta property="og:title" content="Mycelium">
-  <meta property="og:description" content="Stops duplicate side effects on retry and redispatch, blocks bad tool calls, and keeps tool data fresh. Prevention at the tool boundary.">
+  <link rel="icon" href="/favicon.svg?v=6" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css?v=7">
+  <meta property="og:title" content="Handbook · Mycelium">
+  <meta property="og:description" content="Install, prevent, resolve, and verify. The reliability layer for AI agents.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mycelium-labs.github.io/handbook.html">
   <meta property="og:image" content="https://mycelium-labs.github.io/og-image.png">
-  <meta property="og:image:width" content="1536">
-  <meta property="og:image:height" content="1024">
-  <meta property="og:image:alt" content="Mycelium">
-  <meta property="og:site_name" content="Mycelium">
-  <meta property="og:locale" content="en_US">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://mycelium-labs.github.io/og-image.png">
-  <meta name="twitter:title" content="Mycelium">
-  <meta name="twitter:description" content="Stops duplicate side effects on retry and redispatch, blocks bad tool calls, and keeps tool data fresh.">
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How do I build reliable AI agents in production?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Most agent failures in production are not reasoning failures; they are runtime failures: a tool runs twice on retry, context goes stale, or the model emits an invalid tool call. Mycelium's core path wraps tool execution with a transition envelope (classify side effects, durable key, lease, gates). Opt-in helpers cover stale context and bad tool-call boundaries. Framework-agnostic. pip install mycelium-runtime"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How do I prevent duplicate tool execution in LangGraph?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Use a transition envelope, not only an idempotency key plus a cached result. Classify each tool (read vs keyed_mutate vs non_idempotent_mutate, etc.), enable transition: in mycelium.yaml, and use callable paths with mycelium run or @config.apply. Mycelium hashes a durable transition key, holds an execution lease, records terminal state, and resolves duplicates by gates: read tools poll or soft-block UNKNOWN; mutating tools hard-block or reconcile against the provider when you record external_operation_ref. LangGraph Cloud may redispatch long tools around ~180s (BG_JOB_HEARTBEAT sweep). pip install mycelium-runtime && mycelium demo"
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Is Mycelium a replacement for Langfuse or LangSmith?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "No. Langfuse and LangSmith are observability and tracing tools. They show what happened after an agent runs. Mycelium is runtime prevention: a transition ledger around tool execution (core), plus optional tool-boundary and message/history guards. Use both if you want traces and guards."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How do I make AI agent tool calls idempotent in Python?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Wrap side-effect tools with a ledger that atomically claims request_id or tool_call_id before execution. On retry or redispatch, return the stored result. Mycelium provides @ledger_sync() for sync tools and @ledger() for async. Framework-agnostic; works with LangGraph, CrewAI, or plain Python loops."
-        }
-      }
-    ]
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Mycelium",
-    "alternateName": "mycelium-runtime",
-    "applicationCategory": "DeveloperApplication",
-    "operatingSystem": "OS Independent",
-    "description": "The reliability layer for AI agents. AF-00N failure-mode catalog: duplicate side effects, loops, tool misuse, context corruption, premature termination, scope escalation. Framework-agnostic Python.",
-    "url": "https://mycelium-labs.github.io/",
-    "downloadUrl": "https://pypi.org/project/mycelium-runtime/",
-    "codeRepository": "https://github.com/mycelium-labs/mycelium",
-    "programmingLanguage": "Python",
-    "license": "https://opensource.org/licenses/MIT",
-    "keywords": "AI agents, LangGraph, CrewAI, idempotency, duplicate tool execution, agent reliability, runtime guards, tool calling",
-    "author": {
-      "@type": "Organization",
-      "name": "Mycelium Labs",
-      "url": "https://github.com/mycelium-labs"
-    },
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Mycelium",
-    "url": "https://mycelium-labs.github.io/",
-    "description": "The reliability layer for AI agents. AF-00N failure-mode catalog: duplicate-side-effect prevention, tool boundaries, loops, completion, and scope. Framework-agnostic Python.",
-    "publisher": {
-      "@type": "Organization",
-      "name": "Mycelium Labs",
-      "url": "https://github.com/mycelium-labs"
-    }
-  }
-  </script>
-  <style>
-   :root {
-      --ink: #181818;
-      --ink-soft: #3d3d3d;
-      --ink-muted: #6b6b6b;
-      --ink-faint: #9a9a9a;
-      --paper: #f8f7f5;
-      --wash: #f0efec;
-      --line: #d8d6d1;
-      --sidebar: 10rem;
-      --product: #1c1d14;
-      --product-ink: #eef0e2;
-      --product-muted: #a3a574;
-      --product-brand: #d8c45a;
-    }
-
-    * { box-sizing: border-box; }
-
-    html {
-      font-size: 17px;
-      -webkit-font-smoothing: antialiased;
-      scroll-behavior: smooth;
-      overflow-x: clip;
-    }
-
-    body {
-      margin: 0;
-      font-family: "Helvetica Neue", Helvetica, "Segoe UI", sans-serif;
-      color: var(--ink);
-      background: var(--paper);
-      line-height: 1.55;
-      overflow-x: clip;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: var(--sidebar) 1fr;
-      gap: 3rem;
-      max-width: 54rem;
-      margin: 0 auto;
-      padding: 3rem 2rem 4rem;
-      scroll-margin-top: 1rem;
-    }
-
-    .sidebar {
-      position: sticky;
-      top: 2rem;
-      align-self: start;
-    }
-
-    .sidebar > p {
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size: 0.62rem;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      margin: 0 0 1rem;
-    }
-
-    .sidebar a {
-      color: var(--ink-muted);
-      text-decoration: none;
-      border-left: 2px solid transparent;
-      padding: 0.2rem 0 0.2rem 0.65rem;
-      margin-left: -0.65rem;
-      display: block;
-      transition: color 0.15s, border-color 0.15s, background 0.15s;
-    }
-
-    .sidebar a:hover { color: var(--ink); border-left-color: var(--line); }
-    .sidebar a.active { color: var(--ink); font-weight: 600; background: var(--wash); border-left-color: var(--ink); }
-
-    .side-nav { margin: 0; }
-    .side-group {
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size: 0.62rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      margin: 1.15rem 0 0.45rem;
-    }
-    .side-nav > .side-group:first-child { margin-top: 0; }
-    .side-nav ol { margin: 0; padding: 0; list-style: none; font-size: 0.78rem; line-height: 1.5; }
-    .side-nav li { margin-bottom: 0.35rem; }
-
-    .docs-label, .docs-group {
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size: 0.62rem;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-    }
-    .docs-group { font-size: 0.68rem; margin: 2.5rem 0 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--line); scroll-margin-top: 2rem; }
-
-    h1 { font-size: 2.4rem; font-weight: 700; letter-spacing: -0.03em; margin: 0 0 0.75rem; line-height: 1.05; }
-    h2 { font-size: 1.2rem; font-weight: 700; margin: 0 0 0.85rem; padding-bottom: 0.45rem; border-bottom: 1px solid var(--ink); }
-    p { margin: 0 0 0.85rem; color: var(--ink-soft); font-size: 0.95rem; }
-    pre {
-      margin: 0; padding: 1rem 1.1rem; background: var(--wash); border: 1px solid var(--line);
-      overflow-x: auto; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.73rem; line-height: 1.6;
-    }
-    pre + pre { margin-top: 0.75rem; }
-    section { margin-bottom: 2.75rem; scroll-margin-top: 2rem; }
-    #catalog table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 1rem 0 1.5rem; }
-    #catalog th, #catalog td { text-align: left; vertical-align: top; padding: 0.45rem 0.55rem; border-bottom: 1px solid var(--line); }
-    @media (max-width: 860px) {
-      .layout { grid-template-columns: 1fr; gap: 1.75rem; padding: 2.25rem 1.5rem 3rem; }
-      .sidebar { position: static; padding-bottom: 1.1rem; border-bottom: 1px solid var(--line); }
-    }
-  </style>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I build reliable AI agents in production?","acceptedAnswer":{"@type":"Answer","text":"Most agent failures in production are runtime failures: a tool runs twice on retry, context goes stale, or the model emits an invalid tool call. Mycelium wraps tool execution with a transition envelope. pip install mycelium-runtime"}},{"@type":"Question","name":"How do I prevent duplicate tool execution in LangGraph?","acceptedAnswer":{"@type":"Answer","text":"Use a transition envelope, not only an idempotency key plus a cached result. Mycelium hashes a durable transition key, holds an execution lease, and resolves duplicates by gates. pip install mycelium-runtime && mycelium demo"}},{"@type":"Question","name":"Is Mycelium a replacement for Langfuse or LangSmith?","acceptedAnswer":{"@type":"Answer","text":"No. Those are observability tools. Mycelium is runtime prevention at the tool boundary. Use both if you want traces and guards."}}]}</script>
 </head>
-<body>
-
-<header style="background:#1c1d14;color:#eef0e2;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center">
-  <a href="/" style="color:#d8c45a;text-decoration:none;font-weight:600">Mycelium</a>
-  <nav style="display:flex;gap:1.25rem;font-size:0.88rem">
-    <a href="/try.html" style="color:#a3a574;text-decoration:none">Try</a>
-    <a href="/sandbox.html" style="color:#a3a574;text-decoration:none">Sandbox</a>
-    <a href="https://github.com/mycelium-labs/mycelium" style="color:#a3a574;text-decoration:none">GitHub</a>
+<body class="calm-page">
+  <a class="skip-link" href="#how-to-use">Skip to handbook</a>
+  <nav class="site-nav" aria-label="Primary navigation">
+    <a class="brand" href="/" aria-label="Mycelium home"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a>
+    <div class="nav-links">
+      <a href="/#report">Report</a>
+      <a href="/#guardrails">Guardrails</a>
+      <a href="/try.html">Try</a>
+      <a href="/handbook.html" aria-current="page">Docs</a>
+    </div>
+    <a class="nav-github" href="https://github.com/mycelium-labs/mycelium">GitHub <span aria-hidden="true">↗</span></a>
   </nav>
-</header>
 
-<div class="layout" id="how-to-use">
-  <aside class="sidebar">
-    <p>How to use</p>
-    <nav class="side-nav">
-      <p class="side-group">Start</p>
-      <ol>
-        <li><a href="/">Home</a></li>
-        <li><a href="/try.html">Try in 5 minutes</a></li>
-        <li><a href="#install">Install</a></li>
-        <li><a href="#architecture">How it fits</a></li>
-        <li><a href="#scope">What it does</a></li>
-      </ol>
-      <p class="side-group">Core</p>
-      <ol>
-        <li><a href="#actions">Actions</a></li>
-        <li><a href="#resolution">Resolution</a></li>
-        <li><a href="#envelope">Envelope</a></li>
-        <li><a href="#yaml">YAML</a></li>
-      </ol>
-      <p class="side-group">Opt-in</p>
-      <ol>
-        <li><a href="#context">Context</a></li>
-        <li><a href="#tools">Tool boundaries</a></li>
-        <li><a href="#loops">Loop guard</a></li>
-        <li><a href="#completion">Completion</a></li>
-        <li><a href="#scope-guard">Scope guard</a></li>
-        <li><a href="#telemetry">Telemetry</a></li>
-      </ol>
-      <p class="side-group">Reference</p>
-      <ol>
-        <li><a href="#catalog">Failure catalog</a></li>
-        <li><a href="#api">API</a></li>
-        <li><a href="#common-searches">FAQ</a></li>
-      </ol>
-    </nav>
-  </aside>
-  <div class="main">
-    <p class="docs-label">How to use</p>
-    <h1>Start with install, then the core path</h1>
-    <p class="docs-group" id="group-start">Start</p>
-    <section id="install">
-      <h2>Install</h2>
-      <p>Requires Python 3.10 or later.</p>
-      <pre>pip install mycelium-runtime
+  <div class="docs-shell" id="how-to-use">
+    <aside class="docs-side">
+      <p>How to use</p>
+      <nav class="side-nav">
+        <p class="side-group">Start</p>
+        <ol>
+          <li><a href="/">Home</a></li>
+          <li><a href="/try.html">Try in 5 minutes</a></li>
+          <li><a href="/prevent.html">Prevent</a></li>
+          <li><a href="/resolve.html">Resolve</a></li>
+          <li><a href="/verify.html">Verify</a></li>
+          <li><a href="#install">Install</a></li>
+          <li><a href="#architecture">How it fits</a></li>
+          <li><a href="#scope">What it does</a></li>
+        </ol>
+        <p class="side-group">Core</p>
+        <ol>
+          <li><a href="#actions">Actions</a></li>
+          <li><a href="#resolution">Resolution</a></li>
+          <li><a href="#envelope">Envelope</a></li>
+          <li><a href="#yaml">YAML</a></li>
+        </ol>
+        <p class="side-group">Opt-in</p>
+        <ol>
+          <li><a href="#context">Context</a></li>
+          <li><a href="#tools">Tool boundaries</a></li>
+          <li><a href="#loops">Loop guard</a></li>
+          <li><a href="#completion">Completion</a></li>
+          <li><a href="#scope-guard">Scope guard</a></li>
+          <li><a href="#telemetry">Telemetry</a></li>
+        </ol>
+        <p class="side-group">Reference</p>
+        <ol>
+          <li><a href="#catalog">Failure catalog</a></li>
+          <li><a href="#api">API</a></li>
+          <li><a href="#common-searches">FAQ</a></li>
+        </ol>
+      </nav>
+    </aside>
+    <article class="docs-main">
+      <p class="docs-label">How to use</p>
+      <h1>Start with install, then the core path</h1>
+      <p>Open source enforces safety. These notes are the local runtime: claim, gate, fail-closed, reconcile, and record evidence.</p>
+      <p class="docs-group" id="group-start">Start</p>
+      <section id="install">
+        <h2>Install</h2>
+        <p>Requires Python 3.10 or later.</p>
+        <pre>pip install mycelium-runtime
 pip install 'mycelium-runtime[langgraph]'   # automatic ToolRuntime IDs
 pip install 'mycelium-runtime[redis]'   # optional
 pip install 'mycelium-runtime[postgres]'
@@ -289,20 +90,20 @@ mycelium init --minimal    # smaller multi-guard scaffold
 mycelium demo              # feature tour: unguarded vs ledgered + gates / hard-block / release
 mycelium demo --redis      # optional Cloud-style 2-worker Redis proof
 mycelium run --config mycelium.yaml -- python -m my_agent</pre>
-    </section>
-    <section id="architecture">
-      <h2>How it fits</h2>
-      <p>Mycelium sits between the agent loop and your tools: after the LLM returns <code>tool_calls</code>, around execution. Catalog first: AF-002 proves run-or-not and enforces at-most-once.</p>
-    </section>
-    <section id="scope">
-      <h2>What it does</h2>
-      <p>Catalog classes. <code>mycelium init</code> / <code>mycelium run</code> center on AF-002 duplicate side-effect prevention at the tool boundary.</p>
-    </section>
-    <p class="docs-group" id="group-core">Core</p>
-    <section id="actions">
-      <h2>Actions (core)</h2>
-      <p>Transition ledger for duplicate side-effect prevention: the default <code>mycelium init</code> / <code>mycelium run</code> path. Each ledgered tool gets a <code>side_effect_class</code> and <code>transition_key</code>. Duplicate dispatches resolve through <a href="#resolution">gates</a> — not blind re-execution.</p>
-      <pre>from mycelium import load_config
+      </section>
+      <section id="architecture">
+        <h2>How it fits</h2>
+        <p>Mycelium sits between the agent loop and your tools: after the LLM returns <code>tool_calls</code>, around execution. Catalog first: AF-002 proves run-or-not and enforces at-most-once.</p>
+      </section>
+      <section id="scope">
+        <h2>What it does</h2>
+        <p>Catalog classes. <code>mycelium init</code> / <code>mycelium run</code> center on AF-002 duplicate side-effect prevention at the tool boundary.</p>
+      </section>
+      <p class="docs-group" id="group-core">Core</p>
+      <section id="actions">
+        <h2>Actions (core)</h2>
+        <p>Transition ledger for duplicate side-effect prevention: the default <code>mycelium init</code> / <code>mycelium run</code> path. Each ledgered tool gets a <code>side_effect_class</code> and <code>transition_key</code>. Duplicate dispatches resolve through <a href="#resolution">gates</a> — not blind re-execution. <a href="/prevent.html">Read the prevention page →</a></p>
+        <pre>from mycelium import load_config
 
 config = load_config("mycelium.yaml")
 
@@ -312,19 +113,19 @@ def send_payment(amount: float, recipient: str) -> dict:
 
 # payment: duplicate resolves existing transition; won't charge twice
 send_payment(amount=100.0, recipient="acct_123", tool_call_id="call_pay")</pre>
-      <p>See <a href="#resolution">Resolution</a> for gate semantics and <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md#actions-core-duplicate-side-effect-prevention">SDK README</a> for the full reference.</p>
-    </section>
-    <section id="resolution">
-      <h2>Resolution</h2>
-      <p><strong>Invariant:</strong> do not redispatch unless the previous transition is proven terminal or safely recoverable.</p>
-    </section>
-    <section id="envelope">
-      <h2>Envelope fields (core)</h2>
-      <p>Six fields decide whether an unresolved prior execution is merely wasteful or unsafe.</p>
-    </section>
-    <section id="yaml">
-      <h2>YAML</h2>
-      <pre>transition:
+        <p>See <a href="#resolution">Resolution</a> for gate semantics and the <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md#actions-core-duplicate-side-effect-prevention">SDK README</a> for the full reference.</p>
+      </section>
+      <section id="resolution">
+        <h2>Resolution</h2>
+        <p><strong>Invariant:</strong> do not redispatch unless the previous transition is proven terminal or safely recoverable. <a href="/resolve.html">See the resolution gates →</a></p>
+      </section>
+      <section id="envelope">
+        <h2>Envelope fields (core)</h2>
+        <p>Six fields decide whether an unresolved prior execution is merely wasteful or unsafe.</p>
+      </section>
+      <section id="yaml">
+        <h2>YAML</h2>
+        <pre>transition:
   agent_id: payment-agent
   policy_version: "2026.07.1"
   lease_ttl: 3600
@@ -332,22 +133,28 @@ send_payment(amount=100.0, recipient="acct_123", tool_call_id="call_pay")</pre>
 action_ledger:
   storage: file
   path: ./mycelium-ledger.json</pre>
-    </section>
-    <p class="docs-group" id="group-opt-in">Opt-in</p>
-    <section id="context"><h2>Context (opt-in)</h2><p>TTL cache and message/history helpers.</p></section>
-    <section id="tools"><h2>Tool boundaries (opt-in)</h2><p>Input/output/scope validation and allowlists.</p></section>
-    <section id="loops"><h2>Loop guard (AF-003, opt-in)</h2><p>Detects identical tool+args across new <code>tool_call_id</code>s.</p></section>
-    <section id="completion"><h2>Completion contract (AF-007, opt-in)</h2><p>Refuses terminal while required subtasks are pending.</p></section>
-    <section id="scope-guard"><h2>Scope guard (AF-008, opt-in)</h2><p>Freezes the run tool allowlist and re-checks every step.</p></section>
-    <section id="telemetry"><h2>Outcome telemetry &amp; DTTR (v1.20+)</h2><p>Opt-in flat append-only outcome rows for production observability.</p></section>
-    <p class="docs-group" id="group-reference">Reference</p>
-    <section id="catalog">
-      <h2>Failure-mode catalog (AF-001…AF-009)</h2>
-      <p>Stable IDs used in the SDK README, changelogs, and this handbook.</p>
-    </section>
-    <section id="api"><h2>API</h2><p>See SDK README for the full export list.</p></section>
-    <section id="common-searches"><h2>Common searches</h2><p>FAQ content for production reliability, LangGraph duplicates, and idempotency.</p></section>
+      </section>
+      <p class="docs-group" id="group-opt-in">Opt-in</p>
+      <section id="context"><h2>Context (opt-in)</h2><p>TTL cache and message/history helpers.</p></section>
+      <section id="tools"><h2>Tool boundaries (opt-in)</h2><p>Input/output/scope validation and allowlists.</p></section>
+      <section id="loops"><h2>Loop guard (AF-003, opt-in)</h2><p>Detects identical tool+args across new <code>tool_call_id</code>s.</p></section>
+      <section id="completion"><h2>Completion contract (AF-007, opt-in)</h2><p>Refuses terminal while required subtasks are pending.</p></section>
+      <section id="scope-guard"><h2>Scope guard (AF-008, opt-in)</h2><p>Freezes the run tool allowlist and re-checks every step.</p></section>
+      <section id="telemetry"><h2>Outcome telemetry &amp; DTTR (v1.20+)</h2><p>Opt-in flat append-only outcome rows for production observability.</p></section>
+      <p class="docs-group" id="group-reference">Reference</p>
+      <section id="catalog">
+        <h2>Failure-mode catalog (AF-001…AF-009)</h2>
+        <p>Stable IDs used in the SDK README, changelogs, and this handbook. The public story leads with outcomes, not a guardrail count. <a href="/prevent.html">Browse the prevention catalog →</a></p>
+      </section>
+      <section id="api"><h2>API</h2><p>See SDK README for the full export list.</p></section>
+      <section id="common-searches">
+        <h2>Common searches</h2>
+        <p>FAQ content for production reliability, LangGraph duplicates, and idempotency. <a href="/verify.html">Read about Verify →</a></p>
+      </section>
+    </article>
   </div>
-</div>
+
+  <footer class="site-footer"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a><p>Let agents act. Keep the consequences controlled.</p><div><a href="/prevent.html">Prevent</a><a href="/try.html">Try</a><a href="https://github.com/mycelium-labs/mycelium">GitHub</a></div></footer>
+  <script src="/site.js" defer></script>
 </body>
 </html>
