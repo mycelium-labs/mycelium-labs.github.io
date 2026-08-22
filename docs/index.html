@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=10">
+  <link rel="stylesheet" href="/style.css?v=11">
   <meta property="og:title" content="Mycelium — let agents act, keep the consequences controlled">
   <meta property="og:description" content="Prevent duplicate and unsafe side effects before production tools execute. Then record the evidence.">
   <meta property="og:type" content="website">
@@ -86,65 +86,106 @@
       <div class="hero-orbit hero-orbit--top" aria-hidden="true"><span>06</span><p>failure boundaries<br><strong>enforced</strong></p></div>
       <div class="hero-orbit hero-orbit--side" aria-hidden="true"><span>24k+</span><p>runtime<br><strong>downloads</strong></p></div>
 
-      <div class="integrity-wrap report-carousel" id="report" aria-label="Production evidence reports">
-        <div class="report-viewport">
-        <section class="integrity-panel report-panel is-active" data-report-slide aria-hidden="false">
-          <header class="panel-head">
-            <div><p>Verification report</p><code>review · 0 silently bypassed</code></div>
-            <div class="panel-status">
-              <span class="live"><i></i> observed in production</span>
-              <div class="report-dots" role="group" aria-label="Choose production report">
-                <button type="button" data-report-index="0" class="is-active" aria-label="Show verification report" aria-current="true"></button>
-                <button type="button" data-report-index="1" aria-label="Show Week 2 live-lane receipt"></button>
+      <div class="integrity-wrap report-carousel" id="report" role="region" aria-roledescription="carousel" aria-label="Production evidence reports" tabindex="0">
+        <div class="report-viewport" data-report-viewport>
+          <section class="integrity-panel report-panel is-active" data-report-slide data-report-title="Verification report" role="group" aria-roledescription="slide" aria-label="1 of 3" aria-hidden="false">
+            <header class="panel-head">
+              <div><p>Verification report</p><code>review · 0 silently bypassed</code></div>
+              <div class="panel-status">
+                <span class="live"><i></i> observed in production</span>
+                <div class="report-tabs" role="group" aria-label="Choose verification report">
+                  <button type="button" data-report-index="0" class="is-active" aria-label="Show verification report" aria-current="true">Base</button>
+                  <button type="button" data-report-index="1" aria-label="Show Week 2 live-lane receipt">W2</button>
+                  <button type="button" data-report-index="2" aria-label="Show Week 3 live-lane receipt">W3</button>
+                </div>
+              </div>
+            </header>
+            <div class="report-summary">
+              <p class="report-stat">25 <small>protected actions</small></p>
+              <p class="report-line">0 duplicate sends · 0 failed before effect · 0 need review</p>
+              <p class="report-line">0 silent bypasses observed</p>
+            </div>
+            <div class="check-list">
+              <div><span class="check-icon">✓</span><p><strong>Workflow</strong><small>outbound email lane</small></p><code>live</code></div>
+              <div><span class="check-icon">✓</span><p><strong>Tool</strong><small>send</small></p><code>side effect</code></div>
+              <div><span class="check-icon">✓</span><p><strong>Guardrail</strong><small>AF-002 duplicate side effects</small></p><code>enforced</code></div>
+              <div><span class="check-icon">✓</span><p><strong>Window</strong><small>29 Jul–5 Aug 2026</small></p><code>7 days</code></div>
+              <div><span class="check-icon">✓</span><p><strong>Failure class</strong><small>duplicate send</small></p><code>0 observed</code></div>
+            </div>
+            <footer>
+              <span>42 send attempts · 30 unique recipients</span>
+              <span>Evidence: observed in production</span>
+            </footer>
+          </section>
+          <section class="integrity-panel report-panel" data-report-slide data-report-title="Week 2 live-lane receipt" role="group" aria-roledescription="slide" aria-label="2 of 3" aria-hidden="true" hidden>
+            <header class="panel-head">
+              <div><p>Week 2 live-lane receipt</p><code>review · recovery untested</code></div>
+              <div class="panel-status">
+                <span class="live"><i></i> observed in production</span>
+                <div class="report-tabs" role="group" aria-label="Choose verification report">
+                  <button type="button" data-report-index="0" aria-label="Show verification report">Base</button>
+                  <button type="button" data-report-index="1" class="is-active" aria-label="Show Week 2 live-lane receipt" aria-current="true">W2</button>
+                  <button type="button" data-report-index="2" aria-label="Show Week 3 live-lane receipt">W3</button>
+                </div>
+              </div>
+            </header>
+            <div class="report-summary">
+              <p class="report-stat">23 <small>completed sends</small></p>
+              <p class="report-line">23 outbound Gmail sends entered the Mycelium-ledgered lane</p>
+              <p class="report-line">23 reached terminal COMPLETED</p>
+              <p class="report-line">0 ended UNKNOWN</p>
+              <p class="report-line">0 required GmailReconciler recovery</p>
+              <p class="report-line">0 failed before effect</p>
+              <div class="report-note">
+                <p>This window exercised the normal success path. It did not exercise ambiguous-outcome recovery. The first genuine UNKNOWN outcome will be the meaningful live test of GmailReconciler recovery.</p>
               </div>
             </div>
-          </header>
-          <div class="report-summary">
-            <p class="report-stat">25 <small>protected actions</small></p>
-            <p class="report-line">0 duplicate sends · 0 failed before effect · 0 need review</p>
-            <p class="report-line">0 silent bypasses observed</p>
-          </div>
-          <div class="check-list">
-            <div><span class="check-icon">✓</span><p><strong>Workflow</strong><small>outbound email lane</small></p><code>live</code></div>
-            <div><span class="check-icon">✓</span><p><strong>Tool</strong><small>send</small></p><code>side effect</code></div>
-            <div><span class="check-icon">✓</span><p><strong>Guardrail</strong><small>AF-002 duplicate side effects</small></p><code>enforced</code></div>
-            <div><span class="check-icon">✓</span><p><strong>Window</strong><small>29 Jul–5 Aug 2026</small></p><code>7 days</code></div>
-            <div><span class="check-icon">✓</span><p><strong>Failure class</strong><small>duplicate send</small></p><code>0 observed</code></div>
-          </div>
-          <footer>
-            <span>42 send attempts · 30 unique recipients</span>
-            <span>Evidence: observed in production</span>
-          </footer>
-        </section>
-        <section class="integrity-panel report-panel" data-report-slide aria-hidden="true">
-          <header class="panel-head">
-            <div><p>Week 2 · live-lane receipt</p><code>ending 15 Aug 2026 · 15:31 UTC</code></div>
-            <div class="panel-status">
-              <span class="live"><i></i> observed in production</span>
-              <div class="report-dots" role="group" aria-label="Choose production report">
-                <button type="button" data-report-index="0" aria-label="Show verification report"></button>
-                <button type="button" data-report-index="1" class="is-active" aria-label="Show Week 2 live-lane receipt" aria-current="true"></button>
-              </div>
+            <div class="check-list">
+              <div><span class="check-icon">✓</span><p><strong>Lane</strong><small>outbound Gmail sends</small></p><code>23 · ledgered</code></div>
+              <div><span class="check-icon">✓</span><p><strong>Terminal outcome</strong><small>reached terminal COMPLETED</small></p><code>COMPLETED</code></div>
+              <div><span class="check-icon">✓</span><p><strong>UNKNOWN</strong><small>ended UNKNOWN</small></p><code>0</code></div>
+              <div><span class="check-icon">✓</span><p><strong>GmailReconciler recovery</strong><small>required recovery</small></p><code>0 required</code></div>
+              <div><span class="check-icon">✓</span><p><strong>Failed before effect</strong><small>failed before effect</small></p><code>0</code></div>
             </div>
-          </header>
-          <div class="report-summary">
-            <p class="report-stat">23 <small>terminal completions</small></p>
-            <p class="report-line">23 outbound Gmail sends entered the ledgered lane</p>
-            <p class="report-line">0 unknown · 0 failed before effect</p>
-          </div>
-          <div class="check-list">
-            <div><span class="check-icon">✓</span><p><strong>Completed</strong><small>normal success path</small></p><code>23 / 23</code></div>
-            <div><span class="check-icon">✓</span><p><strong>Unknown outcomes</strong><small>ambiguous provider state</small></p><code>0</code></div>
-            <div><span class="check-icon">✓</span><p><strong>Reconciler recovery</strong><small>not required in this window</small></p><code>0</code></div>
-            <div><span class="check-icon">✓</span><p><strong>Window</strong><small>seven-day live lane</small></p><code>Week 2</code></div>
-            <div><span class="watch-icon">○</span><p><strong>Next meaningful test</strong><small>first real UNKNOWN outcome</small></p><code>watching</code></div>
-          </div>
-          <footer>
-            <span>Gmail · Mycelium-ledgered lane</span>
-            <span>No synthetic recovery claim</span>
-          </footer>
-        </section>
+            <footer>
+              <span>Seven days ending 2026-08-15 15:31 UTC</span>
+              <span>Success-path window</span>
+            </footer>
+          </section>
+          <section class="integrity-panel report-panel" data-report-slide data-report-title="Week 3 live-lane receipt" role="group" aria-roledescription="slide" aria-label="3 of 3" aria-hidden="true" hidden>
+            <header class="panel-head">
+              <div><p>Week 3 live-lane receipt</p><code>current · 22 Aug 2026 17:30 UTC</code></div>
+              <div class="panel-status">
+                <span class="live"><i></i> observed in production</span>
+                <div class="report-tabs" role="group" aria-label="Choose verification report">
+                  <button type="button" data-report-index="0" aria-label="Show verification report">Base</button>
+                  <button type="button" data-report-index="1" aria-label="Show Week 2 live-lane receipt">W2</button>
+                  <button type="button" data-report-index="2" class="is-active" aria-label="Show Week 3 live-lane receipt" aria-current="true">W3</button>
+                </div>
+              </div>
+            </header>
+            <div class="report-summary">
+              <p class="report-stat">19 <small>completed sends</small></p>
+              <p class="report-line">19 outbound Gmail sends entered the Mycelium-ledgered lane</p>
+              <p class="report-line">19 reached terminal COMPLETED</p>
+              <p class="report-line">0 UNKNOWN · 0 GmailReconciler recoveries</p>
+              <p class="report-line">0 failures before effect</p>
+              <p class="report-line">19 recorded side_effect_boundary=crossed</p>
+            </div>
+            <div class="check-list">
+              <div><span class="check-icon">✓</span><p><strong>Lane</strong><small>outbound Gmail sends</small></p><code>19 · ledgered</code></div>
+              <div><span class="check-icon">✓</span><p><strong>Terminal outcome</strong><small>reached terminal COMPLETED</small></p><code>19 / 19</code></div>
+              <div><span class="check-icon">✓</span><p><strong>UNKNOWN</strong><small>ambiguous provider outcome</small></p><code>0</code></div>
+              <div><span class="check-icon">✓</span><p><strong>GmailReconciler recovery</strong><small>required recovery</small></p><code>0</code></div>
+              <div><span class="check-icon">✓</span><p><strong>Side-effect boundary</strong><small>recorded on every send</small></p><code>crossed · 19/19</code></div>
+            </div>
+            <footer>
+              <span>15 Aug 15:31 → 22 Aug 15:31 UTC</span>
+              <span>Week 3 · both lanes current</span>
+            </footer>
+          </section>
         </div>
+        <p class="sr-only" data-report-live aria-live="polite"></p>
       </div>
       <p class="hero-scroll" aria-hidden="true">Scroll to explore <span></span></p>
     </header>
@@ -275,6 +316,6 @@
   </main>
 
   <footer class="site-footer"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a><p>Let agents act. Keep the consequences controlled.</p><div><a href="#report">Report</a><a href="/handbook.html">Docs</a><a href="https://github.com/mycelium-labs/mycelium">GitHub</a></div></footer>
-  <script src="/site.js?v=4" defer></script>
+  <script src="/site.js?v=5" defer></script>
 </body>
 </html>
