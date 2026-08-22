@@ -47,7 +47,7 @@
   const carousel = document.querySelector(".report-carousel");
   if (carousel) {
     const slides = [...carousel.querySelectorAll("[data-report-slide]")];
-    const current = carousel.querySelector("[data-report-current]");
+    const dots = [...carousel.querySelectorAll("[data-report-index]")];
     let active = 0;
     const show = index => {
       active = (index + slides.length) % slides.length;
@@ -56,10 +56,14 @@
         slide.classList.toggle("is-active", selected);
         slide.setAttribute("aria-hidden", String(!selected));
       });
-      if (current) current.textContent = String(active + 1).padStart(2, "0");
+      dots.forEach(dot => {
+        const selected = Number(dot.dataset.reportIndex) === active;
+        dot.classList.toggle("is-active", selected);
+        if (selected) dot.setAttribute("aria-current", "true");
+        else dot.removeAttribute("aria-current");
+      });
     };
-    carousel.querySelector("[data-report-prev]")?.addEventListener("click", () => show(active - 1));
-    carousel.querySelector("[data-report-next]")?.addEventListener("click", () => show(active + 1));
+    dots.forEach(dot => dot.addEventListener("click", () => show(Number(dot.dataset.reportIndex))));
   }
 
   const hero = document.querySelector(".immersive-hero");
