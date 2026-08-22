@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=8">
+  <link rel="stylesheet" href="/style.css?v=9">
   <meta property="og:title" content="Mycelium — let agents act, keep the consequences controlled">
   <meta property="og:description" content="Prevent duplicate and unsafe side effects before production tools execute. Then record the evidence.">
   <meta property="og:type" content="website">
@@ -34,7 +34,7 @@
 </head>
 <body class="calm-page">
   <a class="skip-link" href="#report">Skip to verification report</a>
-  <nav class="site-nav" aria-label="Primary navigation">
+  <nav class="site-nav site-nav--immersive" aria-label="Primary navigation">
     <a class="brand" href="/" aria-label="Mycelium home"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a>
     <div class="nav-links">
       <a href="#report">Report</a>
@@ -46,26 +46,55 @@
   </nav>
 
   <main>
-    <header class="hero" aria-labelledby="hero-title" data-contour="left" data-contour-ring="b">
+    <header class="hero immersive-hero" aria-labelledby="hero-title">
+      <canvas class="spore-field" aria-hidden="true"></canvas>
+      <div class="hero-grid" aria-hidden="true"></div>
+      <svg class="mycelium-world" viewBox="0 0 1600 920" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="branch-light" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#151c17"/><stop offset=".48" stop-color="#606a50"/><stop offset="1" stop-color="#141a16"/>
+          </linearGradient>
+          <radialGradient id="node-glow"><stop offset="0" stop-color="#e9f5b2"/><stop offset=".35" stop-color="#9fc47d"/><stop offset="1" stop-color="#53654b"/></radialGradient>
+          <filter id="soft-glow" x="-200%" y="-200%" width="400%" height="400%"><feGaussianBlur stdDeviation="8"/></filter>
+        </defs>
+        <g class="world-depth world-depth--back">
+          <path d="M-120 888C170 747 310 794 552 648S910 455 1110 248 1365 70 1650-20"/>
+          <path d="M278 756C364 624 365 505 297 354M541 651C626 501 755 398 912 346M944 408C1021 290 1033 196 1014 98M1113 246C1254 252 1385 204 1492 112"/>
+        </g>
+        <g class="world-depth world-depth--front">
+          <path d="M-70 926C192 842 323 760 520 671S828 573 1027 448 1320 228 1670 154"/>
+          <path d="M199 815C269 724 281 630 254 539M487 684C510 550 459 473 395 400M769 584C850 480 874 381 856 277M1030 447C1171 460 1290 407 1382 329"/>
+        </g>
+        <g class="network-nodes">
+          <circle cx="253" cy="538" r="13"/><circle cx="396" cy="399" r="9"/><circle cx="520" cy="670" r="15"/><circle cx="856" cy="277" r="10"/><circle cx="1028" cy="447" r="16"/><circle cx="1381" cy="329" r="12"/><circle cx="1112" cy="246" r="8"/>
+        </g>
+        <g class="network-blooms">
+          <g transform="translate(230 538)"><circle cx="0" cy="0" r="24"/><circle cx="25" cy="-15" r="18"/><circle cx="30" cy="17" r="21"/><circle cx="-23" cy="15" r="19"/><circle cx="-18" cy="-20" r="17"/></g>
+          <g transform="translate(510 655)"><circle cx="0" cy="0" r="35"/><circle cx="38" cy="-18" r="26"/><circle cx="37" cy="23" r="29"/><circle cx="-35" cy="20" r="27"/><circle cx="-28" cy="-25" r="24"/></g>
+          <g transform="translate(1020 438)"><circle cx="0" cy="0" r="30"/><circle cx="33" cy="-18" r="22"/><circle cx="35" cy="22" r="25"/><circle cx="-31" cy="22" r="24"/><circle cx="-25" cy="-24" r="21"/></g>
+          <g transform="translate(1380 320)"><circle cx="0" cy="0" r="28"/><circle cx="31" cy="-16" r="20"/><circle cx="31" cy="20" r="23"/><circle cx="-29" cy="18" r="22"/><circle cx="-23" cy="-22" r="20"/></g>
+        </g>
+      </svg>
+
       <div class="hero-copy">
-        <p class="eyebrow"><span></span> Reliability for production agents</p>
-        <h1 id="hero-title">Let agents act.<br><em>Keep the consequences controlled.</em></h1>
+        <p class="eyebrow"><span></span> The reliability layer for production agents</p>
+        <h1 id="hero-title">Let agents<br>touch the <em>real world.</em></h1>
         <p class="hero-support">Mycelium prevents duplicate and unsafe side effects <strong>before production tools execute</strong>, then records evidence of what was allowed, blocked, resolved, or left uncertain.</p>
         <div class="hero-actions">
           <a class="cta-button" href="/try.html">Protect your first workflow — free</a>
+          <a class="hero-text-link" href="#report">See live evidence <span aria-hidden="true">↘</span></a>
         </div>
         <a class="download-proof" href="https://pepy.tech/projects/mycelium-runtime" aria-label="Mycelium Runtime has more than 24,000 PyPI downloads; view statistics on Pepy">
           <strong>24k+</strong><span>PyPI downloads</span>
         </a>
       </div>
 
-      <div class="integrity-wrap" id="report" aria-label="Verification report">
-        <svg class="contour" viewBox="0 0 600 600" aria-hidden="true" focusable="false">
-          <path d="M63 94c98-72 235-66 322-18 91 51 158 158 118 263-45 119-194 199-329 154C39 448-26 323 21 211 33 181 46 128 63 94Z"/>
-          <path d="M100 128c77-55 190-56 268-16 83 43 132 127 104 213-32 98-151 163-258 132C97 423 39 325 71 235c13-37 15-78 29-107Z"/>
-          <path d="M145 165c61-42 143-41 201-9 65 36 98 96 80 162-22 77-112 124-193 103-89-24-128-101-106-169 10-32 5-62 18-87Z"/>
-        </svg>
-        <section class="integrity-panel report-panel">
+      <div class="hero-orbit hero-orbit--top" aria-hidden="true"><span>06</span><p>failure boundaries<br><strong>enforced</strong></p></div>
+      <div class="hero-orbit hero-orbit--side" aria-hidden="true"><span>24k+</span><p>runtime<br><strong>downloads</strong></p></div>
+
+      <div class="integrity-wrap report-carousel" id="report" aria-label="Production evidence reports">
+        <div class="report-viewport">
+        <section class="integrity-panel report-panel is-active" data-report-slide aria-hidden="false">
           <header class="panel-head">
             <div><p>Verification report</p><code>review · 0 silently bypassed</code></div>
             <span class="live"><i></i> observed in production</span>
@@ -87,7 +116,38 @@
             <span>Evidence: observed in production</span>
           </footer>
         </section>
+        <section class="integrity-panel report-panel" data-report-slide aria-hidden="true">
+          <header class="panel-head">
+            <div><p>Week 2 · live-lane receipt</p><code>ending 15 Aug 2026 · 15:31 UTC</code></div>
+            <span class="live"><i></i> observed in production</span>
+          </header>
+          <div class="report-summary">
+            <p class="report-stat">23 <small>terminal completions</small></p>
+            <p class="report-line">23 outbound Gmail sends entered the ledgered lane</p>
+            <p class="report-line">0 unknown · 0 failed before effect</p>
+          </div>
+          <div class="check-list">
+            <div><span class="check-icon">✓</span><p><strong>Completed</strong><small>normal success path</small></p><code>23 / 23</code></div>
+            <div><span class="check-icon">✓</span><p><strong>Unknown outcomes</strong><small>ambiguous provider state</small></p><code>0</code></div>
+            <div><span class="check-icon">✓</span><p><strong>Reconciler recovery</strong><small>not required in this window</small></p><code>0</code></div>
+            <div><span class="check-icon">✓</span><p><strong>Window</strong><small>seven-day live lane</small></p><code>Week 2</code></div>
+            <div><span class="watch-icon">○</span><p><strong>Next meaningful test</strong><small>first real UNKNOWN outcome</small></p><code>watching</code></div>
+          </div>
+          <footer>
+            <span>Gmail · Mycelium-ledgered lane</span>
+            <span>No synthetic recovery claim</span>
+          </footer>
+        </section>
+        </div>
+        <div class="report-controls">
+          <p><span data-report-current>01</span> / 02 &nbsp; Production receipts</p>
+          <div>
+            <button type="button" data-report-prev aria-label="Previous report">←</button>
+            <button type="button" data-report-next aria-label="Next report">→</button>
+          </div>
+        </div>
       </div>
+      <p class="hero-scroll" aria-hidden="true">Scroll to explore <span></span></p>
     </header>
 
     <section class="boundary-band" aria-label="Mycelium reliability boundaries">
@@ -216,6 +276,6 @@
   </main>
 
   <footer class="site-footer"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a><p>Let agents act. Keep the consequences controlled.</p><div><a href="#report">Report</a><a href="/handbook.html">Docs</a><a href="https://github.com/mycelium-labs/mycelium">GitHub</a></div></footer>
-  <script src="/site.js?v=2" defer></script>
+  <script src="/site.js?v=3" defer></script>
 </body>
 </html>

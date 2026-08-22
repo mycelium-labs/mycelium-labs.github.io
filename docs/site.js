@@ -43,4 +43,83 @@
     }), { threshold: .12 });
     reveals.forEach(x => observer.observe(x));
   }
+
+  const carousel = document.querySelector(".report-carousel");
+  if (carousel) {
+    const slides = [...carousel.querySelectorAll("[data-report-slide]")];
+    const current = carousel.querySelector("[data-report-current]");
+    let active = 0;
+    const show = index => {
+      active = (index + slides.length) % slides.length;
+      slides.forEach((slide, i) => {
+        const selected = i === active;
+        slide.classList.toggle("is-active", selected);
+        slide.setAttribute("aria-hidden", String(!selected));
+      });
+      if (current) current.textContent = String(active + 1).padStart(2, "0");
+    };
+    carousel.querySelector("[data-report-prev]")?.addEventListener("click", () => show(active - 1));
+    carousel.querySelector("[data-report-next]")?.addEventListener("click", () => show(active + 1));
+  }
+
+  const hero = document.querySelector(".immersive-hero");
+  const canvas = hero?.querySelector(".spore-field");
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (hero && canvas) {
+    const context = canvas.getContext("2d");
+    const spores = [];
+    let width = 0;
+    let height = 0;
+    let frame = 0;
+    const seedSpore = (spore = {}) => Object.assign(spore, {
+      x: Math.random() * width,
+      y: Math.random() * height,
+      radius: .7 + Math.random() * 2.4,
+      speed: .08 + Math.random() * .28,
+      drift: (Math.random() - .5) * .16,
+      phase: Math.random() * Math.PI * 2,
+      opacity: .2 + Math.random() * .55
+    });
+    const resize = () => {
+      const bounds = hero.getBoundingClientRect();
+      const ratio = Math.min(devicePixelRatio || 1, 2);
+      width = bounds.width;
+      height = bounds.height;
+      canvas.width = Math.round(width * ratio);
+      canvas.height = Math.round(height * ratio);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      const target = Math.min(72, Math.max(28, Math.round(width / 24)));
+      while (spores.length < target) spores.push(seedSpore());
+      spores.length = target;
+    };
+    const draw = () => {
+      context.clearRect(0, 0, width, height);
+      spores.forEach(spore => {
+        spore.y -= spore.speed;
+        spore.x += spore.drift + Math.sin(spore.phase + frame * .008) * .06;
+        if (spore.y < -8 || spore.x < -12 || spore.x > width + 12) {
+          seedSpore(spore);
+          spore.y = height + 8;
+        }
+        context.beginPath();
+        context.fillStyle = `rgba(222,235,196,${spore.opacity})`;
+        context.arc(spore.x, spore.y, spore.radius, 0, Math.PI * 2);
+        context.fill();
+      });
+      frame += 1;
+      if (!reducedMotion) requestAnimationFrame(draw);
+    };
+    resize();
+    draw();
+    addEventListener("resize", resize, { passive: true });
+    if (!reducedMotion) hero.addEventListener("pointermove", event => {
+      const bounds = hero.getBoundingClientRect();
+      const x = ((event.clientX - bounds.left) / bounds.width - .5) * -18;
+      const y = ((event.clientY - bounds.top) / bounds.height - .5) * -12;
+      hero.style.setProperty("--world-x", `${x}px`);
+      hero.style.setProperty("--world-y", `${y}px`);
+    }, { passive: true });
+  }
 })();
