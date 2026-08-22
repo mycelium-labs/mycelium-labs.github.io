@@ -155,4 +155,7 @@
       hero.style.setProperty("--world-y", `${y}px`);
     }, { passive: true });
   }
+  if (location.hash === "#production-evidence") {
+    addEventListener("load", () => document.querySelector("#production-evidence")?.scrollIntoView(), { once: true });
+  }
 })();
