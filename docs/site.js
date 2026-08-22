@@ -46,24 +46,53 @@
 
   const carousel = document.querySelector(".report-carousel");
   if (carousel) {
+    const viewport = carousel.querySelector("[data-report-viewport]");
     const slides = [...carousel.querySelectorAll("[data-report-slide]")];
-    const dots = [...carousel.querySelectorAll("[data-report-index]")];
-    let active = 0;
-    const show = index => {
-      active = (index + slides.length) % slides.length;
-      slides.forEach((slide, i) => {
-        const selected = i === active;
-        slide.classList.toggle("is-active", selected);
-        slide.setAttribute("aria-hidden", String(!selected));
+    const tabs = [...carousel.querySelectorAll("[data-report-index]")];
+    const live = carousel.querySelector("[data-report-live]");
+    const reducedCarouselMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (viewport && slides.length && tabs.length && live) {
+      let active = slides.findIndex(slide => slide.classList.contains("is-active"));
+      if (active < 0) active = 0;
+      const goTo = (index, announce = true) => {
+        const target = Math.min(slides.length - 1, Math.max(0, index));
+        const previous = active;
+        active = target;
+        viewport.dataset.reportDirection = active > previous ? "next" : active < previous ? "prev" : "next";
+        slides.forEach((slide, i) => {
+          const selected = i === active;
+          slide.hidden = !selected;
+          slide.setAttribute("aria-hidden", String(!selected));
+          slide.classList.toggle("is-active", selected);
+          slide.classList.remove("is-entering");
+        });
+        tabs.forEach(tab => {
+          const selected = Number(tab.dataset.reportIndex) === active;
+          tab.classList.toggle("is-active", selected);
+          if (selected) tab.setAttribute("aria-current", "true");
+          else tab.removeAttribute("aria-current");
+        });
+        if (!reducedCarouselMotion && previous !== active) {
+          requestAnimationFrame(() => slides[active].classList.add("is-entering"));
+        }
+        if (announce) {
+          const title = slides[active].dataset.reportTitle || "Production evidence report";
+          live.textContent = `Report ${active + 1} of ${slides.length}: ${title}`;
+        }
+      };
+      slides.forEach(slide => slide.addEventListener("animationend", () => slide.classList.remove("is-entering")));
+      tabs.forEach(tab => tab.addEventListener("click", () => goTo(Number(tab.dataset.reportIndex))));
+      carousel.addEventListener("keydown", event => {
+        if (event.key === "ArrowRight" && active < slides.length - 1) {
+          event.preventDefault();
+          goTo(active + 1);
+        } else if (event.key === "ArrowLeft" && active > 0) {
+          event.preventDefault();
+          goTo(active - 1);
+        }
       });
-      dots.forEach(dot => {
-        const selected = Number(dot.dataset.reportIndex) === active;
-        dot.classList.toggle("is-active", selected);
-        if (selected) dot.setAttribute("aria-current", "true");
-        else dot.removeAttribute("aria-current");
-      });
-    };
-    dots.forEach(dot => dot.addEventListener("click", () => show(Number(dot.dataset.reportIndex))));
+      goTo(active, false);
+    }
   }
 
   const hero = document.querySelector(".immersive-hero");
