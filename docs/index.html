@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=11">
+  <link rel="stylesheet" href="/style.css?v=12">
   <meta property="og:title" content="Mycelium — let agents act, keep the consequences controlled">
   <meta property="og:description" content="Prevent duplicate and unsafe side effects before production tools execute. Then record the evidence.">
   <meta property="og:type" content="website">
@@ -37,7 +37,7 @@
   <nav class="site-nav site-nav--immersive" aria-label="Primary navigation">
     <a class="brand" href="/" aria-label="Mycelium home"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a>
     <div class="nav-links">
-      <a href="#report">Report</a>
+      <a href="#production-evidence">Evidence</a>
       <a href="#guardrails">Guardrails</a>
       <a href="/try.html">Try</a>
       <a href="/handbook.html">Docs</a>
@@ -76,15 +76,51 @@
         <p class="hero-support">Mycelium prevents duplicate and unsafe side effects <strong>before production tools execute</strong>, then records evidence of what was allowed, blocked, resolved, or left uncertain.</p>
         <div class="hero-actions">
           <a class="cta-button" href="/try.html">Protect your first workflow — free</a>
-          <a class="hero-text-link" href="#report">See live evidence <span aria-hidden="true">↘</span></a>
+          <a class="hero-text-link" href="#production-evidence">See live evidence <span aria-hidden="true">↘</span></a>
         </div>
         <a class="download-proof" href="https://pepy.tech/projects/mycelium-runtime" aria-label="Mycelium Runtime has more than 24,000 PyPI downloads; view statistics on Pepy">
           <strong>24k+</strong><span>PyPI downloads</span>
         </a>
       </div>
 
-      <div class="hero-orbit hero-orbit--top" aria-hidden="true"><span>06</span><p>failure boundaries<br><strong>enforced</strong></p></div>
-      <div class="hero-orbit hero-orbit--side" aria-hidden="true"><span>24k+</span><p>runtime<br><strong>downloads</strong></p></div>
+      <aside class="hero-proof" aria-label="Current production evidence">
+        <p class="hero-proof-label"><i></i> Observed in production</p>
+        <div class="hero-proof-stats">
+          <p><strong>67</strong><span>protected actions</span></p>
+          <p><strong>0</strong><span>UNKNOWN outcomes</span></p>
+          <p><strong>3</strong><span>live windows</span></p>
+        </div>
+        <a href="#production-evidence">Read the field notes <span aria-hidden="true">↓</span></a>
+      </aside>
+      <p class="hero-scroll" aria-hidden="true">Scroll to explore <span></span></p>
+    </header>
+
+    <section class="boundary-band" aria-label="Mycelium reliability boundaries">
+      <p>One runtime. Six failure boundaries.</p>
+      <div><span>Duplicate effects</span><span>Runaway loops</span><span>Tool misuse</span><span>Stale context</span><span>Early “done”</span><span>Scope creep</span></div>
+    </section>
+
+    <section class="proof section" id="proof" data-reveal data-contour="right">
+      <div class="section-heading">
+        <p class="eyebrow"><span></span> Reliability you can prove</p>
+        <h2>Not another layer of logs.<br><em>A layer of control.</em></h2>
+        <p>Mycelium acts before the side effect, records what crossed the boundary, and tests whether production safeguards are actually wired.</p>
+      </div>
+      <div class="pillars">
+        <article><p class="pillar-number">01</p><div class="pillar-symbol prevent-symbol" aria-hidden="true"><i></i></div><h3>Prevent</h3><p>Refuse duplicate, invalid, out-of-scope, or over-budget actions before they touch the real world.</p><a href="/prevent.html">Explore prevention <span>→</span></a></article>
+        <article><p class="pillar-number">02</p><div class="pillar-symbol resolve-symbol" aria-hidden="true"><i></i><i></i></div><h3>Resolve</h3><p>Reconcile ambiguous provider outcomes instead of guessing whether a crashed operation ran.</p><a href="/resolve.html">See resolution gates <span>→</span></a></article>
+        <article><p class="pillar-number">03</p><div class="pillar-symbol verify-symbol" aria-hidden="true"><i>✓</i></div><h3>Verify</h3><p>Inspect configuration with Doctor, then exercise synthetic redispatch, crash, contention, and outage scenarios.</p><a href="/verify.html">Read about Verify <span>→</span></a></article>
+      </div>
+    </section>
+
+    <section class="production-evidence" id="production-evidence" data-reveal aria-labelledby="evidence-title">
+      <div class="evidence-intro">
+        <p class="eyebrow light"><span></span> Production field notes</p>
+        <h2 id="evidence-title">Observed outcomes.<br><em>Not synthetic claims.</em></h2>
+        <p>Real receipts from a continuously running Gmail lane. Each window records what crossed the side-effect boundary, what completed, and what remained uncertain.</p>
+        <p class="evidence-method"><span>Method</span> Live provider traffic · Mycelium-ledgered execution · UTC windows</p>
+      </div>
+      <div class="evidence-viewer">
 
       <div class="integrity-wrap report-carousel" id="report" role="region" aria-roledescription="carousel" aria-label="Production evidence reports" tabindex="0">
         <div class="report-viewport" data-report-viewport>
@@ -187,24 +223,6 @@
         </div>
         <p class="sr-only" data-report-live aria-live="polite"></p>
       </div>
-      <p class="hero-scroll" aria-hidden="true">Scroll to explore <span></span></p>
-    </header>
-
-    <section class="boundary-band" aria-label="Mycelium reliability boundaries">
-      <p>One runtime. Six failure boundaries.</p>
-      <div><span>Duplicate effects</span><span>Runaway loops</span><span>Tool misuse</span><span>Stale context</span><span>Early “done”</span><span>Scope creep</span></div>
-    </section>
-
-    <section class="proof section" id="proof" data-reveal data-contour="right">
-      <div class="section-heading">
-        <p class="eyebrow"><span></span> Reliability you can prove</p>
-        <h2>Not another layer of logs.<br><em>A layer of control.</em></h2>
-        <p>Mycelium acts before the side effect, records what crossed the boundary, and tests whether production safeguards are actually wired.</p>
-      </div>
-      <div class="pillars">
-        <article><p class="pillar-number">01</p><div class="pillar-symbol prevent-symbol" aria-hidden="true"><i></i></div><h3>Prevent</h3><p>Refuse duplicate, invalid, out-of-scope, or over-budget actions before they touch the real world.</p><a href="/prevent.html">Explore prevention <span>→</span></a></article>
-        <article><p class="pillar-number">02</p><div class="pillar-symbol resolve-symbol" aria-hidden="true"><i></i><i></i></div><h3>Resolve</h3><p>Reconcile ambiguous provider outcomes instead of guessing whether a crashed operation ran.</p><a href="/resolve.html">See resolution gates <span>→</span></a></article>
-        <article><p class="pillar-number">03</p><div class="pillar-symbol verify-symbol" aria-hidden="true"><i>✓</i></div><h3>Verify</h3><p>Inspect configuration with Doctor, then exercise synthetic redispatch, crash, contention, and outage scenarios.</p><a href="/verify.html">Read about Verify <span>→</span></a></article>
       </div>
     </section>
 
@@ -310,12 +328,12 @@
       <p>Install the open-source kernel, protect one consequential tool, and keep a labeled report of what was allowed, blocked, or left uncertain.</p>
       <div class="hero-actions centered">
         <a class="cta-button light-cta" href="/try.html">Protect your first workflow — free</a>
-        <a class="text-link light-link" href="#report">View a real verification report <span aria-hidden="true">→</span></a>
+        <a class="text-link light-link" href="#production-evidence">View production field notes <span aria-hidden="true">→</span></a>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a><p>Let agents act. Keep the consequences controlled.</p><div><a href="#report">Report</a><a href="/handbook.html">Docs</a><a href="https://github.com/mycelium-labs/mycelium">GitHub</a></div></footer>
-  <script src="/site.js?v=5" defer></script>
+  <footer class="site-footer"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a><p>Let agents act. Keep the consequences controlled.</p><div><a href="#production-evidence">Evidence</a><a href="/handbook.html">Docs</a><a href="https://github.com/mycelium-labs/mycelium">GitHub</a></div></footer>
+  <script src="/site.js?v=6" defer></script>
 </body>
 </html>
