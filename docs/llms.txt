@@ -1,6 +1,6 @@
 # Mycelium
 
-> Mycelium helps you build reliable AI agents in production by adding runtime guards around tool execution. After the LLM returns tool calls, it stops duplicate side effects on retry/redispatch, can block bad tool args and out-of-scope calls, and can keep tool data fresh. It is a framework-agnostic Python library (3.10+) that works with LangGraph, CrewAI, or a plain Python loop. It is not a framework, and not observability/tracing. Keywords: reliable AI agents, AI agent reliability, production AI agents, agent guardrails, idempotent tool calls.
+> Mycelium is a runtime control boundary for consequential agent actions. It makes tool calls safe to retry by claiming an action before execution, returning stored results for completed duplicates, and failing closed when recovery is ambiguous. It protects payments, customer messages, infrastructure changes, and business-system writes from accidental re-execution. Mycelium is a framework-agnostic Python 3.10+ library for LangGraph, CrewAI, or plain Python loops. It complements orchestration and observability; it does not replace them. Keywords: agent side effects, safe retries, at-most-once execution, idempotent tool calls, agent reliability.
 
 ## What it does
 
