@@ -1,18 +1,24 @@
 # Mycelium
 
-> Mycelium is a runtime control boundary for consequential agent actions. It makes tool calls safe to retry by claiming an action before execution, returning stored results for completed duplicates, and failing closed when recovery is ambiguous. It protects payments, customer messages, infrastructure changes, and business-system writes from accidental re-execution. Mycelium is a framework-agnostic Python 3.10+ library for LangGraph, CrewAI, or plain Python loops. It complements orchestration and observability; it does not replace them. Keywords: agent side effects, safe retries, at-most-once execution, idempotent tool calls, agent reliability.
+> Mycelium is the reliability layer between AI agents and their tools. It prevents unsafe runtime actions after the model proposes a call and before the tool can cause damage. It validates arguments, outputs, paths, entities, destinations, scope, authority, context, budgets, completion state, secrets, and execution state. Mycelium is a framework-agnostic Python 3.10+ library for LangGraph, CrewAI, or plain Python loops. It complements orchestration and observability; it does not replace them. Keywords: agent runtime safety, tool-call validation, agent guardrails, safe tool execution, agent reliability.
 
 ## What it does
 
-Core (default on-ramp via `mycelium init` / `mycelium run`):
+Default execution control (`mycelium init` / `mycelium run`):
 
 - **Duplicate side effects on retry:** classify each tool (`read`, `keyed_mutate`, `non_idempotent_mutate`, etc.), hash a durable transition key, hold a lease (auto-extended while `@ledger` / `@ledger_sync` tools run; default every `lease_ttl / 3`), and resolve duplicates by terminal state — poll reads, hard-block or reconcile ambiguous writes. Disable auto-renew with `lease_renew_interval: 0`.
 - **Transition envelope fields:** `side_effect_class` → `spendability` → `side_effect_boundary` → `terminal_outcome` → `external_operation_ref` → `retry_permission` — the identity/policy stack for that ledger (not a separate product).
 
-Opt-in (configure or call explicitly):
+Composable prevention controls (configure or call explicitly):
 
-- **Stale or broken context:** TTL-fresh tool data (`@protect` / `Session`); optional `MessageValidator` / `HistoryGuard` before the next LLM turn.
-- **Bad tool calls:** `@bounded` input/output/scope checks; optional `ToolRegistry` allowlist — block before the tool runs.
+- **Bad tool calls:** `@bounded` input/output/entity/path checks and `ToolRegistry` allowlists block invalid or out-of-scope calls before execution.
+- **Runaway behavior:** `loop_guard` catches repeated action patterns; `budget` enforces duration, step, token, and USD ceilings.
+- **Stale or broken context:** `@protect` / `Session`, `MessageValidator`, and `HistoryGuard` validate tool data and conversation structure.
+- **Premature completion:** `completion` requires host-declared work before a run may report success.
+- **Permission widening:** `scope_guard` freezes the run allowlist and refuses mid-run or handoff expansion.
+- **Credentials and destinations:** `secret_args` blocks raw secrets; `entity_guard` restricts write destinations.
+- **Destructive authority:** `destructive_confirm`, `authority_window`, and `use_time_currency` require exact, current permission and facts at execution time.
+- **Verification:** `mycelium doctor` inspects detectable wiring; `mycelium verify` exercises synthetic safety scenarios without calling application tools.
 
 ## Install
 
@@ -27,7 +33,7 @@ mycelium run --config mycelium.yaml -- python -m my_app
 ```
 ## How it differs from Langfuse / LangSmith
 
-Langfuse and LangSmith are observability and tracing — they show what happened after an agent runs. Mycelium is runtime prevention: a transition ledger around tool execution (core), plus optional tool-boundary and message/history guards. Use both if you want traces and guards.
+Langfuse and LangSmith are observability and tracing — they show what happened after an agent runs. Mycelium is runtime prevention across the tool-call boundary. Use both if you want traces and enforcement.
 
 ## Try in 5 minutes
 
