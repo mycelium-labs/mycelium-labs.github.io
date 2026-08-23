@@ -915,7 +915,12 @@ body.spectrum { margin: 0; overflow-x: hidden; background: var(--cream); color: 
 .primary:hover { transform: translateY(3px); box-shadow: 0 4px 0 #a72c2c; }
 .copy-command { min-height: 54px; display: inline-flex; align-items: center; gap: 1rem; padding: 0 .7rem 0 1.1rem; border: 2px solid var(--night); border-radius: 99px; background: transparent; color: var(--night); cursor: pointer; }
 .copy-command code { font: 500 .76rem/1 var(--mono); }.copy-command span { padding-left: .8rem; border-left: 1px solid currentColor; font: 600 .62rem/1 var(--mono); text-transform: uppercase; }
-.works-with { margin: 1.3rem 0 0; color: #625f77; font: 500 .67rem/1.5 var(--mono); }
+.hero-proofline { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem 1.25rem; margin-top: 1.3rem; }
+.works-with { margin: 0; color: #625f77; font: 500 .67rem/1.5 var(--mono); }
+.download-count { display: inline-flex; align-items: baseline; gap: .4rem; padding: .35rem .65rem; border: 1px solid #cbc4dc; border-radius: 99px; background: #fffaf2; text-decoration: none; white-space: nowrap; }
+.download-count strong { color: var(--cobalt); font: 400 .82rem/1 var(--display); letter-spacing: -.03em; }
+.download-count span { color: #625f77; font: 600 .58rem/1 var(--mono); letter-spacing: .04em; text-transform: uppercase; }
+.download-count:hover { border-color: var(--cobalt); }
 
 .control-field { position: relative; min-height: 570px; isolation: isolate; }
 .control-field::before { content: ""; position: absolute; inset: 5% 0 0 8%; z-index: -2; border-radius: 50% 44% 52% 46%; background: #ece7ff; transform: rotate(-7deg); }
