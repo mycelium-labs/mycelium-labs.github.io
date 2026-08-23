@@ -7,7 +7,7 @@
   <meta name="description" content="How to install Mycelium, prevent duplicate side effects, resolve ambiguous outcomes, and verify the boundary is wired.">
   <meta name="theme-color" content="#f3f1ea">
   <link rel="canonical" href="https://mycelium-labs.github.io/handbook.html">
-  <link rel="icon" href="/favicon.svg?v=6" type="image/svg+xml">
+  <link rel="icon" href="/favicon.svg?v=7" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
@@ -94,16 +94,16 @@ mycelium run --config mycelium.yaml -- python -m my_agent</pre>
       </section>
       <section id="architecture">
         <h2>How it fits</h2>
-        <p>Mycelium sits between the agent loop and your tools: after the LLM returns <code>tool_calls</code>, around execution. Catalog first: AF-002 proves run-or-not and enforces at-most-once.</p>
+        <p>Mycelium sits between the agent loop and your tools: after the LLM returns <code>tool_calls</code>, around execution. Its execution control proves run-or-not and enforces at-most-once.</p>
       </section>
       <section id="scope">
         <h2>What it does</h2>
-        <p>Catalog classes. <code>mycelium init</code> / <code>mycelium run</code> center on AF-002 duplicate side-effect prevention at the tool boundary.</p>
+        <p>Control areas. <code>mycelium init</code> / <code>mycelium run</code> begin with durable side-effect protection at the tool boundary.</p>
       </section>
       <p class="docs-group" id="group-core">Core</p>
       <section id="actions">
         <h2>Actions (core)</h2>
-        <p>Transition ledger for duplicate side-effect prevention: the default <code>mycelium init</code> / <code>mycelium run</code> path. Each ledgered tool gets a <code>side_effect_class</code> and <code>transition_key</code>. Duplicate dispatches resolve through <a href="#resolution">gates</a> — not blind re-execution. <a href="/prevent.html">Read the prevention page →</a></p>
+        <p>Transition ledger for safe execution: the default <code>mycelium init</code> / <code>mycelium run</code> path. Each ledgered tool gets a <code>side_effect_class</code> and <code>transition_key</code>. Repeated dispatches resolve through <a href="#resolution">gates</a>, not blind re-execution. <a href="/prevent.html">Read the prevention page →</a></p>
         <pre>from mycelium import load_config
 
 config = load_config("mycelium.yaml")
@@ -138,14 +138,14 @@ action_ledger:
       <p class="docs-group" id="group-opt-in">Opt-in</p>
       <section id="context"><h2>Context (opt-in)</h2><p>TTL cache and message/history helpers.</p></section>
       <section id="tools"><h2>Tool boundaries (opt-in)</h2><p>Input/output/scope validation and allowlists.</p></section>
-      <section id="loops"><h2>Loop guard (AF-003, opt-in)</h2><p>Detects identical tool+args across new <code>tool_call_id</code>s.</p></section>
-      <section id="completion"><h2>Completion contract (AF-007, opt-in)</h2><p>Refuses terminal while required subtasks are pending.</p></section>
-      <section id="scope-guard"><h2>Scope guard (AF-008, opt-in)</h2><p>Freezes the run tool allowlist and re-checks every step.</p></section>
-      <section id="secret-in-args"><h2>Secret-in-args (AF-010, opt-in)</h2><p>Blocks raw credentials before claim. Pass <code>secret://</code> references instead of API keys. Fail-closed pre-execution blocking is the primary protection; redaction is defense-in-depth. Mycelium cannot sanitize logs created inside application or provider code.</p></section>
+      <section id="loops"><h2>Loop guard (opt-in)</h2><p>Detects identical tool+args across new <code>tool_call_id</code>s.</p></section>
+      <section id="completion"><h2>Completion contract (opt-in)</h2><p>Refuses terminal while required subtasks are pending.</p></section>
+      <section id="scope-guard"><h2>Scope guard (opt-in)</h2><p>Freezes the run tool allowlist and re-checks every step.</p></section>
+      <section id="secret-in-args"><h2>Secret-in-args (opt-in)</h2><p>Blocks raw credentials before claim. Pass <code>secret://</code> references instead of API keys. Fail-closed pre-execution blocking is the primary protection; redaction is defense-in-depth. Mycelium cannot sanitize logs created inside application or provider code.</p></section>
       <section id="telemetry"><h2>Outcome telemetry &amp; DTTR (v1.20+)</h2><p>Opt-in flat append-only outcome rows for production observability.</p></section>
       <p class="docs-group" id="group-reference">Reference</p>
       <section id="catalog">
-        <h2>Failure-mode catalog (AF-001…AF-010)</h2>
+        <h2>Failure-mode catalog</h2>
         <p>Stable IDs used in the SDK README, changelogs, and this handbook. The public story leads with outcomes, not a guardrail count. <a href="/prevent.html">Browse the prevention catalog →</a></p>
       </section>
       <section id="api"><h2>API</h2><p>See SDK README for the full export list.</p></section>

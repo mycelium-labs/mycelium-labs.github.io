@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Instrument+Sans:wght@400;500&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css?v=11">
-  <link rel="icon" href="/favicon.svg?v=6" type="image/svg+xml">
+  <link rel="icon" href="/favicon.svg?v=7" type="image/svg+xml">
   <style>
     :root {
       --bg: #0a0e0b;
@@ -48,10 +48,7 @@
       letter-spacing: -0.02em;
       color: var(--brand);
     }
-    .brand-mark { width: 24px; height: 24px; flex: 0 0 auto; border: 1px solid currentColor; border-radius: 50%; position: relative; }
-    .brand-mark::before, .brand-mark::after { content: ""; position: absolute; left: -3px; top: 11px; height: 1px; width: 30px; background: currentColor; transform-origin: center; }
-    .brand-mark::before { transform: rotate(-50deg); }
-    .brand-mark::after { transform: rotate(-20deg); }
+    .brand-mark { width: 26px; height: 26px; flex: 0 0 auto; background: url('/favicon.svg?v=7') center / contain no-repeat; }
     h1 {
       margin: 0 0 0.5rem;
       font-size: 1.35rem;
@@ -220,7 +217,7 @@
 
       window.setTimeout(function () {
         if (!done) {
-          fail("Still waking after 60s — try Open anyway.");
+          fail("Still waking after 60s. Try Open anyway.");
         }
       }, 60000);
     })();

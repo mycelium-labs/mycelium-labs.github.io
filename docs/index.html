@@ -3,17 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Mycelium — stop unsafe agent actions before they happen</title>
+  <title>Mycelium | Stop unsafe agent actions before they happen</title>
   <meta name="description" content="Mycelium is the reliability layer between AI agents and their tools. Validate intent, arguments, authority, context, budgets, and execution before an action can cause damage.">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="theme-color" content="#fff8ed">
   <link rel="canonical" href="https://mycelium-labs.github.io/">
-  <link rel="icon" href="/favicon.svg?v=6" type="image/svg+xml">
+  <link rel="icon" href="/favicon.svg?v=7" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png?v=7" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=7">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css?v=21">
-  <meta property="og:title" content="Mycelium — stop unsafe agent actions before they happen">
+  <meta property="og:title" content="Mycelium | Stop unsafe agent actions before they happen">
   <meta property="og:description" content="The reliability layer between your agent and its tools.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mycelium-labs.github.io/">
@@ -66,17 +68,17 @@
     <section class="safety-spectrum" id="guardrails" aria-labelledby="spectrum-title">
       <header><p class="section-tag">THE SAFETY SPECTRUM</p><h2 id="spectrum-title">One boundary. Many ways to stop harm.</h2><p>Turn on the controls your workflow needs. They compose around the same tool-call path.</p></header>
       <div class="spectrum-river">
-        <article class="cap cap-coral"><span>01</span><div><h3>Validate the call</h3><p>Reject bad types, missing fields, unsafe paths, invalid entities, wrong destinations, and tools outside the registry.</p><a href="/prevent.html">Tool boundary →</a></div><code>AF-004</code></article>
-        <article class="cap cap-blue"><span>02</span><div><h3>Constrain authority</h3><p>Freeze the tool allowlist, require exact destructive grants, and re-check expiring authority and decide-time facts at the moment of use.</p><a href="/prevent.html">Scope &amp; grants →</a></div><code>AF-008 · AF-011 · AF-012</code></article>
-        <article class="cap cap-lime"><span>03</span><div><h3>Keep context honest</h3><p>Catch stale tool data, malformed message history, orphan results, duplicate IDs, and superseded checkpoints before the next action.</p><a href="/handbook.html#context">Context guards →</a></div><code>AF-006</code></article>
-        <article class="cap cap-amber"><span>04</span><div><h3>Stop runaway behavior</h3><p>Detect repeated tool patterns, enforce step/token/USD ceilings, and refuse “done” until required work is complete.</p><a href="/handbook.html#loops">Run controls →</a></div><code>AF-003 · AF-007</code></article>
-        <article class="cap cap-violet"><span>05</span><div><h3>Protect secrets &amp; destinations</h3><p>Block raw credentials before claim, use secret references, and keep writes inside host-approved destination policy.</p><a href="/handbook.html#secret-in-args">Data safety →</a></div><code>AF-010</code></article>
-        <article class="cap cap-ink"><span>06</span><div><h3>Control execution</h3><p>Claim consequential actions, prevent concurrent execution, recover ambiguous outcomes, and return stored results when work already completed.</p><a href="/resolve.html">Execution control →</a></div><code>AF-002</code></article>
+        <article class="cap cap-coral"><span>01</span><div><h3>Validate the call</h3><p>Reject bad types, missing fields, unsafe paths, invalid entities, wrong destinations, and tools outside the registry.</p><a href="/prevent.html">Tool boundary →</a></div><code>TOOL VALIDATION</code></article>
+        <article class="cap cap-blue"><span>02</span><div><h3>Constrain authority</h3><p>Freeze the tool allowlist, require exact destructive grants, and re-check expiring authority and decide-time facts at the moment of use.</p><a href="/prevent.html">Scope &amp; grants →</a></div><code>SCOPE &amp; AUTHORITY</code></article>
+        <article class="cap cap-lime"><span>03</span><div><h3>Keep context honest</h3><p>Catch stale tool data, malformed message history, orphan results, duplicate IDs, and superseded checkpoints before the next action.</p><a href="/handbook.html#context">Context guards →</a></div><code>CONTEXT INTEGRITY</code></article>
+        <article class="cap cap-amber"><span>04</span><div><h3>Stop runaway behavior</h3><p>Detect repeated tool patterns, enforce step/token/USD ceilings, and refuse “done” until required work is complete.</p><a href="/handbook.html#loops">Run controls →</a></div><code>RUN CONTROL</code></article>
+        <article class="cap cap-violet"><span>05</span><div><h3>Protect secrets &amp; destinations</h3><p>Block raw credentials before claim, use secret references, and keep writes inside host-approved destination policy.</p><a href="/handbook.html#secret-in-args">Data safety →</a></div><code>DATA SAFETY</code></article>
+        <article class="cap cap-ink"><span>06</span><div><h3>Control execution</h3><p>Claim consequential actions, prevent concurrent execution, recover ambiguous outcomes, and return stored results when work already completed.</p><a href="/resolve.html">Execution control →</a></div><code>EXECUTION CONTROL</code></article>
       </div>
     </section>
 
     <section class="journey" id="how" aria-labelledby="journey-title">
-      <div class="journey-copy"><p class="section-tag">ONE TOOL CALL / FIVE DECISIONS</p><h2 id="journey-title">The tool only runs after the boundary says yes.</h2><p>Mycelium evaluates deterministic facts in order. A refusal is returned to the agent as a useful runtime outcome—not discovered later in a dashboard.</p></div>
+      <div class="journey-copy"><p class="section-tag">ONE TOOL CALL / FIVE DECISIONS</p><h2 id="journey-title">The tool only runs after the boundary says yes.</h2><p>Mycelium evaluates deterministic facts in order. A refusal is returned to the agent as a useful runtime outcome, not discovered later in a dashboard.</p></div>
       <ol class="journey-steps">
         <li><span>1</span><div><b>Is the call valid?</b><p>Schema, registry, entity, path, secret, destination.</p></div><i class="yes">PASS</i></li>
         <li><span>2</span><div><b>Is it authorized now?</b><p>Frozen scope, object grant, authority window, current facts.</p></div><i class="yes">PASS</i></li>
@@ -96,7 +98,7 @@
     </section>
 
     <section class="proof" id="proof" aria-labelledby="proof-title">
-      <div class="proof-main"><p class="section-tag">PROVE THE PROTECTION</p><h2 id="proof-title">Inspect it. Break it. Verify it.</h2><p><b>Doctor</b> checks whether safety is configured and detectably wired. <b>Verify</b> exercises synthetic crashes, redispatch, contention, outages, secrets, entity policy, destructive grants, and authority timing—without calling your real tools.</p><div class="proof-actions"><a class="primary" href="/verify.html">See verification</a><a href="https://github.com/mycelium-labs/mycelium">Inspect source ↗</a></div></div>
+      <div class="proof-main"><p class="section-tag">PROVE THE PROTECTION</p><h2 id="proof-title">Inspect it. Break it. Verify it.</h2><p><b>Doctor</b> checks whether safety is configured and detectably wired. <b>Verify</b> exercises synthetic crashes, redispatch, contention, outages, secrets, entity policy, destructive grants, and authority timing without calling your real tools.</p><div class="proof-actions"><a class="primary" href="/verify.html">See verification</a><a href="https://github.com/mycelium-labs/mycelium">Inspect source ↗</a></div></div>
       <div class="proof-command"><code><span>$</span> mycelium doctor --config mycelium.yaml
 <i># representative checks</i>
 <b>PASS</b> tool registry
@@ -114,8 +116,8 @@
     </section>
 
     <section class="honesty" aria-labelledby="honesty-title">
-      <p class="section-tag">THE HONEST BOUNDARY</p><h2 id="honesty-title">Deterministic runtime controls—not judgment dressed up as certainty.</h2>
-      <div><p><b>Mycelium ships deterministic guards for</b><br>execution, validation, loops, context integrity, completion, scope, secrets, destinations, destructive authorization, authority timing, and use-time facts.</p><p><b>It does not yet claim deterministic prevention for</b><br>hallucination (AF-001), open-ended goal misalignment (AF-005), or prompt injection (AF-009). Those remain judgment or roadmap territory.</p></div>
+      <p class="section-tag">THE HONEST BOUNDARY</p><h2 id="honesty-title">Deterministic runtime controls, not judgment dressed up as certainty.</h2>
+      <div><p><b>Mycelium ships deterministic guards for</b><br>execution, validation, loops, context integrity, completion, scope, secrets, destinations, destructive authorization, authority timing, and use-time facts.</p><p><b>It does not yet claim deterministic prevention for</b><br>hallucination, open-ended goal misalignment, or prompt injection. Those remain judgment or roadmap territory.</p></div>
     </section>
 
     <section class="start"><p class="section-tag">START WITH THE RISKIEST TOOL</p><h2>Give your agent freedom.<br><em>Keep the boundary.</em></h2><div class="hero-actions"><a class="primary" href="/try.html">Protect your first tool</a><button class="copy-command light" type="button" data-copy="pip install mycelium-runtime"><code>pip install mycelium-runtime</code><span data-copy-state>Copy</span></button></div></section>

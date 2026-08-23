@@ -1,4 +1,4 @@
-/* Mycelium site — incident-dossier / transaction-ledger system.
+/* Mycelium site: incident-dossier / transaction-ledger system.
    Paper stock, ink, hairline rules, one safety accent. No ornament. */
 
 :root {
@@ -282,7 +282,7 @@ h1.display em {
 .band--ink .link { color: var(--paper); border-bottom-color: #4a443a; }
 .band--ink .link:hover { color: #f0a58e; border-bottom-color: #f0a58e; }
 
-/* record block — dossier cover metadata */
+/* record block: dossier cover metadata */
 
 .record {
   border-top: 2px solid var(--ink);
@@ -448,7 +448,7 @@ h1.display em {
   text-transform: uppercase;
 }
 
-/* staggered reveal — only when JS confirms motion is welcome */
+/* staggered reveal: only when JS confirms motion is welcome */
 .trace-anim .trace li { opacity: 0; transform: translateY(4px); }
 .trace-anim.is-playing .trace li {
   animation: trace-in .28s ease forwards;
@@ -875,7 +875,7 @@ h1.display em {
 }
 
 /* --------------------------------------------------------------------------
-   Control spectrum homepage — broad runtime safety, expressed as motion/path.
+   Control spectrum homepage: broad runtime safety, expressed as motion/path.
    -------------------------------------------------------------------------- */
 :root {
   --cream: #fff8ed;
@@ -897,17 +897,17 @@ body.spectrum { margin: 0; overflow-x: hidden; background: var(--cream); color: 
 .spectrum .skip-link:focus { transform: none; }
 .topbar { width: min(1380px, 100%); min-height: 76px; margin: auto; padding: .7rem clamp(18px, 4vw, 56px); display: flex; align-items: center; gap: 1.5rem; }
 .logo { display: inline-flex; align-items: center; gap: .65rem; font: 400 1rem/1 var(--display); letter-spacing: -.02em; text-decoration: none; white-space: nowrap; }
-.logo i { width: 18px; height: 18px; border-radius: 50% 50% 12% 50%; background: conic-gradient(from 45deg, var(--coral), var(--amber), var(--lime), var(--cobalt), var(--violet), var(--coral)); transform: rotate(12deg); }
+.logo i { width: 24px; height: 24px; background: url('/favicon.svg?v=7') center / contain no-repeat; }
 .topbar nav { display: flex; gap: clamp(.9rem, 2.5vw, 2rem); margin-left: auto; }
 .topbar nav a, .github-link { font: 600 .7rem/1 var(--mono); letter-spacing: .07em; text-decoration: none; text-transform: uppercase; }
 .topbar nav a { padding: .8rem 0; border-bottom: 2px solid transparent; }.topbar nav a:hover { border-color: var(--cobalt); }
 .github-link { padding: .8rem 1rem; border-radius: 99px; background: var(--night); color: #fff !important; }
-.hero { position: relative; width: min(1380px, 100%); min-height: 720px; margin: auto; padding: clamp(60px, 9vw, 130px) clamp(18px, 4vw, 56px) 90px; display: grid; grid-template-columns: minmax(0, .95fr) minmax(480px, 1.05fr); gap: clamp(30px, 4vw, 70px); align-items: center; }
+.hero { position: relative; width: min(1380px, 100%); min-height: calc(100svh - 76px); margin: auto; padding: clamp(24px, 3vw, 44px) clamp(18px, 4vw, 56px) clamp(38px, 5vw, 68px); display: grid; grid-template-columns: minmax(0, .95fr) minmax(480px, 1.05fr); gap: clamp(30px, 4vw, 70px); align-items: start; }
 .hero::before { content: ""; position: absolute; z-index: -1; width: 420px; height: 420px; left: -210px; top: 50px; border-radius: 50%; background: var(--lime); opacity: .25; filter: blur(2px); }
 .kicker, .section-tag { margin: 0 0 1.2rem; font: 600 .7rem/1.4 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
 .kicker span { display: inline-block; margin-right: .5rem; padding: .35rem .65rem; border-radius: 99px; background: var(--lime); }
 .hero h1, .manifesto h2, .safety-spectrum h2, .journey h2, .real-world h2, .proof h2, .evidence h2, .honesty h2, .start h2 { margin: 0; font-family: var(--display); font-weight: 400; letter-spacing: -.055em; line-height: .94; text-wrap: balance; }
-.hero h1 { max-width: 820px; font-size: clamp(3.4rem, 7.4vw, 7.2rem); }
+.hero h1 { max-width: 820px; font-size: clamp(3.4rem, 6vw, 6.2rem); }
 .hero h1 em { color: var(--cobalt); font-style: normal; }
 .hero-lede { max-width: 62ch; margin: 1.8rem 0 0; font-size: clamp(1.05rem, 1.5vw, 1.3rem); line-height: 1.6; }
 .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem; margin-top: 2rem; }
@@ -956,6 +956,11 @@ body.spectrum { margin: 0; overflow-x: hidden; background: var(--cream); color: 
 @media (max-width: 1000px) {
   .hero { grid-template-columns: 1fr; }.control-field { width: min(650px,100%); margin: auto; }.safety-spectrum > header { grid-template-columns: 1fr; }.journey { grid-template-columns: 1fr; }.journey-copy { position: static; }.block-example { grid-column: 1; }.proof, .evidence { grid-template-columns: 1fr; }.evidence > p { margin: 0; }
 }
+@media (max-height: 820px) and (min-width: 1001px) {
+  .hero { min-height: auto; padding-top: 20px; padding-bottom: 36px; }
+  .hero h1 { font-size: clamp(3.4rem, 5.3vw, 5.4rem); }
+  .control-field { min-height: 520px; transform: scale(.9); transform-origin: top center; }
+}
 @media (max-width: 700px) {
   .topbar { flex-wrap: wrap; }.topbar nav { order: 3; width: 100%; overflow-x: auto; margin-left: 0; }.github-link { margin-left: auto; }.hero { min-height: auto; padding-top: 55px; }.hero h1 { font-size: clamp(3rem, 15vw, 5.2rem); }.hero-actions { align-items: stretch; }.copy-command { max-width: 100%; }.control-field { min-height: 520px; transform: scale(.88); transform-origin: left center; width: 112%; }.cap { grid-template-columns: 58px 1fr; gap: 1rem; }.cap > span { width: 58px; height: 58px; }.cap > code { grid-column: 2; padding-top: 0; }.spectrum-river::before { left: 27px; }.world-orbit { height: 580px; }.world-orbit::before, .world-orbit::after { display: none; }.orbit-core { width: 150px; height: 150px; }.world-payments { left: 0; }.world-comms { left: 50%; top: 0; }.world-infra { right: 0; top: 28%; }.world-data { right: 2%; bottom: 2%; }.world-files { left: 42%; bottom: 0; }.world-agents { left: 0; bottom: 18%; }.honesty > div { grid-template-columns: 1fr; }.footer { flex-wrap: wrap; }.footer nav { width: 100%; margin-left: 0; }
 }
@@ -970,7 +975,7 @@ body.spectrum { margin: 0; overflow-x: hidden; background: var(--cream); color: 
 body.calm-page { background: var(--cream); font-family: var(--s-body); }
 .calm-page .site-nav { position: relative; border-top: 0; }
 .calm-page .site-nav::before { content: ""; position: absolute; inset: 0 0 auto; height: 6px; background: linear-gradient(90deg,var(--coral) 0 18%,var(--amber) 18% 36%,var(--lime) 36% 54%,var(--aqua) 54% 70%,var(--cobalt) 70% 86%,var(--violet) 86%); }
-.calm-page .brand-mark { background: conic-gradient(var(--coral),var(--amber),var(--lime),var(--cobalt),var(--violet),var(--coral)); }
+.calm-page .brand-mark { width: 24px; height: 24px; border-radius: 0; background: url('/favicon.svg?v=7') center / contain no-repeat; }
 .calm-page .page-hero h1 { color: var(--cobalt); }
 .calm-page .page-hero h1 em, .calm-page .section-heading h2 em { color: var(--coral); }
 .calm-page main > .section:nth-of-type(3n+1) .eyebrow { color: var(--cobalt); }
