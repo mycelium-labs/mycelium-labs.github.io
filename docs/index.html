@@ -1,58 +1,127 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mycelium — safe retries for consequential agent actions</title>
-<meta name="description" content="Mycelium is a Python runtime control boundary that makes consequential agent tool calls safe to retry—without duplicate payments, emails, tickets, or infrastructure changes.">
-<meta name="robots" content="index,follow,max-image-preview:large"><meta name="theme-color" content="#f2efe5">
-<link rel="canonical" href="https://mycelium-labs.github.io/"><link rel="icon" href="/favicon.svg?v=6" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans+Condensed:wght@500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css?v=20">
-<meta property="og:title" content="Mycelium — safe retries for consequential agent actions"><meta property="og:description" content="Put a durable control boundary between agent retries and irreversible tools."><meta property="og:type" content="website"><meta property="og:url" content="https://mycelium-labs.github.io/"><meta property="og:image" content="https://mycelium-labs.github.io/og-image.png"><meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Mycelium","alternateName":"mycelium-runtime","applicationCategory":"DeveloperApplication","description":"A runtime control boundary that makes consequential agent tool calls safe to retry.","url":"https://mycelium-labs.github.io/","downloadUrl":"https://pypi.org/project/mycelium-runtime/","codeRepository":"https://github.com/mycelium-labs/mycelium","programmingLanguage":"Python","license":"https://opensource.org/licenses/MIT"}</script>
-</head><body class="dossier">
-<a class="skip-link" href="#main">Skip to content</a>
-<header class="masthead"><div class="masthead-in wrap"><a class="wordmark" href="/" aria-label="Mycelium home">MYCELIUM<span>/RUNTIME</span></a><nav aria-label="Primary navigation"><a href="#mechanism">Mechanism</a><a href="#evidence">Evidence</a><a href="/handbook.html">Docs</a><a href="https://github.com/mycelium-labs/mycelium">GitHub ↗</a></nav></div></header>
-<main id="main">
-<section class="cover wrap" aria-labelledby="title"><p class="case-label">Runtime control boundary / Python / Open source</p><div class="cover-grid"><div>
-<h1 id="title">Your agent can retry.<br><em>Your payment cannot.</em></h1>
-<p class="dek">Mycelium makes consequential tool calls safe to retry. It places a durable decision point between agent orchestration and the systems that send money, email customers, mutate infrastructure, or write business records.</p>
-<div class="install"><code>pip install mycelium-runtime</code><button type="button" data-copy="pip install mycelium-runtime"><span data-copy-state>Copy</span></button></div>
-<div class="cover-links"><a class="button" href="/try.html">Protect one tool</a><a href="https://github.com/mycelium-labs/mycelium">Inspect the source →</a></div></div>
-<aside class="record" aria-label="Project record"><p class="record-title">PROJECT RECORD / 08.2026</p><dl><div><dt>Runtime</dt><dd>Python 3.10+</dd></div><div><dt>Frameworks</dt><dd>LangGraph, CrewAI</dd></div><div><dt>State</dt><dd>File, SQLite, Redis, Postgres</dd></div><div><dt>License</dt><dd>MIT</dd></div><div><dt>Downloads</dt><dd>25k on PyPI</dd></div></dl><p class="stamp">AT-MOST-ONCE<br>BY CONSTRUCTION</p></aside></div></section>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mycelium — stop unsafe agent actions before they happen</title>
+  <meta name="description" content="Mycelium is the reliability layer between AI agents and their tools. Validate intent, arguments, authority, context, budgets, and execution before an action can cause damage.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="theme-color" content="#fff8ed">
+  <link rel="canonical" href="https://mycelium-labs.github.io/">
+  <link rel="icon" href="/favicon.svg?v=6" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css?v=21">
+  <meta property="og:title" content="Mycelium — stop unsafe agent actions before they happen">
+  <meta property="og:description" content="The reliability layer between your agent and its tools.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mycelium-labs.github.io/">
+  <meta property="og:image" content="https://mycelium-labs.github.io/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Mycelium","alternateName":"mycelium-runtime","applicationCategory":"DeveloperApplication","description":"The reliability layer between AI agents and their tools.","url":"https://mycelium-labs.github.io/","downloadUrl":"https://pypi.org/project/mycelium-runtime/","codeRepository":"https://github.com/mycelium-labs/mycelium","programmingLanguage":"Python","license":"https://opensource.org/licenses/MIT"}</script>
+</head>
+<body class="spectrum">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="topbar">
+    <a class="logo" href="/" aria-label="Mycelium home"><i aria-hidden="true"></i>MYCELIUM</a>
+    <nav aria-label="Primary navigation"><a href="#scope">Scope</a><a href="#how">How it works</a><a href="#proof">Proof</a><a href="/handbook.html">Docs</a></nav>
+    <a class="github-link" href="https://github.com/mycelium-labs/mycelium">GitHub ↗</a>
+  </header>
 
-<section class="band problem" id="problem"><div class="section wrap"><div class="section-head"><p>01 / THE FAILURE WINDOW</p><h2>The dangerous moment is after the tool ran—and before the agent knew.</h2></div><div class="exhibit"><div class="exhibit-copy"><p>A worker sends the payment. The process dies before the result is committed. On recovery, orchestration sees an unfinished node and dispatches it again.</p><p class="callout">The second call is operationally reasonable and commercially wrong.</p></div><ol class="failure-list"><li><b>01</b><span>Agent requests a consequential action.</span></li><li><b>02</b><span>External system accepts it.</span></li><li><b>03</b><span>Worker crashes before durable acknowledgement.</span></li><li><b>04</b><span>Retry cannot distinguish “never ran” from “ran, result lost.”</span></li></ol></div></div></section>
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="kicker"><span>Runtime safety</span> for agents that take real action</p>
+        <h1 id="hero-title">Let agents act.<br><em>Stop unsafe actions.</em></h1>
+        <p class="hero-lede">Mycelium sits between your agent and its tools. Configure the controls that matter, then validate inputs, scope, authority, context, and execution state before a call can touch the real world.</p>
+        <div class="hero-actions"><a class="primary" href="/try.html">Protect your first tool</a><button class="copy-command" type="button" data-copy="pip install mycelium-runtime"><code>pip install mycelium-runtime</code><span data-copy-state>Copy</span></button></div>
+        <p class="works-with">Python 3.10+ · LangGraph · CrewAI · plain Python · MIT</p>
+      </div>
 
-<section class="section wrap" id="mechanism"><div class="section-head"><p>02 / THE CONTROL BOUNDARY</p><h2>Every retry must earn permission to touch the outside world.</h2><span>Mycelium claims an action before execution, records the outcome after execution, and refuses to guess when recovery is ambiguous.</span></div>
-<div class="trace" data-trace-exhibit><div class="trace-head"><span>INCIDENT REPLAY / SEND PAYMENT</span><button type="button" data-replay>Replay trace</button></div><div class="lanes">
-<article><h3>WITHOUT A BOUNDARY</h3><ol><li><time>10:04:11</time><span>tool.execute()</span><b class="bad">$480 SENT</b></li><li><time>10:04:12</time><span>worker exits</span><b>RESULT LOST</b></li><li><time>10:04:18</time><span>node retry</span><b class="bad">$480 SENT AGAIN</b></li></ol></article>
-<article><h3>WITH MYCELIUM</h3><ol><li><time>10:04:11</time><span>claim action key</span><b>EXECUTE</b></li><li><time>10:04:12</time><span>worker exits</span><b>STATE: UNKNOWN</b></li><li><time>10:04:18</time><span>node retry</span><b class="good">HARD BLOCK</b></li></ol></article></div></div>
-<div class="ledger"><div><b>ALLOW</b><span>No prior execution. Run once.</span></div><div><b>RETURN</b><span>Completed earlier. Reuse the result.</span></div><div><b>POLL</b><span>Still running. Wait.</span></div><div><b>REPAIR</b><span>Reconcile with the external system.</span></div><div><b>HARD BLOCK</b><span>Authority is ambiguous. Do not execute.</span></div></div></section>
+      <div class="control-field" aria-label="A tool call passes through configured Mycelium safety checks before execution">
+        <div class="agent-pulse"><span>AGENT</span><b>refund_order</b><code>{order: "ORD-42"}</code></div>
+        <svg class="route-lines" viewBox="0 0 620 500" aria-hidden="true" focusable="false">
+          <path class="route route-a" d="M98 248 C180 248 170 80 304 80 S430 178 516 178"/>
+          <path class="route route-b" d="M98 248 C190 248 188 192 304 192 S420 248 516 248"/>
+          <path class="route route-c" d="M98 248 C190 248 184 306 304 306 S420 320 516 320"/>
+          <path class="route route-d" d="M98 248 C180 248 170 424 304 424 S430 366 516 366"/>
+          <circle class="moving-dot dot-a" cx="0" cy="0" r="7"/><circle class="moving-dot dot-b" cx="0" cy="0" r="7"/><circle class="moving-dot dot-c" cx="0" cy="0" r="7"/>
+        </svg>
+        <span class="check check-input">ARGS<br><b>VALID</b></span>
+        <span class="check check-scope">SCOPE<br><b>ALLOWED</b></span>
+        <span class="check check-context">CONTEXT<br><b>FRESH</b></span>
+        <span class="check check-authority">AUTHORITY<br><b>CURRENT</b></span>
+        <div class="verdict"><small>MYCELIUM VERDICT</small><strong>ALLOW</strong><span>safe to execute</span></div>
+        <div class="real-tool"><span>REAL TOOL</span><b>refund created</b></div>
+      </div>
+    </section>
 
-<section class="band ink"><div class="section wrap"><div class="section-head"><p>03 / CATEGORY</p><h2>Observability tells you what happened.<br>Mycelium controls whether the tool may execute.</h2></div><div class="comparison"><div class="comparison-head"><span>System</span><span>Primary job</span><span>At the side-effect boundary</span></div><div><b>Tracing &amp; evals</b><span>Explain and score runs</span><span>Observe</span></div><div><b>Workflow engines</b><span>Resume durable workflows</span><span>Retry orchestration</span></div><div><b>Prompt &amp; tool guardrails</b><span>Validate intent and inputs</span><span>Allow or reject requests</span></div><div class="highlight"><b>Mycelium</b><span>Control consequential actions</span><span>Claim, deduplicate, reconcile, block</span></div></div><p class="note">Use it with your framework, tracing stack, and durable workflow engine. It solves a narrower problem at the last responsible moment.</p></div></section>
+    <section class="manifesto" id="scope">
+      <p>Wrong answers can be corrected.</p>
+      <h2>Wrong actions ship consequences.</h2>
+      <p>Mycelium prevents runtime failures at the last responsible moment: after the model proposes a tool call, before the tool can cause damage.</p>
+    </section>
 
-<section class="section wrap" id="use-cases"><div class="section-head"><p>04 / WHERE IT FITS</p><h2>Protect actions whose duplicate is a real incident.</h2></div><div class="listing"><article><small>FINANCIAL</small><h3>Charge, refund, transfer</h3><p>Keep a crash from turning one approved transaction into two.</p></article><article><small>CUSTOMER COMMS</small><h3>Send email or SMS</h3><p>Prevent repeat outreach when a graph resumes or a worker is redispatched.</p></article><article><small>SYSTEMS</small><h3>Provision or mutate infra</h3><p>Make uncertain outcomes enter reconciliation instead of blind re-execution.</p></article><article><small>BUSINESS OPS</small><h3>Create tickets or CRM records</h3><p>Deduplicate by action identity across agents, queues, and restarts.</p></article></div></section>
+    <section class="safety-spectrum" id="guardrails" aria-labelledby="spectrum-title">
+      <header><p class="section-tag">THE SAFETY SPECTRUM</p><h2 id="spectrum-title">One boundary. Many ways to stop harm.</h2><p>Turn on the controls your workflow needs. They compose around the same tool-call path.</p></header>
+      <div class="spectrum-river">
+        <article class="cap cap-coral"><span>01</span><div><h3>Validate the call</h3><p>Reject bad types, missing fields, unsafe paths, invalid entities, wrong destinations, and tools outside the registry.</p><a href="/prevent.html">Tool boundary →</a></div><code>AF-004</code></article>
+        <article class="cap cap-blue"><span>02</span><div><h3>Constrain authority</h3><p>Freeze the tool allowlist, require exact destructive grants, and re-check expiring authority and decide-time facts at the moment of use.</p><a href="/prevent.html">Scope &amp; grants →</a></div><code>AF-008 · AF-011 · AF-012</code></article>
+        <article class="cap cap-lime"><span>03</span><div><h3>Keep context honest</h3><p>Catch stale tool data, malformed message history, orphan results, duplicate IDs, and superseded checkpoints before the next action.</p><a href="/handbook.html#context">Context guards →</a></div><code>AF-006</code></article>
+        <article class="cap cap-amber"><span>04</span><div><h3>Stop runaway behavior</h3><p>Detect repeated tool patterns, enforce step/token/USD ceilings, and refuse “done” until required work is complete.</p><a href="/handbook.html#loops">Run controls →</a></div><code>AF-003 · AF-007</code></article>
+        <article class="cap cap-violet"><span>05</span><div><h3>Protect secrets &amp; destinations</h3><p>Block raw credentials before claim, use secret references, and keep writes inside host-approved destination policy.</p><a href="/handbook.html#secret-in-args">Data safety →</a></div><code>AF-010</code></article>
+        <article class="cap cap-ink"><span>06</span><div><h3>Control execution</h3><p>Claim consequential actions, prevent concurrent execution, recover ambiguous outcomes, and return stored results when work already completed.</p><a href="/resolve.html">Execution control →</a></div><code>AF-002</code></article>
+      </div>
+    </section>
 
-<section class="band proof" id="proof"><div class="section wrap split"><div><div class="section-head"><p>05 / REPRODUCIBLE PROOF</p><h2>Kill the worker. Replay the run. Inspect the record.</h2></div><p>The repository includes crash/replay scenarios for the exact boundary Mycelium claims to control. Do not take the diagram on faith.</p><a class="button" href="https://github.com/mycelium-labs/mycelium#quickstart">Run the quickstart ↗</a></div><pre class="terminal"><span>$</span> git clone https://github.com/mycelium-labs/mycelium
-<span>$</span> cd mycelium
-<span>$</span> uv run pytest -q
+    <section class="journey" id="how" aria-labelledby="journey-title">
+      <div class="journey-copy"><p class="section-tag">ONE TOOL CALL / FIVE DECISIONS</p><h2 id="journey-title">The tool only runs after the boundary says yes.</h2><p>Mycelium evaluates deterministic facts in order. A refusal is returned to the agent as a useful runtime outcome—not discovered later in a dashboard.</p></div>
+      <ol class="journey-steps">
+        <li><span>1</span><div><b>Is the call valid?</b><p>Schema, registry, entity, path, secret, destination.</p></div><i class="yes">PASS</i></li>
+        <li><span>2</span><div><b>Is it authorized now?</b><p>Frozen scope, object grant, authority window, current facts.</p></div><i class="yes">PASS</i></li>
+        <li><span>3</span><div><b>Is the run still healthy?</b><p>Fresh context, loop progress, budget, completion state.</p></div><i class="yes">PASS</i></li>
+        <li><span>4</span><div><b>May this execution proceed?</b><p>Durable claim, effect identity, lease, prior outcome.</p></div><i class="yes">ALLOW</i></li>
+        <li class="execute"><span>5</span><div><b>Execute the real tool</b><p>Only now does the call cross the side-effect boundary.</p></div><i>RUN</i></li>
+      </ol>
+      <div class="block-example"><span>ANY CHECK FAILS</span><strong>BLOCK</strong><p>No tool body. No damage. A named reason returns to the runtime.</p></div>
+    </section>
 
-<i># expected invariant</i>
-action_key ............. claimed once
-external execution .... at most once
-ambiguous recovery .... fail closed</pre></div></section>
+    <section class="real-world" aria-labelledby="world-title">
+      <header><p class="section-tag">WHERE CONSEQUENCES LIVE</p><h2 id="world-title">Payments are one example.<br>Every consequential tool belongs here.</h2></header>
+      <div class="world-orbit">
+        <p class="world world-payments">Payments</p><p class="world world-comms">Customer<br>messages</p><p class="world world-infra">Infrastructure</p><p class="world world-data">Business<br>records</p><p class="world world-files">Files &amp;<br>secrets</p><p class="world world-agents">Subagents &amp;<br>handoffs</p>
+        <div class="orbit-core"><span>MYCELIUM</span><b>safe action<br>boundary</b></div>
+      </div>
+    </section>
 
-<section class="section wrap" id="evidence"><div class="section-head"><p>06 / FIELD NOTES</p><h2>67 protected Gmail actions. No observed duplicates.</h2><span>Early production evidence from a single workflow—not a general reliability claim. Recovery behavior has not yet been exercised by a live crash.</span></div><div class="receipts">
-<div class="receipt-tabs" role="tablist" aria-label="Evidence periods"><button id="tab-base" role="tab" aria-selected="true" aria-controls="panel-base" data-receipt-tab="base">BASE</button><button id="tab-w2" role="tab" aria-selected="false" aria-controls="panel-w2" data-receipt-tab="w2" tabindex="-1">WEEK 2</button><button id="tab-w3" role="tab" aria-selected="false" aria-controls="panel-w3" data-receipt-tab="w3" tabindex="-1">WEEK 3</button></div>
-<div class="receipt-panel" id="panel-base" role="tabpanel" aria-labelledby="tab-base" data-receipt-panel="base"><div><b>25</b><span>protected actions</span></div><div><b>42</b><span>send attempts</span></div><div><b>30</b><span>unique recipients</span></div><div><b>0</b><span>UNKNOWN outcomes</span></div></div>
-<div class="receipt-panel" id="panel-w2" role="tabpanel" aria-labelledby="tab-w2" data-receipt-panel="w2" hidden><div><b>23</b><span>completed actions</span></div><div><b>0</b><span>observed duplicates</span></div><div><b>0</b><span>UNKNOWN outcomes</span></div><div><b>0</b><span>recovery events</span></div></div>
-<div class="receipt-panel" id="panel-w3" role="tabpanel" aria-labelledby="tab-w3" data-receipt-panel="w3" hidden><div><b>19</b><span>completed actions</span></div><div><b>0</b><span>observed duplicates</span></div><div><b>0</b><span>UNKNOWN outcomes</span></div><div><b>0</b><span>recovery events</span></div></div><p class="sr-only" aria-live="polite" data-receipt-status></p></div>
-<p class="source-note">Source: repository production field notes. Counts describe observed actions, not a controlled benchmark. <a href="https://github.com/mycelium-labs/mycelium/tree/main/docs">Audit the evidence ↗</a></p></section>
+    <section class="proof" id="proof" aria-labelledby="proof-title">
+      <div class="proof-main"><p class="section-tag">PROVE THE PROTECTION</p><h2 id="proof-title">Inspect it. Break it. Verify it.</h2><p><b>Doctor</b> checks whether safety is configured and detectably wired. <b>Verify</b> exercises synthetic crashes, redispatch, contention, outages, secrets, entity policy, destructive grants, and authority timing—without calling your real tools.</p><div class="proof-actions"><a class="primary" href="/verify.html">See verification</a><a href="https://github.com/mycelium-labs/mycelium">Inspect source ↗</a></div></div>
+      <div class="proof-command"><code><span>$</span> mycelium doctor --config mycelium.yaml
+<i># representative checks</i>
+<b>PASS</b> tool registry
+<b>PASS</b> side-effect classification
+<b>PASS</b> durable storage
+<b>PASS</b> scope + policy wiring
 
-<section class="band limits"><div class="section wrap columns"><div><p class="case-label">GOOD FIT</p><h2>You have consequential tools and retryable execution.</h2><ul><li>Agents run on queues, graphs, or restartable workers.</li><li>An action has a stable business identity.</li><li>You need a durable answer to “may this execute?”</li></ul></div><div><p class="case-label">NOT THE JOB</p><h2>Mycelium is not a complete agent platform.</h2><ul><li>It does not replace orchestration, tracing, or evals.</li><li>It cannot make an inherently unsafe tool safe.</li><li>It refuses ambiguous re-execution; you still define reconciliation.</li></ul></div></div></section>
+<span>$</span> mycelium verify --scenario simulation
+<b>PASS</b> protection held under failure</code></div>
+    </section>
 
-<section class="section wrap" id="guardrails"><div class="section-head"><p>07 / SUPPORTING CONTROLS</p><h2>At-most-once is the wedge. The runtime also constrains authority.</h2></div><div class="catalog"><a href="/prevent.html"><b>PREVENT</b><span>Rate, budget, schema, destination, and scope checks before execution.</span><i>→</i></a><a href="/resolve.html"><b>RESOLVE</b><span>Explicit operator decisions for uncertain or rejected actions.</span><i>→</i></a><a href="/verify.html"><b>VERIFY</b><span>Durable evidence for what ran, returned, blocked, or needs repair.</span><i>→</i></a></div></section>
-<section class="final band"><div class="section wrap"><p class="case-label">START WITH ONE TOOL</p><h2>Make the next retry boring.</h2><div class="install"><code>pip install mycelium-runtime</code><button type="button" data-copy="pip install mycelium-runtime"><span data-copy-state>Copy</span></button></div><div class="cover-links"><a class="button" href="/try.html">Protect one tool</a><a href="/handbook.html">Read the handbook →</a></div></div></section>
-</main>
-<footer class="site-footer"><div class="wrap"><a class="wordmark" href="/">MYCELIUM<span>/RUNTIME</span></a><p>Runtime control for consequential agent actions.</p><nav aria-label="Footer"><a href="https://pypi.org/project/mycelium-runtime/">PyPI</a><a href="https://github.com/mycelium-labs/mycelium">GitHub</a><a href="/handbook.html">Docs</a></nav></div></footer>
-<script src="/site.js?v=20" defer></script></body></html>
+    <section class="evidence" id="evidence" aria-labelledby="evidence-title">
+      <div><p class="section-tag">EARLY FIELD EVIDENCE</p><h2 id="evidence-title">67 protected Gmail actions.<br>Zero observed duplicates.</h2></div>
+      <p>This is evidence for one live execution lane, not the whole safety catalog. The lane exercised normal success paths; no genuine UNKNOWN outcome occurred, so live recovery remains untested. <a href="https://github.com/mycelium-labs/mycelium/tree/main/docs">Audit the field notes ↗</a></p>
+    </section>
+
+    <section class="honesty" aria-labelledby="honesty-title">
+      <p class="section-tag">THE HONEST BOUNDARY</p><h2 id="honesty-title">Deterministic runtime controls—not judgment dressed up as certainty.</h2>
+      <div><p><b>Mycelium ships deterministic guards for</b><br>execution, validation, loops, context integrity, completion, scope, secrets, destinations, destructive authorization, authority timing, and use-time facts.</p><p><b>It does not yet claim deterministic prevention for</b><br>hallucination (AF-001), open-ended goal misalignment (AF-005), or prompt injection (AF-009). Those remain judgment or roadmap territory.</p></div>
+    </section>
+
+    <section class="start"><p class="section-tag">START WITH THE RISKIEST TOOL</p><h2>Give your agent freedom.<br><em>Keep the boundary.</em></h2><div class="hero-actions"><a class="primary" href="/try.html">Protect your first tool</a><button class="copy-command light" type="button" data-copy="pip install mycelium-runtime"><code>pip install mycelium-runtime</code><span data-copy-state>Copy</span></button></div></section>
+  </main>
+
+  <footer class="footer"><a class="logo" href="/"><i aria-hidden="true"></i>MYCELIUM</a><p>The reliability layer for AI agents.</p><nav aria-label="Footer"><a href="/handbook.html">Docs</a><a href="https://pypi.org/project/mycelium-runtime/">PyPI</a><a href="https://github.com/mycelium-labs/mycelium">GitHub</a></nav></footer>
+  <script src="/site.js?v=21" defer></script>
+</body>
+</html>
