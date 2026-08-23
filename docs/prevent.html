@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Prevent — Mycelium</title>
+  <title>Prevent | Mycelium</title>
   <meta name="description" content="Refuse duplicate, invalid, out-of-scope, or over-budget actions before they touch the real world.">
   <meta name="theme-color" content="#f3f1ea">
   <link rel="canonical" href="https://mycelium-labs.github.io/prevent.html">
-  <link rel="icon" href="/favicon.svg?v=6" type="image/svg+xml">
+  <link rel="icon" href="/favicon.svg?v=7" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css?v=21">
-  <meta property="og:title" content="Prevent — Mycelium">
+  <meta property="og:title" content="Prevent | Mycelium">
   <meta property="og:description" content="Refuse duplicate and unsafe side effects before production tools execute.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mycelium-labs.github.io/prevent.html">
@@ -58,13 +58,13 @@
         <p>Each class maps to a runtime surface. Configure only what the workflow needs.</p>
       </div>
       <div class="guardrail-list">
-        <a href="/handbook.html#actions"><code>AF-002</code><strong>Observability black hole</strong><span>Prove run-or-not and enforce at-most-once before the tool runs.</span><i>Action ledger</i></a>
-        <a href="/handbook.html#loops"><code>AF-003</code><strong>Infinite reasoning loops</strong><span>Recognize repeated action patterns with no progress.</span><i>Loop guard</i></a>
-        <a href="/handbook.html#tools"><code>AF-004</code><strong>Tool misuse</strong><span>Validate inputs, outputs, entities, paths, and allowlists.</span><i>@bounded</i></a>
-        <a href="/handbook.html#context"><code>AF-006</code><strong>Context corruption</strong><span>Keep messages, history, and session state from going stale.</span><i>Context</i></a>
-        <a href="/handbook.html#completion"><code>AF-007</code><strong>Premature termination</strong><span>Require declared outcomes before a run can finish.</span><i>Completion</i></a>
-        <a href="/handbook.html#scope-guard"><code>AF-008</code><strong>Cascading permission</strong><span>Freeze the run allowlist and reject widening mid-flight.</span><i>Scope guard</i></a>
-        <a href="/handbook.html#secret-in-args"><code>AF-010</code><strong>Secret-in-args</strong><span>Block raw credentials before claim. Pass secret:// references.</span><i>secret_args</i></a>
+        <a href="/handbook.html#actions"><code>EXECUTION</code><strong>Unknown or repeated effects</strong><span>Prove run-or-not and enforce at-most-once before the tool runs.</span><i>Action ledger</i></a>
+        <a href="/handbook.html#loops"><code>LOOPS</code><strong>Infinite reasoning loops</strong><span>Recognize repeated action patterns with no progress.</span><i>Loop guard</i></a>
+        <a href="/handbook.html#tools"><code>VALIDATION</code><strong>Tool misuse</strong><span>Validate inputs, outputs, entities, paths, and allowlists.</span><i>@bounded</i></a>
+        <a href="/handbook.html#context"><code>CONTEXT</code><strong>Context corruption</strong><span>Keep messages, history, and session state from going stale.</span><i>Context</i></a>
+        <a href="/handbook.html#completion"><code>COMPLETION</code><strong>Premature termination</strong><span>Require declared outcomes before a run can finish.</span><i>Completion</i></a>
+        <a href="/handbook.html#scope-guard"><code>SCOPE</code><strong>Cascading permission</strong><span>Freeze the run allowlist and reject widening mid-flight.</span><i>Scope guard</i></a>
+        <a href="/handbook.html#secret-in-args"><code>SECRETS</code><strong>Secret-in-args</strong><span>Block raw credentials before claim. Pass secret:// references.</span><i>secret_args</i></a>
       </div>
     </section>
 
@@ -95,7 +95,7 @@ send_payment(amount=<em>100.0</em>, recipient=<em>"acct_123"</em>, tool_call_id=
       <h2>Then resolve<br><em>what the crash left open.</em></h2>
       <div class="hero-actions centered">
         <a class="cta-button light-cta" href="/resolve.html">See resolution gates</a>
-        <a class="text-link light-link" href="/try.html">Protect your first workflow — free <span aria-hidden="true">→</span></a>
+        <a class="text-link light-link" href="/try.html">Protect your first workflow, free <span aria-hidden="true">→</span></a>
       </div>
     </section>
   </main>

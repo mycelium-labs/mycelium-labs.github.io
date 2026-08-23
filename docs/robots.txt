@@ -1,4 +1,4 @@
-# Mycelium docs — https://mycelium-labs.github.io/
+# Mycelium docs: https://mycelium-labs.github.io/
 
 # Traditional search crawlers
 User-agent: *
