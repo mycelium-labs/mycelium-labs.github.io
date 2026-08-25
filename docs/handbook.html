@@ -44,6 +44,7 @@
           <li><a href="/resolve.html">Resolve</a></li>
           <li><a href="/verify.html">Verify</a></li>
           <li><a href="#install">Install</a></li>
+          <li><a href="#agent-setup">Agent setup</a></li>
           <li><a href="#architecture">How it fits</a></li>
           <li><a href="#scope">What it does</a></li>
         </ol>
@@ -53,6 +54,8 @@
           <li><a href="#resolution">Resolution</a></li>
           <li><a href="#envelope">Envelope</a></li>
           <li><a href="#yaml">YAML</a></li>
+          <li><a href="#shared-state">Shared state</a></li>
+          <li><a href="#provider-adapters">Provider adapters</a></li>
         </ol>
         <p class="side-group">Opt-in</p>
         <ol>
@@ -91,6 +94,12 @@ mycelium init --minimal    # smaller multi-guard scaffold
 mycelium demo              # feature tour: unguarded vs ledgered + gates / hard-block / release
 mycelium demo --redis      # optional Cloud-style 2-worker Redis proof
 mycelium run --config mycelium.yaml -- python -m my_agent</pre>
+      </section>
+      <section id="agent-setup">
+        <h2>Agent-assisted setup</h2>
+        <p>The repository includes a <code>$mycelium-setup</code> skill for coding agents. Ask the agent to use it in your project. It inventories tool entry points, proposes side-effect classifications, writes or updates <code>mycelium.yaml</code>, wires supported runtimes, adds focused tests, and runs Doctor and Verify.</p>
+        <pre>Use $mycelium-setup to protect this project.</pre>
+        <p>The skill does not invent signing keys, provider credentials, business request IDs, production namespaces, or approval policy. Review consequential tool classifications and supply those host-owned values yourself. The generated YAML remains ordinary project configuration that you can inspect and edit.</p>
       </section>
       <section id="architecture">
         <h2>How it fits</h2>
@@ -134,6 +143,33 @@ send_payment(amount=100.0, recipient="acct_123", tool_call_id="call_pay")</pre>
 action_ledger:
   storage: file
   path: ./mycelium-ledger.json</pre>
+      </section>
+      <section id="shared-state">
+        <h2>Unified durable state</h2>
+        <p>Loop, scope, completion, state-flush, and audit-receipt guards can share one namespaced atomic backend. A guard with no local <code>storage</code> setting inherits it automatically, including guards you enable later.</p>
+        <pre>state_backend:
+  storage: postgres        # memory | file | redis | postgres
+  dsn_env: DATABASE_URL
+  namespace: payments-prod
+
+loop_guard: {}
+completion:
+  required: [payment_recorded]</pre>
+        <p>Use file for one node and Redis or Postgres for multiple workers. To move old guard state, stop workers, keep the legacy per-guard storage configured, run the copy, then switch those guards to inherited or <code>shared</code> storage:</p>
+        <pre>mycelium state migrate --plan --config mycelium.yaml
+mycelium state migrate --apply --config mycelium.yaml
+mycelium doctor --config mycelium.yaml --strict</pre>
+        <p>Migration is copy-only and refuses conflicts. Rollback means pointing the guard back to its unchanged legacy storage.</p>
+      </section>
+      <section id="provider-adapters">
+        <h2>Provider adapter conformance</h2>
+        <p>A reconciler decides whether an ambiguous operation completed. A false <code>NOT_EXECUTED</code> permits another attempt, so every adapter needs adversarial tests. Gmail is the only adapter currently shipped. Other providers implement the same conformance fixture and supply provider-specific scripted observations.</p>
+        <pre>export MYCELIUM_ADAPTER_REPORT_SIGNING_KEY='from-your-secret-manager'
+mycelium providers verify gmail \
+  --key-id provider-ci-2026-01 \
+  --output gmail-adapter-report.json
+mycelium providers verify-report gmail-adapter-report.json --json</pre>
+        <p>The key signs the report with HMAC-SHA256 so CI or an operator can detect edits and verify which adapter source passed. Mycelium itself works without this key; it is required only when creating or checking an adapter-verification report. The report proves the synthetic suite passed and the source still matches. It does not prove live credentials are read-only, so enforce provider scopes separately.</p>
       </section>
       <p class="docs-group" id="group-opt-in">Opt-in</p>
       <section id="context"><h2>Context (opt-in)</h2><p>TTL cache and message/history helpers.</p></section>

@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=21">
+  <link rel="stylesheet" href="/style.css?v=22">
   <meta property="og:title" content="Mycelium | Stop unsafe agent actions before they happen">
   <meta property="og:description" content="The reliability layer between your agent and its tools.">
   <meta property="og:type" content="website">
@@ -36,7 +36,7 @@
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="topbar">
     <a class="logo" href="/" aria-label="Mycelium home"><i aria-hidden="true"></i>MYCELIUM</a>
-    <nav aria-label="Primary navigation"><a href="#scope">Scope</a><a href="#how">How it works</a><a href="#proof">Proof</a><a href="/handbook.html">Docs</a></nav>
+    <nav aria-label="Primary navigation"><a href="#scope">Scope</a><a href="#how">How it works</a><a href="#setup">Setup</a><a href="#proof">Proof</a><a href="/handbook.html">Docs</a></nav>
     <a class="github-link" href="https://github.com/mycelium-labs/mycelium">GitHub ↗</a>
   </header>
 
@@ -109,8 +109,19 @@
       </div>
     </section>
 
+    <section class="proof setup-proof" id="setup" aria-labelledby="setup-title">
+      <div class="proof-main"><p class="section-tag">AGENT-ASSISTED SETUP</p><h2 id="setup-title">Let your coding agent wire the boundary.</h2><p>The repository ships a <b>$mycelium-setup</b> skill. It inventories your tools, classifies their effects, fills the YAML, wires the runtime, and runs Doctor and Verify. You still approve consequential classifications, identity, secrets, and provider access.</p><div class="proof-actions"><a class="primary" href="/handbook.html#agent-setup">See the setup contract</a><a href="https://github.com/mycelium-labs/mycelium/tree/main/.agents/skills/mycelium-setup">Inspect the skill ↗</a></div></div>
+      <div class="proof-command"><code><i># in your coding agent</i>
+<span>$</span> Use $mycelium-setup to protect this project.
+
+<b>DISCOVER</b> tools + framework
+<b>CLASSIFY</b> side effects
+<b>WIRE</b> config + runtime
+<b>VERIFY</b> doctor + failure scenarios</code></div>
+    </section>
+
     <section class="proof" id="proof" aria-labelledby="proof-title">
-      <div class="proof-main"><p class="section-tag">PROVE THE PROTECTION</p><h2 id="proof-title">Inspect it. Break it. Verify it.</h2><p><b>Doctor</b> checks whether safety is configured and detectably wired. <b>Verify</b> exercises synthetic crashes, redispatch, contention, outages, secrets, entity policy, destructive grants, and authority timing without calling your real tools.</p><div class="proof-actions"><a class="primary" href="/verify.html">See verification</a><a href="https://github.com/mycelium-labs/mycelium">Inspect source ↗</a></div></div>
+      <div class="proof-main"><p class="section-tag">PROVE THE PROTECTION</p><h2 id="proof-title">Inspect it. Break it. Verify it.</h2><p><b>Doctor</b> checks whether safety is configured and detectably wired. <b>Verify</b> exercises synthetic runtime failures. <b>Provider Verify</b> challenges reconciliation adapters with lag, ambiguity, duplicates, malformed handles, and forbidden writes.</p><div class="proof-actions"><a class="primary" href="/verify.html">See verification</a><a href="https://github.com/mycelium-labs/mycelium">Inspect source ↗</a></div></div>
       <div class="proof-command"><code><span>$</span> mycelium doctor --config mycelium.yaml
 <i># representative checks</i>
 <b>PASS</b> tool registry

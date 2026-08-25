@@ -19,6 +19,8 @@ Composable prevention controls (configure or call explicitly):
 - **Credentials and destinations:** `secret_args` blocks raw secrets; `entity_guard` restricts write destinations.
 - **Destructive authority:** `destructive_confirm`, `authority_window`, and `use_time_currency` require exact, current permission and facts at execution time.
 - **Verification:** `mycelium doctor` inspects detectable wiring; `mycelium verify` exercises synthetic safety scenarios without calling application tools.
+- **Unified state:** one top-level `state_backend` automatically gives loop, scope, completion, state-flush, and audit-receipt guards namespaced atomic storage. Use file on one node and Redis/Postgres across workers.
+- **Provider reconciliation:** `mycelium providers verify <adapter>` adversarially tests uncertainty handling and forbidden writes, then emits a signed report bound to the adapter source. Gmail is the only adapter currently shipped; other providers implement a conformance fixture. Reports do not prove live credentials are read-only.
 
 ## Install
 
@@ -31,6 +33,26 @@ mycelium demo              # see the bug and the fix (langgraph#7417)
 mycelium init              # transition + one ledgered tool -> mycelium.yaml
 mycelium run --config mycelium.yaml -- python -m my_app
 ```
+
+## Coding-agent setup
+
+The source repository ships `.agents/skills/mycelium-setup/SKILL.md`. Ask a
+compatible coding agent to “Use `$mycelium-setup` to protect this project.” It
+discovers tools, proposes side-effect classifications, fills `mycelium.yaml`,
+wires supported runtimes, and runs Doctor and Verify. The developer must still
+approve consequential classifications and supply host-owned identities,
+secrets, production namespaces, provider credentials, and approval policy.
+
+## Adapter verification
+
+```
+export MYCELIUM_ADAPTER_REPORT_SIGNING_KEY='from-your-secret-manager'
+mycelium providers verify gmail --key-id provider-ci --output adapter-report.json
+mycelium providers verify-report adapter-report.json
+```
+
+The signing key is for tamper-evident adapter reports, not normal Mycelium
+runtime operation.
 ## How it differs from Langfuse / LangSmith
 
 Langfuse and LangSmith are observability and tracing. They show what happened after an agent runs. Mycelium is runtime prevention across the tool-call boundary. Use both if you want traces and enforcement.

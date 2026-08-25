@@ -70,6 +70,24 @@
       </div>
     </section>
 
+    <section class="stack-section section" data-reveal data-contour="left" data-contour-ring="b">
+      <div class="stack-copy">
+        <p class="eyebrow"><span></span> Adapter trust</p>
+        <h2>Challenge the code<br><em>that answers “did it run?”</em></h2>
+        <p>A false <code>NOT_EXECUTED</code> authorizes another attempt and can duplicate the side effect. The provider conformance kit tests lag, ambiguity, duplicate matches, malformed handles, false negatives, and forbidden writes before an adapter is trusted.</p>
+        <p>The signed report is synthetic and source-bound. It does not prove that a live provider token has read-only scopes. Gmail is the only adapter currently shipped; developers add a fixture for every other provider.</p>
+      </div>
+      <div class="code-window">
+        <header><span></span><span></span><span></span><p>adapter verification</p></header>
+        <pre><code>export MYCELIUM_ADAPTER_REPORT_SIGNING_KEY='from-your-secret-manager'
+mycelium providers verify gmail \
+  --key-id provider-ci-2026-01 \
+  --output gmail-adapter-report.json
+mycelium providers verify-report gmail-adapter-report.json</code></pre>
+        <footer><span>no live Gmail writes</span><i>SOURCE-BOUND REPORT</i></footer>
+      </div>
+    </section>
+
     <section class="final-cta" data-reveal data-contour="both">
       <p class="eyebrow light"><span></span> Next</p>
       <h2>Then prove<br><em>the wiring holds.</em></h2>

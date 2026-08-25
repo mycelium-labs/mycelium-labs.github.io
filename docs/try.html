@@ -384,6 +384,13 @@
     <p class="steps-kicker">Path</p>
     <h2>Four commands.</h2>
 
+    <p class="note">
+      <strong>Using a coding agent?</strong> Ask it to “Use
+      <code>$mycelium-setup</code> to protect this project.” The repository skill
+      discovers tools, fills the YAML, wires the runtime, and runs the checks.
+      You review effect classifications, identity, secrets, and provider access.
+    </p>
+
     <article class="step">
       <div class="n" aria-hidden="true">01</div>
       <div>
@@ -416,10 +423,12 @@ mycelium verify --config mycelium.yaml</pre>
         <h3>Scaffold one ledgered tool</h3>
         <p>
           Writes <code>mycelium.yaml</code>: transition + one mutating tool.
-          Fill in your callable path.
+          Fill in the callable path manually, or let <code>$mycelium-setup</code>
+          inspect and wire your application.
         </p>
         <pre>mycelium init
-# edit mycelium.yaml → tools.*.callable</pre>
+# manual path: edit mycelium.yaml → tools.*.callable
+# agent path: use $mycelium-setup</pre>
       </div>
     </article>
 

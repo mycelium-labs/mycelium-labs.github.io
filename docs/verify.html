@@ -47,6 +47,7 @@
       <ul class="gate-list">
         <li><code>doctor</code><p>Inspect mycelium.yaml without executing tools. Missing IDs and unwired guards show up in the report.</p></li>
         <li><code>verify</code><p>Exercise synthetic redispatch, crash, contention, and outage against the configured backend. Never hits application tools, LLMs, or real providers.</p></li>
+        <li><code>providers verify</code><p>Run the adapter conformance kit. It fails on unsafe uncertainty handling or observed writes and emits a signed report bound to the tested source.</p></li>
         <li><code>demo</code><p>Compare an unguarded path with a ledgered one. See hard-block, return, repair, reconcile, and operator release.</p></li>
         <li><code>demo --redis</code><p>Two OS processes against a real Redis ledger. One claimer wins; the other polls or returns the stored result.</p></li>
       </ul>
@@ -62,11 +63,14 @@
       <div class="code-window">
         <header><span></span><span></span><span></span><p>terminal</p></header>
         <pre><code>mycelium doctor --config mycelium.yaml
-mycelium verify --config mycelium.yaml
-mycelium demo
+	mycelium verify --config mycelium.yaml
+	export MYCELIUM_ADAPTER_REPORT_SIGNING_KEY='from-your-secret-manager'
+	mycelium providers verify gmail --key-id provider-ci --output adapter-report.json
+	mycelium providers verify-report adapter-report.json
+	mycelium demo
 mycelium demo --redis
 mycelium run --config mycelium.yaml -- python -m my_agent</code></pre>
-        <footer><span>doctor is read-only</span><i>NO SIDE EFFECTS</i></footer>
+        <footer><span>provider cases use scripted clients</span><i>NO LIVE SIDE EFFECTS</i></footer>
       </div>
     </section>
 
@@ -78,6 +82,7 @@ mycelium run --config mycelium.yaml -- python -m my_agent</code></pre>
       <ul class="example-list">
         <li>Observed in production: a live lane, like the outbound email report on the homepage.</li>
         <li>Synthetic verification: demo, crash, contention, or outage fixtures.</li>
+        <li>Adapter verified: the signed report passed the required synthetic cases and still matches the installed adapter source.</li>
         <li>Operator asserted: a human confirmed the outcome.</li>
         <li>Not verifiable: residual risk stays visible.</li>
       </ul>
