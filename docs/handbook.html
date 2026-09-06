@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Handbook · Mycelium</title>
-  <meta name="description" content="How to install Mycelium, prevent duplicate side effects, resolve ambiguous outcomes, and verify the boundary is wired.">
+  <meta name="description" content="Install Mycelium and make AI-agent tool actions reliable across validation, authority, execution, recovery, and evidence.">
   <meta name="keywords" content="Mycelium documentation, AI agent reliability, tool boundary, side effect safety, LangGraph, CrewAI, Python SDK">
   <meta name="theme-color" content="#f3f1ea">
   <link rel="canonical" href="https://mycelium-labs.github.io/handbook.html">
@@ -18,7 +18,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mycelium-labs.github.io/handbook.html">
   <meta property="og:image" content="https://mycelium-labs.github.io/og-image.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I build reliable AI agents in production?","acceptedAnswer":{"@type":"Answer","text":"Most agent failures in production are runtime failures: a tool runs twice on retry, context goes stale, or the model emits an invalid tool call. Mycelium wraps tool execution with a transition envelope. pip install mycelium-runtime"}},{"@type":"Question","name":"How do I prevent duplicate tool execution in LangGraph?","acceptedAnswer":{"@type":"Answer","text":"Use a transition envelope, not only an idempotency key plus a cached result. Mycelium hashes a durable transition key, holds an execution lease, and resolves duplicates by gates. pip install mycelium-runtime && mycelium demo"}},{"@type":"Question","name":"Is Mycelium a replacement for Langfuse or LangSmith?","acceptedAnswer":{"@type":"Answer","text":"No. Those are observability tools. Mycelium is runtime prevention at the tool boundary. Use both if you want traces and guards."}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I build reliable AI agents in production?","acceptedAnswer":{"@type":"Answer","text":"Place a deterministic boundary between the agent and its tools. Mycelium validates calls and authority before execution, controls runtime behavior, then resolves outcomes and records evidence. pip install mycelium-runtime"}},{"@type":"Question","name":"How do I prevent duplicate tool execution in LangGraph?","acceptedAnswer":{"@type":"Answer","text":"Use a transition envelope, not only an idempotency key plus a cached result. Mycelium hashes a durable transition key, holds an execution lease, and resolves duplicates by gates. pip install mycelium-runtime && mycelium demo"}},{"@type":"Question","name":"Is Mycelium a replacement for Langfuse or LangSmith?","acceptedAnswer":{"@type":"Answer","text":"No. Those are observability tools. Mycelium controls tool actions at runtime. Use both if you want traces and deterministic action controls."}}]}</script>
 </head>
 <body class="calm-page">
   <a class="skip-link" href="#how-to-use">Skip to handbook</a>
@@ -49,7 +49,7 @@
           <li><a href="#architecture">How it fits</a></li>
           <li><a href="#scope">What it does</a></li>
         </ol>
-        <p class="side-group">Core</p>
+        <p class="side-group">Execution &amp; recovery</p>
         <ol>
           <li><a href="#actions">Actions</a></li>
           <li><a href="#resolution">Resolution</a></li>
@@ -58,7 +58,7 @@
           <li><a href="#shared-state">Shared state</a></li>
           <li><a href="#provider-adapters">Provider adapters</a></li>
         </ol>
-        <p class="side-group">Opt-in</p>
+        <p class="side-group">Additional controls</p>
         <ol>
           <li><a href="#context">Context</a></li>
           <li><a href="#tools">Tool boundaries</a></li>
@@ -78,8 +78,8 @@
     </aside>
     <article class="docs-main">
       <p class="docs-label">How to use</p>
-      <h1>Start with install, then the core path</h1>
-      <p>These notes describe the shipped local runtime: claim, gate, fail-closed, reconcile, and record evidence. Hosted team storage is planned, not live.</p>
+      <h1>Start with one tool. Protect its full lifecycle.</h1>
+      <p>These notes describe the shipped local runtime: validate and authorize before execution, control the run, resolve outcomes, and record evidence. The default scaffold starts with one ledgered tool; it is the first integration step, not the whole product. Hosted team storage is planned, not live.</p>
       <p class="docs-group" id="group-start">Start</p>
       <section id="install">
         <h2>Install</h2>
@@ -104,15 +104,15 @@ mycelium run --config mycelium.yaml -- python -m my_agent</pre>
       </section>
       <section id="architecture">
         <h2>How it fits</h2>
-        <p>Mycelium sits between the agent loop and your tools: after the LLM returns <code>tool_calls</code>, around execution. Its execution control proves run-or-not and enforces at-most-once.</p>
+        <p>Mycelium sits between the agent loop and your tools after the LLM returns <code>tool_calls</code>. At that boundary it composes input and authority checks, run controls, safe execution, outcome resolution, and evidence. Its execution ledger proves run-or-not and enforces at-most-once when retries or crashes occur.</p>
       </section>
       <section id="scope">
         <h2>What it does</h2>
-        <p>Control areas. <code>mycelium init</code> / <code>mycelium run</code> begin with durable side-effect protection at the tool boundary.</p>
+        <p>Mycelium makes tool actions reliable before, during, and after execution. <code>mycelium init</code> / <code>mycelium run</code> begin with durable execution control for one tool; configure the other control areas that match your workflow.</p>
       </section>
-      <p class="docs-group" id="group-core">Core</p>
+      <p class="docs-group" id="group-core">Execution &amp; recovery</p>
       <section id="actions">
-        <h2>Actions (core)</h2>
+        <h2>Action execution</h2>
         <p>Transition ledger for safe execution: the default <code>mycelium init</code> / <code>mycelium run</code> path. Each ledgered tool gets a <code>side_effect_class</code> and <code>transition_key</code>. Repeated dispatches resolve through <a href="#resolution">gates</a>, not blind re-execution. <a href="/prevent.html">Read the prevention page →</a></p>
         <pre>from mycelium import load_config
 
@@ -124,14 +124,14 @@ def send_payment(amount: float, recipient: str) -> dict:
 
 # payment: duplicate resolves existing transition; won't charge twice
 send_payment(amount=100.0, recipient="acct_123", tool_call_id="call_pay")</pre>
-        <p>See <a href="#resolution">Resolution</a> for gate semantics and the <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md#actions-core-duplicate-side-effect-prevention">SDK README</a> for the full reference.</p>
+        <p>See <a href="#resolution">Resolution</a> for gate semantics and the <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md#quickstart-idempotency--audit-receipts">SDK README</a> for the full reference.</p>
       </section>
       <section id="resolution">
         <h2>Resolution</h2>
         <p><strong>Invariant:</strong> do not redispatch unless the previous transition is proven terminal or safely recoverable. <a href="/resolve.html">See the resolution gates →</a></p>
       </section>
       <section id="envelope">
-        <h2>Envelope fields (core)</h2>
+        <h2>Envelope fields</h2>
         <p>Six fields decide whether an unresolved prior execution is merely wasteful or unsafe.</p>
       </section>
       <section id="yaml">
@@ -172,7 +172,7 @@ mycelium providers verify gmail \
 mycelium providers verify-report gmail-adapter-report.json --json</pre>
         <p>The key signs the report with HMAC-SHA256 so CI or an operator can detect edits and verify which adapter source passed. Mycelium itself works without this key; it is required only when creating or checking an adapter-verification report. The report proves the synthetic suite passed and the source still matches. It does not prove live credentials are read-only, so enforce provider scopes separately.</p>
       </section>
-      <p class="docs-group" id="group-opt-in">Opt-in</p>
+      <p class="docs-group" id="group-opt-in">Additional controls</p>
       <section id="context"><h2>Context (opt-in)</h2><p>TTL cache and message/history helpers.</p></section>
       <section id="tools"><h2>Tool boundaries (opt-in)</h2><p>Input/output/scope validation and allowlists.</p></section>
       <section id="loops"><h2>Loop guard (opt-in)</h2><p>Detects identical tool+args across new <code>tool_call_id</code>s.</p></section>
@@ -188,7 +188,7 @@ mycelium providers verify-report gmail-adapter-report.json --json</pre>
       <section id="api"><h2>API</h2><p>See SDK README for the full export list.</p></section>
       <section id="common-searches">
         <h2>Common searches</h2>
-        <p>FAQ content for production reliability, LangGraph duplicates, and idempotency. <a href="/verify.html">Read about Verify →</a></p>
+        <p>FAQ content for production reliability, action validation, scope, context, LangGraph duplicates, and idempotency. <a href="/verify.html">Read about Verify →</a></p>
       </section>
     </article>
   </div>

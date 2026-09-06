@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Try Mycelium in 5 minutes: reliability layer for AI agents</title>
-  <meta name="description" content="Install mycelium-runtime, run the demo, scaffold a ledgered tool, and wrap your agent in about five minutes. The reliability layer for AI agents.">
-  <meta name="keywords" content="Mycelium tutorial, mycelium-runtime, AI agent setup, tool ledger, at-most-once execution, Python SDK">
+  <meta name="description" content="Install mycelium-runtime and protect one AI-agent tool with lifecycle controls for validation, execution, recovery, and evidence.">
+  <meta name="keywords" content="Mycelium tutorial, mycelium-runtime, AI agent reliability, tool guardrails, safe execution, Python SDK">
   <link rel="canonical" href="https://mycelium-labs.github.io/try.html">
   <meta property="og:title" content="Try Mycelium in 5 minutes">
-  <meta property="og:description" content="Install, demo, init, run: prove at-most-once tool calls before your agent double-charges.">
+  <meta property="og:description" content="Protect one AI-agent tool across validation, execution, recovery, and evidence.">
   <meta property="og:url" content="https://mycelium-labs.github.io/try.html">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://mycelium-labs.github.io/og-image.png">
@@ -363,8 +363,9 @@
       <p class="brand"><span class="brand-mark" aria-hidden="true"></span>Mycelium</p>
       <h1 class="headline">Try it in 5 minutes</h1>
       <p class="support">
-        Install the reliability layer, watch a duplicate side effect get blocked,
-        then wire one tool. No framework rewrite.
+        Install the reliability layer and protect one tool across its action
+        lifecycle. The demo uses duplicate prevention as one concrete example.
+        No framework rewrite.
       </p>
       <div class="cta-row">
         <button
@@ -405,11 +406,11 @@ pip install 'mycelium-runtime[langgraph]'   # optional</pre>
     <article class="step">
       <div class="n" aria-hidden="true">02</div>
       <div>
-        <h3>See the bug get stopped</h3>
+        <h3>See execution control in action</h3>
         <p>
-          Feature tour: lease, hard-block, repair, reconcile, operator release.
-          Doctor inspects config. Verify exercises synthetic failures against
-          the ledger backend only.
+          The feature tour demonstrates one lifecycle area: lease, hard-block,
+          repair, reconcile, and operator release. Doctor inspects config.
+          Verify exercises synthetic failures against the ledger backend only.
         </p>
         <pre>mycelium demo
 mycelium demo --redis   # needs Redis + mycelium-runtime[redis]
@@ -446,9 +447,10 @@ mycelium verify --config mycelium.yaml</pre>
     </article>
 
     <p class="note">
-      <strong>What you just enabled:</strong> any tool, any provider:
-      prove run-or-not and enforce at-most-once. Not tracing. Prevention at the
-      tool boundary. Loop, scope, and completion guards are opt-in later.
+      <strong>What you just enabled:</strong> the default execution and recovery
+      layer for one tool. Add validation, scope, secrets, authority, context,
+      loop, budget, and completion controls when they apply. Together they make
+      tool actions reliable before, during, and after execution.
     </p>
 
     <div class="foot">

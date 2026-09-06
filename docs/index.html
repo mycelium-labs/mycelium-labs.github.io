@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Mycelium | Stop unsafe agent actions before they happen</title>
-  <meta name="description" content="Mycelium is the reliability layer between AI agents and their tools. Validate intent, arguments, authority, context, budgets, and execution before an action can cause damage.">
+  <title>Mycelium | Reliable tool actions for AI agents</title>
+  <meta name="description" content="Mycelium makes AI-agent tool actions reliable across validation, authority, runtime control, outcome resolution, and evidence.">
   <meta name="keywords" content="AI agent reliability, agent guardrails, tool calling, side effect safety, idempotency, LangGraph, CrewAI, Python">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="theme-color" content="#fff8ed">
@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css?v=22">
-  <meta property="og:title" content="Mycelium | Stop unsafe agent actions before they happen">
+  <meta property="og:title" content="Mycelium | Reliable tool actions for AI agents">
   <meta property="og:description" content="The reliability layer between your agent and its tools.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mycelium-labs.github.io/">
@@ -25,12 +25,12 @@
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Mycelium runtime safety checks a tool call before it reaches the real tool.">
+  <meta property="og:image:alt" content="Mycelium controls an AI-agent tool action across its reliability lifecycle.">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Mycelium | Stop unsafe agent actions before they happen">
+  <meta name="twitter:title" content="Mycelium | Reliable tool actions for AI agents">
   <meta name="twitter:description" content="The framework-agnostic reliability layer between your agent and its tools.">
   <meta name="twitter:image" content="https://mycelium-labs.github.io/og-image-v3.png">
-  <meta name="twitter:image:alt" content="Mycelium runtime safety checks a tool call before it reaches the real tool.">
+  <meta name="twitter:image:alt" content="Mycelium controls an AI-agent tool action across its reliability lifecycle.">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Mycelium","alternateName":"mycelium-runtime","applicationCategory":"DeveloperApplication","description":"The reliability layer between AI agents and their tools.","url":"https://mycelium-labs.github.io/","downloadUrl":"https://pypi.org/project/mycelium-runtime/","codeRepository":"https://github.com/mycelium-labs/mycelium","programmingLanguage":"Python","license":"https://opensource.org/licenses/MIT"}</script>
 </head>
 <body class="spectrum">
@@ -46,7 +46,7 @@
       <div class="hero-copy">
         <p class="kicker"><span>Runtime safety</span> for agents that take real action</p>
         <h1 id="hero-title">Let agents act.<br><em>Stop unsafe actions.</em></h1>
-        <p class="hero-lede">Mycelium sits between your agent and its tools. Configure the controls that matter, then validate inputs, scope, authority, context, and execution state before a call can touch the real world.</p>
+        <p class="hero-lede">Mycelium sits between your agent and its tools. Configure the controls that matter, validate inputs and authority before execution, control the run, then establish outcomes and reconcile uncertainty afterward.</p>
         <div class="hero-actions"><a class="primary" href="/try.html">Protect your first tool</a><button class="copy-command" type="button" data-copy="pip install mycelium-runtime"><code>pip install mycelium-runtime</code><span data-copy-state>Copy</span></button></div>
         <div class="hero-proofline">
           <p class="works-with">Framework agnostic · Python 3.10+ · Plain Python · MIT</p>
@@ -59,7 +59,7 @@
     <section class="manifesto" id="scope">
       <p>Wrong answers can be corrected.</p>
       <h2>Wrong actions ship consequences.</h2>
-      <p>Mycelium prevents runtime failures at the last responsible moment: after the model proposes a tool call, before the tool can cause damage.</p>
+      <p>Mycelium controls tool actions at the last responsible boundary: after the model proposes a call, through execution, and until the outcome is known or safely unresolved.</p>
     </section>
 
     <section class="safety-spectrum" id="guardrails" aria-labelledby="spectrum-title">
