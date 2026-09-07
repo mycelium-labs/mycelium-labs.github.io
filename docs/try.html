@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Try Mycelium in 5 minutes: reliability layer for AI agents</title>
-  <meta name="description" content="Install mycelium-runtime and protect one AI-agent tool with lifecycle controls for validation, execution, recovery, and evidence.">
-  <meta name="keywords" content="Mycelium tutorial, mycelium-runtime, AI agent reliability, tool guardrails, safe execution, Python SDK">
+  <meta name="description" content="Install Mycelium and protect one AI-agent tool from Python, TypeScript, Go, or another HTTP/JSON runtime.">
+  <meta name="keywords" content="Mycelium tutorial, mycelium-runtime, AI agent reliability, tool guardrails, safe execution, Python SDK, TypeScript, Go, sidecar">
   <link rel="canonical" href="https://mycelium-labs.github.io/try.html">
   <meta property="og:title" content="Try Mycelium in 5 minutes">
-  <meta property="og:description" content="Protect one AI-agent tool across validation, execution, recovery, and evidence.">
+  <meta property="og:description" content="Protect one AI-agent tool from Python, TypeScript, Go, or any HTTP/JSON runtime.">
   <meta property="og:url" content="https://mycelium-labs.github.io/try.html">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://mycelium-labs.github.io/og-image.png">
@@ -393,6 +393,14 @@
       You review effect classifications, identity, secrets, and provider access.
     </p>
 
+    <p class="note">
+      <strong>Using TypeScript, Go, or another language?</strong> The Mycelium
+      engine remains Python, while your application connects through its local
+      HTTP/JSON sidecar. Follow the
+      <a href="/handbook.html#languages">language-neutral setup</a> instead of
+      rewriting the state machine.
+    </p>
+
     <article class="step">
       <div class="n" aria-hidden="true">01</div>
       <div>
@@ -457,6 +465,8 @@ mycelium verify --config mycelium.yaml</pre>
       <a href="/handbook.html">Full handbook</a>
       <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md">SDK README</a>
       <a href="https://pypi.org/project/mycelium-runtime/">PyPI</a>
+      <a href="https://www.npmjs.com/package/@mycelium-labs/sidecar-client">TypeScript</a>
+      <a href="https://pkg.go.dev/github.com/mycelium-labs/mycelium/clients/go">Go</a>
       <a href="https://github.com/mycelium-labs/mycelium">Source</a>
     </div>
   </main>

@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Handbook · Mycelium</title>
-  <meta name="description" content="Install Mycelium and make AI-agent tool actions reliable across validation, authority, execution, recovery, and evidence.">
-  <meta name="keywords" content="Mycelium documentation, AI agent reliability, tool boundary, side effect safety, LangGraph, CrewAI, Python SDK">
+  <meta name="description" content="Install Mycelium and make AI-agent tool actions reliable from Python, TypeScript, Go, or any HTTP/JSON runtime.">
+  <meta name="keywords" content="Mycelium documentation, AI agent reliability, tool boundary, side effect safety, LangGraph, CrewAI, Python SDK, TypeScript, Go, sidecar">
   <meta name="theme-color" content="#f3f1ea">
   <link rel="canonical" href="https://mycelium-labs.github.io/handbook.html">
   <link rel="icon" href="/favicon.svg?v=7" type="image/svg+xml">
@@ -18,7 +18,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mycelium-labs.github.io/handbook.html">
   <meta property="og:image" content="https://mycelium-labs.github.io/og-image.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I build reliable AI agents in production?","acceptedAnswer":{"@type":"Answer","text":"Place a deterministic boundary between the agent and its tools. Mycelium validates calls and authority before execution, controls runtime behavior, then resolves outcomes and records evidence. pip install mycelium-runtime"}},{"@type":"Question","name":"How do I prevent duplicate tool execution in LangGraph?","acceptedAnswer":{"@type":"Answer","text":"Use a transition envelope, not only an idempotency key plus a cached result. Mycelium hashes a durable transition key, holds an execution lease, and resolves duplicates by gates. pip install mycelium-runtime && mycelium demo"}},{"@type":"Question","name":"Is Mycelium a replacement for Langfuse or LangSmith?","acceptedAnswer":{"@type":"Answer","text":"No. Those are observability tools. Mycelium controls tool actions at runtime. Use both if you want traces and deterministic action controls."}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I build reliable AI agents in production?","acceptedAnswer":{"@type":"Answer","text":"Place a deterministic boundary between the agent and its tools. Mycelium validates calls and authority before execution, controls runtime behavior, then resolves outcomes and records evidence. pip install mycelium-runtime"}},{"@type":"Question","name":"Can I use Mycelium from TypeScript, Go, or another language?","acceptedAnswer":{"@type":"Answer","text":"Yes. The authoritative engine remains Python, while non-Python applications connect to its local sidecar through a language-neutral HTTP and JSON protocol. Published experimental TypeScript and Go clients are available; other languages can use OpenAPI directly."}},{"@type":"Question","name":"How do I prevent duplicate tool execution in LangGraph?","acceptedAnswer":{"@type":"Answer","text":"Use a transition envelope, not only an idempotency key plus a cached result. Mycelium hashes a durable transition key, holds an execution lease, and resolves duplicates by gates. pip install mycelium-runtime && mycelium demo"}},{"@type":"Question","name":"Is Mycelium a replacement for Langfuse or LangSmith?","acceptedAnswer":{"@type":"Answer","text":"No. Those are observability tools. Mycelium controls tool actions at runtime. Use both if you want traces and deterministic action controls."}}]}</script>
 </head>
 <body class="calm-page">
   <a class="skip-link" href="#how-to-use">Skip to handbook</a>
@@ -45,6 +45,7 @@
           <li><a href="/resolve.html">Resolve</a></li>
           <li><a href="/verify.html">Verify</a></li>
           <li><a href="#install">Install</a></li>
+          <li><a href="#languages">Other languages</a></li>
           <li><a href="#agent-setup">Agent setup</a></li>
           <li><a href="#architecture">How it fits</a></li>
           <li><a href="#scope">What it does</a></li>
@@ -79,7 +80,7 @@
     <article class="docs-main">
       <p class="docs-label">How to use</p>
       <h1>Start with one tool. Protect its full lifecycle.</h1>
-      <p>These notes describe the shipped local runtime: validate and authorize before execution, control the run, resolve outcomes, and record evidence. The default scaffold starts with one ledgered tool; it is the first integration step, not the whole product. Hosted team storage is planned, not live.</p>
+      <p>These notes describe the shipped local runtime: validate and authorize before execution, control the run, resolve outcomes, and record evidence. Python applications use the engine directly; other languages use the same engine through its local HTTP/JSON sidecar. The default scaffold starts with one ledgered tool; it is the first integration step, not the whole product. Hosted team storage is planned, not live.</p>
       <p class="docs-group" id="group-start">Start</p>
       <section id="install">
         <h2>Install</h2>
@@ -95,6 +96,32 @@ mycelium init --minimal    # smaller multi-guard scaffold
 mycelium demo              # feature tour: unguarded vs ledgered + gates / hard-block / release
 mycelium demo --redis      # optional Cloud-style 2-worker Redis proof
 mycelium run --config mycelium.yaml -- python -m my_agent</pre>
+      </section>
+      <section id="languages">
+        <h2>TypeScript, Go, and other languages</h2>
+        <p>The engine is Python, but the doorway into it is language-neutral. Run Mycelium as a small local sidecar beside your application. Your application sends action details and results over HTTP/JSON; the sidecar owns identity, claims, leases, fencing, transitions, and recovery.</p>
+        <pre>pip install mycelium-runtime
+umask 077
+python -c 'import secrets; print(secrets.token_urlsafe(32))' &gt; /absolute/path/sidecar.token</pre>
+        <pre># /absolute/path/sidecar.yaml
+kind: mycelium-sidecar
+protocol_version: "v1alpha1"
+identity_namespace: identity-v1
+tenant_id: tenant-a
+application_id: app-a
+bearer_token_file: /absolute/path/sidecar.token
+ledger: {type: file, path: /absolute/path/sidecar-ledger.json}
+outcome_storage: {type: file, path: /absolute/path/sidecar-outcomes.ndjson}
+server: {host: 127.0.0.1, port: 8787}</pre>
+        <pre>mycelium sidecar serve --config /absolute/path/sidecar.yaml
+
+# TypeScript / Node.js
+npm install @mycelium-labs/sidecar-client@experimental
+
+# Go
+go get github.com/mycelium-labs/mycelium/clients/go@v0.1.0</pre>
+        <p><a href="https://www.npmjs.com/package/@mycelium-labs/sidecar-client">TypeScript package ↗</a> · <a href="https://pkg.go.dev/github.com/mycelium-labs/mycelium/clients/go">Go module ↗</a> · <a href="https://github.com/mycelium-labs/mycelium/tree/main/sdk/docs/spec">HTTP/OpenAPI protocol ↗</a></p>
+        <p>Java, Rust, C#, Ruby, and other runtimes can call the same authenticated OpenAPI contract directly. The language clients are thin helpers; they do not duplicate Mycelium's Python state machine. The current <code>v1alpha1</code> profile is an experimental trusted-local integration, not a remote or multi-tenant production service.</p>
       </section>
       <section id="agent-setup">
         <h2>Agent-assisted setup</h2>
@@ -132,7 +159,17 @@ send_payment(amount=100.0, recipient="acct_123", tool_call_id="call_pay")</pre>
       </section>
       <section id="envelope">
         <h2>Envelope fields</h2>
-        <p>Six fields decide whether an unresolved prior execution is merely wasteful or unsafe.</p>
+        <p>The transition envelope is the identity and recovery record for one external effect. Seven fields help Mycelium decide whether a retry is safe or must stop:</p>
+        <ol>
+          <li><code>side_effect_class</code> — what kind of action this is.</li>
+          <li><code>capability</code> — whether retry is intrinsically safe, queryable, or blind.</li>
+          <li><code>spendability</code> — whether the same intent may execute more than once.</li>
+          <li><code>side_effect_boundary</code> — whether the provider call was not crossed, may have crossed, or crossed.</li>
+          <li><code>terminal_outcome</code> — whether the prior attempt completed, failed, expired, or remains unknown.</li>
+          <li><code>external_operation_ref</code> — the provider handle used for read-only reconciliation.</li>
+          <li><code>retry_permission</code> — whether another attempt is permitted.</li>
+        </ol>
+        <p>Python applications configure these semantics through the runtime. Non-Python applications send the same lifecycle over the frozen development-only <code>v1alpha1</code> protocol. <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/spec/TRANSITION_ENVELOPE.md">Read the language-neutral specification ↗</a></p>
       </section>
       <section id="yaml">
         <h2>YAML</h2>
@@ -185,7 +222,7 @@ mycelium providers verify-report gmail-adapter-report.json --json</pre>
         <h2>Failure-mode catalog</h2>
         <p>Stable IDs used in the SDK README, changelogs, and this handbook. The public story leads with outcomes, not a guardrail count. <a href="/prevent.html">Browse the prevention catalog →</a></p>
       </section>
-      <section id="api"><h2>API</h2><p>See SDK README for the full export list.</p></section>
+      <section id="api"><h2>API</h2><p>See the <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md">SDK README</a> for Python exports. Non-Python clients use the authenticated OpenAPI 3.1 contract served at <code>GET /v1/openapi.json</code>; see <a href="#languages">other languages</a>.</p></section>
       <section id="common-searches">
         <h2>Common searches</h2>
         <p>FAQ content for production reliability, action validation, scope, context, LangGraph duplicates, and idempotency. <a href="/verify.html">Read about Verify →</a></p>
