@@ -84,7 +84,7 @@ mycelium run --config mycelium.yaml -- python -m my_agent</code></pre>
         <li>Observed in production: a live lane, like the outbound email report on the homepage.</li>
         <li>Synthetic verification: demo, crash, contention, or outage fixtures.</li>
         <li>Adapter verified: the signed report passed the required synthetic cases and still matches the installed adapter source.</li>
-        <li>Language-client build: the experimental TypeScript and Go clients compile against the frozen protocol. A repeatable cross-language conformance suite is still open work.</li>
+        <li>Cross-language conformance: raw HTTP, TypeScript, and Go run the same synthetic lifecycle against a temporary local Python sidecar in CI. This proves the trusted-local protocol path, not production deployment safety.</li>
         <li>Operator asserted: a human confirmed the outcome.</li>
         <li>Not verifiable: residual risk stays visible.</li>
       </ul>
