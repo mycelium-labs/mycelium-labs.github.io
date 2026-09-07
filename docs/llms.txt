@@ -1,13 +1,13 @@
 # Mycelium
 
-> Mycelium is the reliability layer between AI agents and their tools. It prevents unsafe runtime actions after the model proposes a call and before the tool can cause damage. It validates arguments, outputs, paths, entities, destinations, scope, authority, context, budgets, completion state, secrets, and execution state. Mycelium is a framework-agnostic Python 3.10+ library for LangGraph, CrewAI, or plain Python loops. It complements orchestration and observability; it does not replace them. Keywords: agent runtime safety, tool-call validation, agent guardrails, safe tool execution, agent reliability.
+> Mycelium is the reliability layer between AI agents and their tools. It prevents unsafe runtime actions after the model proposes a call and before the tool can cause damage. It validates arguments, outputs, paths, entities, destinations, scope, authority, context, budgets, completion state, secrets, and execution state. The authoritative engine is a framework-agnostic Python 3.10+ runtime for LangGraph, CrewAI, or plain Python loops. TypeScript, Go, and any language that can send HTTP/JSON can use the same engine through the experimental local `v1alpha1` sidecar instead of reimplementing its state machine. It complements orchestration and observability; it does not replace them. Keywords: agent runtime safety, tool-call validation, agent guardrails, safe tool execution, agent reliability, language-neutral sidecar.
 
 ## What it does
 
 Default execution control (`mycelium init` / `mycelium run`):
 
 - **Duplicate side effects on retry:** classify each tool (`read`, `keyed_mutate`, `non_idempotent_mutate`, etc.), hash a durable transition key, hold a lease (auto-extended while `@ledger` / `@ledger_sync` tools run; default every `lease_ttl / 3`), and resolve duplicates by terminal state: poll reads, hard-block or reconcile ambiguous writes. Disable auto-renew with `lease_renew_interval: 0`.
-- **Transition envelope fields:** `side_effect_class` → `spendability` → `side_effect_boundary` → `terminal_outcome` → `external_operation_ref` → `retry_permission`. This is the identity/policy stack for that ledger, not a separate product.
+- **Transition envelope fields:** `side_effect_class` → `capability` → `spendability` → `side_effect_boundary` → `terminal_outcome` → `external_operation_ref` → `retry_permission`. These seven recovery axes tell Mycelium whether another attempt is safe or must stop.
 
 Composable prevention controls (configure or call explicitly):
 
@@ -33,6 +33,25 @@ mycelium demo              # see the bug and the fix (langgraph#7417)
 mycelium init              # transition + one ledgered tool -> mycelium.yaml
 mycelium run --config mycelium.yaml -- python -m my_app
 ```
+
+## TypeScript, Go, and other languages
+
+The engine remains Python. Run it as a small local sidecar, then connect with a
+thin client:
+
+```
+pip install mycelium-runtime
+mycelium sidecar serve --config /absolute/path/sidecar.yaml
+
+npm install @mycelium-labs/sidecar-client@experimental
+go get github.com/mycelium-labs/mycelium/clients/go@v0.1.0
+```
+
+Java, Rust, C#, Ruby, and other runtimes can call the authenticated OpenAPI
+contract directly. Only `EXECUTE` permits the provider call; every other claim
+disposition means do not execute. The current profile is trusted-local and
+development-only: no remote hosting, multi-tenancy, production authentication,
+or hostile-client protection.
 
 ## Coding-agent setup
 
@@ -75,4 +94,7 @@ mycelium run --config mycelium.yaml -- python -m my_app
 - PyPI: https://pypi.org/project/mycelium-runtime/
 - Source: https://github.com/mycelium-labs/mycelium
 - API reference: https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md
+- Language-neutral protocol: https://github.com/mycelium-labs/mycelium/tree/main/sdk/docs/spec
+- TypeScript client: https://www.npmjs.com/package/@mycelium-labs/sidecar-client
+- Go client: https://pkg.go.dev/github.com/mycelium-labs/mycelium/clients/go
 - License: MIT

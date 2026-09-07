@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Mycelium | Reliable tool actions for AI agents</title>
-  <meta name="description" content="Mycelium makes AI-agent tool actions reliable across validation, authority, runtime control, outcome resolution, and evidence.">
-  <meta name="keywords" content="AI agent reliability, agent guardrails, tool calling, side effect safety, idempotency, LangGraph, CrewAI, Python">
+  <meta name="description" content="Mycelium makes AI-agent tool actions reliable across validation, execution, recovery, and evidence—from Python, TypeScript, Go, or any HTTP/JSON runtime.">
+  <meta name="keywords" content="AI agent reliability, agent guardrails, tool calling, side effect safety, idempotency, LangGraph, CrewAI, Python, TypeScript, Go, sidecar">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="theme-color" content="#fff8ed">
   <link rel="canonical" href="https://mycelium-labs.github.io/">
@@ -17,7 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css?v=22">
   <meta property="og:title" content="Mycelium | Reliable tool actions for AI agents">
-  <meta property="og:description" content="The reliability layer between your agent and its tools.">
+  <meta property="og:description" content="One authoritative reliability engine for agent tools in Python, TypeScript, Go, or any HTTP/JSON runtime.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mycelium-labs.github.io/">
   <meta property="og:site_name" content="Mycelium">
@@ -28,16 +28,16 @@
   <meta property="og:image:alt" content="Mycelium controls an AI-agent tool action across its reliability lifecycle.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Mycelium | Reliable tool actions for AI agents">
-  <meta name="twitter:description" content="The framework-agnostic reliability layer between your agent and its tools.">
+  <meta name="twitter:description" content="The language-neutral reliability boundary between your agent and its tools.">
   <meta name="twitter:image" content="https://mycelium-labs.github.io/og-image-v3.png">
   <meta name="twitter:image:alt" content="Mycelium controls an AI-agent tool action across its reliability lifecycle.">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Mycelium","alternateName":"mycelium-runtime","applicationCategory":"DeveloperApplication","description":"The reliability layer between AI agents and their tools.","url":"https://mycelium-labs.github.io/","downloadUrl":"https://pypi.org/project/mycelium-runtime/","codeRepository":"https://github.com/mycelium-labs/mycelium","programmingLanguage":"Python","license":"https://opensource.org/licenses/MIT"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Mycelium","alternateName":"mycelium-runtime","applicationCategory":"DeveloperApplication","description":"A language-neutral reliability boundary between AI agents and their tools, with a Python engine and HTTP/JSON sidecar clients.","url":"https://mycelium-labs.github.io/","downloadUrl":"https://pypi.org/project/mycelium-runtime/","codeRepository":"https://github.com/mycelium-labs/mycelium","programmingLanguage":"Python","license":"https://opensource.org/licenses/MIT"}</script>
 </head>
 <body class="spectrum">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="topbar">
     <a class="logo" href="/" aria-label="Mycelium home"><i aria-hidden="true"></i>MYCELIUM</a>
-    <nav aria-label="Primary navigation"><a href="#scope">Scope</a><a href="#how">How it works</a><a href="#setup">Setup</a><a href="#proof">Proof</a><a href="/handbook.html">Docs</a></nav>
+    <nav aria-label="Primary navigation"><a href="#scope">Scope</a><a href="#how">How it works</a><a href="#languages">Languages</a><a href="#setup">Setup</a><a href="#proof">Proof</a><a href="/handbook.html">Docs</a></nav>
     <a class="github-link" href="https://github.com/mycelium-labs/mycelium">GitHub ↗</a>
   </header>
 
@@ -49,7 +49,7 @@
         <p class="hero-lede">Mycelium sits between your agent and its tools. Configure the controls that matter, validate inputs and authority before execution, control the run, then establish outcomes and reconcile uncertainty afterward.</p>
         <div class="hero-actions"><a class="primary" href="/try.html">Protect your first tool</a><button class="copy-command" type="button" data-copy="pip install mycelium-runtime"><code>pip install mycelium-runtime</code><span data-copy-state>Copy</span></button></div>
         <div class="hero-proofline">
-          <p class="works-with">Framework agnostic · Python 3.10+ · Plain Python · MIT</p>
+          <p class="works-with">Python engine · TypeScript &amp; Go clients · HTTP/JSON · MIT</p>
           <a class="download-count" href="https://pepy.tech/project/mycelium-runtime" aria-label="25 thousand PyPI downloads, view download statistics"><strong>25K</strong><span>PyPI downloads</span></a>
         </div>
       </div>
@@ -92,6 +92,18 @@
         <p class="world world-payments">Payments</p><p class="world world-comms">Customer<br>messages</p><p class="world world-infra">Infrastructure</p><p class="world world-data">Business<br>records</p><p class="world world-files">Files &amp;<br>secrets</p><p class="world world-agents">Subagents &amp;<br>handoffs</p>
         <div class="orbit-core"><span>MYCELIUM</span><b>safe action<br>boundary</b></div>
       </div>
+    </section>
+
+    <section class="proof" id="languages" aria-labelledby="languages-title">
+      <div class="proof-main"><p class="section-tag">USE IT FROM ANY LANGUAGE</p><h2 id="languages-title">One engine.<br>Any HTTP/JSON runtime.</h2><p>Mycelium's safety engine remains Python. A small local sidecar gives TypeScript, Go, Java, Rust, and other applications the same doorway into it. The application asks whether an action may run and reports the result; the sidecar owns identity, claims, leases, fencing, transitions, and recovery.</p><p>The TypeScript and Go packages are thin clients, not separate Mycelium engines. Other languages can call the same OpenAPI contract directly.</p><div class="proof-actions"><a class="primary" href="/handbook.html#languages">See language setup</a><a href="https://www.npmjs.com/package/@mycelium-labs/sidecar-client">TypeScript package ↗</a><a href="https://pkg.go.dev/github.com/mycelium-labs/mycelium/clients/go">Go module ↗</a></div></div>
+      <div class="proof-command"><code><b>YOUR APPLICATION</b>
+TypeScript · Go · Java · Rust
+          ↓ HTTP/JSON
+<b>LOCAL MYCELIUM SIDECAR</b>
+          ↓
+Python engine + durable ledger
+
+<i>experimental local integration</i></code></div>
     </section>
 
     <section class="proof setup-proof" id="setup" aria-labelledby="setup-title">

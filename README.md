@@ -1,8 +1,12 @@
 # mycelium-labs.github.io
 
-Public site for [Mycelium](https://github.com/mycelium-labs/mycelium) (PyPI: `mycelium-runtime`): product homepage, try-in-5-minutes page, interactive sandbox.
+Public site for [Mycelium](https://github.com/mycelium-labs/mycelium) (PyPI:
+`mycelium-runtime`): product homepage, try-in-5-minutes page, interactive
+sandbox, and language-neutral integration guide.
 
 The SDK package lives in **[mycelium-labs/mycelium](https://github.com/mycelium-labs/mycelium)**.
+The authoritative engine is Python; TypeScript, Go, and other languages connect
+through its local HTTP/JSON sidecar.
 
 ## Layout
 
@@ -44,3 +48,5 @@ docker run --rm -p 7860:7860 mycelium-sandbox
 - Homepage: https://mycelium-labs.github.io/
 - Try in 5 minutes: https://mycelium-labs.github.io/try.html
 - PyPI: https://pypi.org/project/mycelium-runtime/
+- TypeScript client: https://www.npmjs.com/package/@mycelium-labs/sidecar-client
+- Go client: https://pkg.go.dev/github.com/mycelium-labs/mycelium/clients/go
