@@ -53,6 +53,7 @@
         <p class="side-group">Execution &amp; recovery</p>
         <ol>
           <li><a href="#actions">Actions</a></li>
+          <li><a href="#composite">Composite recovery</a></li>
           <li><a href="#resolution">Resolution</a></li>
           <li><a href="#envelope">Envelope</a></li>
           <li><a href="#yaml">YAML</a></li>
@@ -119,7 +120,7 @@ server: {host: 127.0.0.1, port: 8787}</pre>
 npm install @mycelium-labs/sidecar-client@experimental
 
 # Go
-go get github.com/mycelium-labs/mycelium/clients/go@v0.1.0</pre>
+go get github.com/mycelium-labs/mycelium/clients/go@v0.1.1</pre>
         <p>For multiple sidecars, use the repository's shared PostgreSQL Docker Compose profile:</p>
         <pre>git clone https://github.com/mycelium-labs/mycelium.git
 cd mycelium
@@ -158,6 +159,12 @@ def send_payment(amount: float, recipient: str) -> dict:
 # payment: duplicate resolves existing transition; won't charge twice
 send_payment(amount=100.0, recipient="acct_123", tool_call_id="call_pay")</pre>
         <p>See <a href="#resolution">Resolution</a> for gate semantics and the <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md#quickstart-idempotency--audit-receipts">SDK README</a> for the full reference.</p>
+      </section>
+      <section id="composite">
+        <h2>Durable composite recovery</h2>
+        <p>Python applications can wrap an unchanged straight-line function whose consequential child calls are already protected by Mycelium. The opt-in <code>@composite</code> decorator pins the child-call manifest, returns stored child results during replay, and runs only children that have not already completed. Every retry must provide the same stable, host-owned operation ID.</p>
+        <p>This is a bounded Python-runtime feature, not a general workflow engine or a sidecar endpoint. It supports local file and SQLite composite-control storage; it is not available through the language-neutral API or the shared PostgreSQL sidecar profile. Conditions, loops, dynamic dispatch, nested composites, opaque calls, and hidden direct provider effects are rejected or remain outside its protection.</p>
+        <p><a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/COMPOSITE_RECOVERY.md">Read the supported API, recovery model, and limitations ↗</a></p>
       </section>
       <section id="resolution">
         <h2>Resolution</h2>

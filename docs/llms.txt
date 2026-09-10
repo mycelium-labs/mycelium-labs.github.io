@@ -21,6 +21,7 @@ Composable prevention controls (configure or call explicitly):
 - **Verification:** `mycelium doctor` inspects detectable wiring; `mycelium verify` exercises synthetic safety scenarios without calling application tools.
 - **Unified state:** one top-level `state_backend` automatically gives loop, scope, completion, state-flush, and audit-receipt guards namespaced atomic storage. Use file on one node and Redis/Postgres across workers.
 - **Provider reconciliation:** `mycelium providers verify <adapter>` adversarially tests uncertainty handling and forbidden writes, then emits a signed report bound to the adapter source. Gmail is the only adapter currently shipped; other providers implement a conformance fixture. Reports do not prove live credentials are read-only.
+- **Durable composite recovery:** Python applications can wrap an unchanged straight-line function with `@composite` when its consequential child calls are already ledgered. Replay returns stored child results and runs only unfinished children. This bounded feature requires a stable host-owned operation ID and local file or SQLite composite-control storage; it is not a sidecar endpoint, a shared-PostgreSQL feature, or a general workflow engine.
 
 ## Install
 
@@ -44,7 +45,7 @@ pip install mycelium-runtime
 mycelium sidecar serve --config /absolute/path/sidecar.yaml
 
 npm install @mycelium-labs/sidecar-client@experimental
-go get github.com/mycelium-labs/mycelium/clients/go@v0.1.0
+go get github.com/mycelium-labs/mycelium/clients/go@v0.1.1
 ```
 
 Java, Rust, C#, Ruby, and other runtimes can call the authenticated OpenAPI
