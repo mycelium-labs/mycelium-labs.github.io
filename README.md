@@ -6,7 +6,8 @@ sandbox, and language-neutral integration guide.
 
 The SDK package lives in **[mycelium-labs/mycelium](https://github.com/mycelium-labs/mycelium)**.
 The authoritative engine is Python; TypeScript, Go, and other languages connect
-through its local HTTP/JSON sidecar.
+through its self-hosted HTTP/JSON sidecar. Users can run one sidecar locally or
+coordinate multiple sidecars through shared PostgreSQL.
 
 ## Layout
 

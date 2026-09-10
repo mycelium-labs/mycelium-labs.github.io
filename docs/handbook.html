@@ -18,7 +18,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mycelium-labs.github.io/handbook.html">
   <meta property="og:image" content="https://mycelium-labs.github.io/og-image.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I build reliable AI agents in production?","acceptedAnswer":{"@type":"Answer","text":"Place a deterministic boundary between the agent and its tools. Mycelium validates calls and authority before execution, controls runtime behavior, then resolves outcomes and records evidence. pip install mycelium-runtime"}},{"@type":"Question","name":"Can I use Mycelium from TypeScript, Go, or another language?","acceptedAnswer":{"@type":"Answer","text":"Yes. The authoritative engine remains Python, while non-Python applications connect to its local sidecar through a language-neutral HTTP and JSON protocol. Published experimental TypeScript and Go clients are available; other languages can use OpenAPI directly."}},{"@type":"Question","name":"How do I prevent duplicate tool execution in LangGraph?","acceptedAnswer":{"@type":"Answer","text":"Use a transition envelope, not only an idempotency key plus a cached result. Mycelium hashes a durable transition key, holds an execution lease, and resolves duplicates by gates. pip install mycelium-runtime && mycelium demo"}},{"@type":"Question","name":"Is Mycelium a replacement for Langfuse or LangSmith?","acceptedAnswer":{"@type":"Answer","text":"No. Those are observability tools. Mycelium controls tool actions at runtime. Use both if you want traces and deterministic action controls."}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I build reliable AI agents in production?","acceptedAnswer":{"@type":"Answer","text":"Place a deterministic boundary between the agent and its tools. Mycelium validates calls and authority before execution, controls runtime behavior, then resolves outcomes and records evidence. pip install mycelium-runtime"}},{"@type":"Question","name":"Can I use Mycelium from TypeScript, Go, or another language?","acceptedAnswer":{"@type":"Answer","text":"Yes. Mycelium is self-hosted: the authoritative engine remains Python, while non-Python applications connect through its language-neutral HTTP and JSON sidecar. Run one sidecar locally or coordinate multiple sidecars through shared PostgreSQL. TypeScript and Go clients are available; other languages can use OpenAPI directly."}},{"@type":"Question","name":"How do I prevent duplicate tool execution in LangGraph?","acceptedAnswer":{"@type":"Answer","text":"Use a transition envelope, not only an idempotency key plus a cached result. Mycelium hashes a durable transition key, holds an execution lease, and resolves duplicates by gates. pip install mycelium-runtime && mycelium demo"}},{"@type":"Question","name":"Is Mycelium a replacement for Langfuse or LangSmith?","acceptedAnswer":{"@type":"Answer","text":"No. Those are observability tools. Mycelium controls tool actions at runtime. Use both if you want traces and deterministic action controls."}}]}</script>
 </head>
 <body class="calm-page">
   <a class="skip-link" href="#how-to-use">Skip to handbook</a>
@@ -80,7 +80,7 @@
     <article class="docs-main">
       <p class="docs-label">How to use</p>
       <h1>Start with one tool. Protect its full lifecycle.</h1>
-      <p>These notes describe the shipped local runtime: validate and authorize before execution, control the run, resolve outcomes, and record evidence. Python applications use the engine directly; other languages use the same engine through its local HTTP/JSON sidecar. The default scaffold starts with one ledgered tool; it is the first integration step, not the whole product. Hosted team storage is planned, not live.</p>
+      <p>Mycelium is open-source and self-hosted. Python applications use the engine directly; other languages use the same engine through its HTTP/JSON sidecar. Run one sidecar locally or coordinate multiple sidecars through shared PostgreSQL. No Mycelium cloud account or hosted endpoint is required.</p>
       <p class="docs-group" id="group-start">Start</p>
       <section id="install">
         <h2>Install</h2>
@@ -99,7 +99,7 @@ mycelium run --config mycelium.yaml -- python -m my_agent</pre>
       </section>
       <section id="languages">
         <h2>TypeScript, Go, and other languages</h2>
-        <p>The engine is Python, but the doorway into it is language-neutral. Run Mycelium as a small local sidecar beside your application. Your application sends action details and results over HTTP/JSON; the sidecar owns identity, claims, leases, fencing, transitions, and recovery.</p>
+        <p>The engine is Python, but the doorway into it is language-neutral. Run Mycelium as a self-hosted sidecar beside your application. Your application sends action details and results over HTTP/JSON; the sidecar owns identity, claims, leases, fencing, transitions, and recovery.</p>
         <pre>pip install mycelium-runtime
 umask 077
 python -c 'import secrets; print(secrets.token_urlsafe(32))' &gt; /absolute/path/sidecar.token</pre>
@@ -120,8 +120,14 @@ npm install @mycelium-labs/sidecar-client@experimental
 
 # Go
 go get github.com/mycelium-labs/mycelium/clients/go@v0.1.0</pre>
-        <p><a href="https://www.npmjs.com/package/@mycelium-labs/sidecar-client">TypeScript package ↗</a> · <a href="https://pkg.go.dev/github.com/mycelium-labs/mycelium/clients/go">Go module ↗</a> · <a href="https://github.com/mycelium-labs/mycelium/tree/main/sdk/docs/spec">HTTP/OpenAPI protocol ↗</a></p>
-        <p>Java, Rust, C#, Ruby, and other runtimes can call the same authenticated OpenAPI contract directly. The language clients are thin helpers; they do not duplicate Mycelium's Python state machine. The current <code>v1alpha1</code> profile is an experimental trusted-local integration, not a remote or multi-tenant production service.</p>
+        <p>For multiple sidecars, use the repository's shared PostgreSQL Docker Compose profile:</p>
+        <pre>git clone https://github.com/mycelium-labs/mycelium.git
+cd mycelium
+export MYCELIUM_POSTGRES_PASSWORD="$(openssl rand -hex 24)"
+export MYCELIUM_SIDECAR_TOKEN="$(openssl rand -hex 32)"
+docker compose -f docker-compose.sidecar.yml up --build</pre>
+        <p><a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/SELF_HOSTING.md">Complete self-hosting guide ↗</a> · <a href="https://www.npmjs.com/package/@mycelium-labs/sidecar-client">TypeScript package ↗</a> · <a href="https://pkg.go.dev/github.com/mycelium-labs/mycelium/clients/go">Go module ↗</a> · <a href="https://github.com/mycelium-labs/mycelium/tree/main/sdk/docs/spec">HTTP/OpenAPI protocol ↗</a></p>
+        <p>Java, Rust, C#, Ruby, and other runtimes can call the same authenticated OpenAPI contract directly. The language clients are thin helpers; they do not duplicate Mycelium's Python state machine. The <code>v1alpha1</code> development and shared PostgreSQL profiles are experimental and self-hosted, not a public multi-tenant service.</p>
       </section>
       <section id="agent-setup">
         <h2>Agent-assisted setup</h2>
@@ -169,7 +175,7 @@ send_payment(amount=100.0, recipient="acct_123", tool_call_id="call_pay")</pre>
           <li><code>external_operation_ref</code> — the provider handle used for read-only reconciliation.</li>
           <li><code>retry_permission</code> — whether another attempt is permitted.</li>
         </ol>
-        <p>Python applications configure these semantics through the runtime. Non-Python applications send the same lifecycle over the frozen development-only <code>v1alpha1</code> protocol. <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/spec/TRANSITION_ENVELOPE.md">Read the language-neutral specification ↗</a></p>
+        <p>Python applications configure these semantics through the runtime. Non-Python applications send the same lifecycle over the experimental <code>v1alpha1</code> protocol. <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/spec/TRANSITION_ENVELOPE.md">Read the language-neutral specification ↗</a></p>
       </section>
       <section id="yaml">
         <h2>YAML</h2>

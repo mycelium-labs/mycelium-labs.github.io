@@ -95,15 +95,15 @@
     </section>
 
     <section class="proof" id="languages" aria-labelledby="languages-title">
-      <div class="proof-main"><p class="section-tag">USE IT FROM ANY LANGUAGE</p><h2 id="languages-title">One engine.<br>Any HTTP/JSON runtime.</h2><p>Mycelium's safety engine remains Python. A small local sidecar gives TypeScript, Go, Java, Rust, and other applications the same doorway into it. The application asks whether an action may run and reports the result; the sidecar owns identity, claims, leases, fencing, transitions, and recovery.</p><p>The TypeScript and Go packages are thin clients, not separate Mycelium engines. Other languages can call the same OpenAPI contract directly.</p><div class="proof-actions"><a class="primary" href="/handbook.html#languages">See language setup</a><a href="https://www.npmjs.com/package/@mycelium-labs/sidecar-client">TypeScript package ↗</a><a href="https://pkg.go.dev/github.com/mycelium-labs/mycelium/clients/go">Go module ↗</a></div></div>
+      <div class="proof-main"><p class="section-tag">USE IT FROM ANY LANGUAGE</p><h2 id="languages-title">One engine.<br>Any HTTP/JSON runtime.</h2><p>Mycelium is open-source and self-hosted. Its safety engine remains Python, while a small sidecar gives TypeScript, Go, Java, Rust, and other applications the same doorway into it. Run one sidecar locally or coordinate multiple sidecars through shared PostgreSQL.</p><p>The TypeScript and Go packages are thin clients, not separate Mycelium engines. Other languages can call the same OpenAPI contract directly.</p><div class="proof-actions"><a class="primary" href="/handbook.html#languages">See self-hosted setup</a><a href="https://www.npmjs.com/package/@mycelium-labs/sidecar-client">TypeScript package ↗</a><a href="https://pkg.go.dev/github.com/mycelium-labs/mycelium/clients/go">Go module ↗</a></div></div>
       <div class="proof-command"><code><b>YOUR APPLICATION</b>
 TypeScript · Go · Java · Rust
           ↓ HTTP/JSON
-<b>LOCAL MYCELIUM SIDECAR</b>
+<b>SELF-HOSTED MYCELIUM SIDECAR</b>
           ↓
 Python engine + durable ledger
 
-<i>experimental local integration</i></code></div>
+<i>local or shared PostgreSQL profile</i></code></div>
     </section>
 
     <section class="proof setup-proof" id="setup" aria-labelledby="setup-title">
