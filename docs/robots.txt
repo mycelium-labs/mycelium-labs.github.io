@@ -1,4 +1,4 @@
-# Mycelium docs: https://mycelium-labs.github.io/
+# Mycelium docs: https://mycelium.nandanadileep.com/
 
 # Traditional search crawlers
 User-agent: *
@@ -39,4 +39,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://mycelium-labs.github.io/sitemap.xml
+Sitemap: https://mycelium.nandanadileep.com/sitemap.xml

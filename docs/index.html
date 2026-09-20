@@ -3,12 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Mycelium | Reliable tool actions for AI agents</title>
+  <title>Mycelium | AI Agent Reliability &amp; Tool Execution Control</title>
   <meta name="description" content="Mycelium makes AI-agent tool actions reliable across validation, execution, recovery, and evidence—from Python, TypeScript, Go, or any HTTP/JSON runtime.">
-  <meta name="keywords" content="AI agent reliability, agent guardrails, tool calling, side effect safety, idempotency, LangGraph, CrewAI, Python, TypeScript, Go, sidecar">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="theme-color" content="#fff8ed">
-  <link rel="canonical" href="https://mycelium-labs.github.io/">
+  <link rel="canonical" href="https://mycelium.nandanadileep.com/">
   <link rel="icon" href="/favicon.svg?v=7" type="image/svg+xml">
   <link rel="icon" href="/favicon-32.png?v=7" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=7">
@@ -16,22 +15,22 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css?v=23">
-  <meta property="og:title" content="Mycelium | Reliable tool actions for AI agents">
+  <meta property="og:title" content="Mycelium | AI Agent Reliability &amp; Tool Execution Control">
   <meta property="og:description" content="One authoritative reliability engine for agent tools in Python, TypeScript, Go, or any HTTP/JSON runtime.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://mycelium-labs.github.io/">
+  <meta property="og:url" content="https://mycelium.nandanadileep.com/">
   <meta property="og:site_name" content="Mycelium">
-  <meta property="og:image" content="https://mycelium-labs.github.io/og-image-v3.png">
+  <meta property="og:image" content="https://mycelium.nandanadileep.com/og-image-v3.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Mycelium controls an AI-agent tool action across its reliability lifecycle.">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Mycelium | Reliable tool actions for AI agents">
+  <meta name="twitter:title" content="Mycelium | AI Agent Reliability &amp; Tool Execution Control">
   <meta name="twitter:description" content="The language-neutral reliability boundary between your agent and its tools.">
-  <meta name="twitter:image" content="https://mycelium-labs.github.io/og-image-v3.png">
+  <meta name="twitter:image" content="https://mycelium.nandanadileep.com/og-image-v3.png">
   <meta name="twitter:image:alt" content="Mycelium controls an AI-agent tool action across its reliability lifecycle.">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Mycelium","alternateName":"mycelium-runtime","applicationCategory":"DeveloperApplication","description":"A language-neutral reliability boundary between AI agents and their tools, with a Python engine and HTTP/JSON sidecar clients.","url":"https://mycelium-labs.github.io/","downloadUrl":"https://pypi.org/project/mycelium-runtime/","codeRepository":"https://github.com/mycelium-labs/mycelium","programmingLanguage":"Python","license":"https://opensource.org/licenses/MIT"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://mycelium.nandanadileep.com/#website","name":"Mycelium","url":"https://mycelium.nandanadileep.com/","inLanguage":"en"},{"@type":["SoftwareApplication","SoftwareSourceCode"],"@id":"https://mycelium.nandanadileep.com/#software","name":"Mycelium","alternateName":"mycelium-runtime","applicationCategory":"DeveloperApplication","description":"A language-neutral reliability boundary between AI agents and their tools, with a Python engine and HTTP/JSON sidecar clients.","url":"https://mycelium.nandanadileep.com/","downloadUrl":"https://pypi.org/project/mycelium-runtime/","codeRepository":"https://github.com/mycelium-labs/mycelium","programmingLanguage":"Python","runtimePlatform":"Python 3.10+","license":"https://opensource.org/licenses/MIT","isAccessibleForFree":true,"sameAs":["https://github.com/mycelium-labs/mycelium","https://pypi.org/project/mycelium-runtime/"]}]}</script>
 </head>
 <body class="spectrum">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -44,7 +43,7 @@
   <main id="main">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <p class="kicker"><span>Runtime safety</span> for agents that take real action</p>
+        <p class="kicker"><span>AI agent reliability</span> for tools that take real action</p>
         <h1 id="hero-title">Let agents act.<br><em>Stop unsafe actions.</em></h1>
         <p class="hero-lede">Mycelium sits between your agent and its tools. Configure the controls that matter, validate inputs and authority before execution, control the run, then establish outcomes and reconcile uncertainty afterward.</p>
         <div class="hero-actions"><a class="primary" href="/try.html">Protect your first tool</a><button class="copy-command" type="button" data-copy="pip install mycelium-runtime"><code>pip install mycelium-runtime</code><span data-copy-state>Copy</span></button></div>
@@ -79,6 +78,13 @@
         <article class="cap cap-violet"><span>05</span><div><h3>Protect secrets &amp; destinations</h3><p>Block raw credentials before claim, use secret references, and keep writes inside host-approved destination policy.</p><a href="/handbook.html#secret-in-args">Data safety →</a></div><code>DATA SAFETY</code></article>
         <article class="cap cap-ink"><span>06</span><div><h3>Control execution</h3><p>Claim consequential actions, prevent concurrent execution, recover ambiguous outcomes, and return stored results when work already completed.</p><a href="/resolve.html">Execution control →</a></div><code>EXECUTION CONTROL</code></article>
       </div>
+    </section>
+
+    <section class="manifesto" aria-labelledby="guide-title">
+      <p>Practical reliability guide</p>
+      <h2 id="guide-title">Why did your agent run that tool twice?</h2>
+      <p>Learn how stable action identity, durable claims, and outcome recovery help prevent duplicate effects when an agent retries.</p>
+      <p><a href="/prevent-duplicate-tool-calls-langgraph.html">How to prevent duplicate tool calls in LangGraph →</a></p>
     </section>
 
     <section class="journey" id="how" aria-labelledby="journey-title">

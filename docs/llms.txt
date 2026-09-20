@@ -79,7 +79,7 @@ Langfuse and LangSmith are observability and tracing. They show what happened af
 
 ## Try in 5 minutes
 
-https://mycelium-labs.github.io/try.html
+https://mycelium.nandanadileep.com/try.html
 
 ```
 pip install mycelium-runtime
@@ -90,8 +90,9 @@ mycelium run --config mycelium.yaml -- python -m my_app
 
 ## Links
 
+- Duplicate tool call guide: https://mycelium.nandanadileep.com/prevent-duplicate-tool-calls-langgraph.html
 - Handbook / docs: https://github.com/mycelium-labs/mycelium/tree/main/sdk/docs
-- Try in 5 minutes: https://mycelium-labs.github.io/try.html
+- Try in 5 minutes: https://mycelium.nandanadileep.com/try.html
 - PyPI: https://pypi.org/project/mycelium-runtime/
 - Source: https://github.com/mycelium-labs/mycelium
 - API reference: https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md

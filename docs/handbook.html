@@ -3,21 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Handbook · Mycelium</title>
+  <title>Mycelium Docs | Agent Reliability, Setup &amp; Recovery</title>
   <meta name="description" content="Install Mycelium and make AI-agent tool actions reliable from Python, TypeScript, Go, or any HTTP/JSON runtime.">
-  <meta name="keywords" content="Mycelium documentation, AI agent reliability, tool boundary, side effect safety, LangGraph, CrewAI, Python SDK, TypeScript, Go, sidecar">
   <meta name="theme-color" content="#f3f1ea">
-  <link rel="canonical" href="https://mycelium-labs.github.io/handbook.html">
+  <link rel="canonical" href="https://mycelium.nandanadileep.com/handbook.html">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:site_name" content="Mycelium">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mycelium Docs | Agent Reliability, Setup &amp; Recovery">
+  <meta name="twitter:description" content="Install Mycelium and make AI-agent tool actions reliable from Python, TypeScript, Go, or any HTTP/JSON runtime.">
+  <meta name="twitter:image" content="https://mycelium.nandanadileep.com/og-image-v3.png">
+  <meta name="twitter:image:alt" content="Mycelium: reliability controls for AI-agent tool actions.">
   <link rel="icon" href="/favicon.svg?v=7" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css?v=21">
-  <meta property="og:title" content="Handbook · Mycelium">
+  <meta property="og:title" content="Mycelium Docs | Agent Reliability, Setup &amp; Recovery">
   <meta property="og:description" content="Install, prevent, resolve, and verify. The reliability layer for AI agents.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://mycelium-labs.github.io/handbook.html">
-  <meta property="og:image" content="https://mycelium-labs.github.io/og-image.png">
+  <meta property="og:url" content="https://mycelium.nandanadileep.com/handbook.html">
+  <meta property="og:image" content="https://mycelium.nandanadileep.com/og-image-v3.png">
+  <meta property="og:image:alt" content="Mycelium: reliability controls for AI-agent tool actions.">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I build reliable AI agents in production?","acceptedAnswer":{"@type":"Answer","text":"Place a deterministic boundary between the agent and its tools. Mycelium validates calls and authority before execution, controls runtime behavior, then resolves outcomes and records evidence. pip install mycelium-runtime"}},{"@type":"Question","name":"Can I use Mycelium from TypeScript, Go, or another language?","acceptedAnswer":{"@type":"Answer","text":"Yes. Mycelium is self-hosted: the authoritative engine remains Python, while non-Python applications connect through its language-neutral HTTP and JSON sidecar. Run one sidecar locally or coordinate multiple sidecars through shared PostgreSQL. TypeScript and Go clients are available; other languages can use OpenAPI directly."}},{"@type":"Question","name":"How do I prevent duplicate tool execution in LangGraph?","acceptedAnswer":{"@type":"Answer","text":"Use a transition envelope, not only an idempotency key plus a cached result. Mycelium hashes a durable transition key, holds an execution lease, and resolves duplicates by gates. pip install mycelium-runtime && mycelium demo"}},{"@type":"Question","name":"Is Mycelium a replacement for Langfuse or LangSmith?","acceptedAnswer":{"@type":"Answer","text":"No. Those are observability tools. Mycelium controls tool actions at runtime. Use both if you want traces and deterministic action controls."}}]}</script>
 </head>
 <body class="calm-page">
@@ -41,6 +48,7 @@
         <ol>
           <li><a href="/">Home</a></li>
           <li><a href="/try.html">Try in 5 minutes</a></li>
+          <li><a href="/prevent-duplicate-tool-calls-langgraph.html">Prevent duplicate tool calls</a></li>
           <li><a href="/prevent.html">Prevent</a></li>
           <li><a href="/resolve.html">Resolve</a></li>
           <li><a href="/verify.html">Verify</a></li>
