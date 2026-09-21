@@ -152,6 +152,17 @@ docker compose -f docker-compose.sidecar.yml up --build</pre>
         <h2>What it does</h2>
         <p>Mycelium makes tool actions reliable before, during, and after execution. <code>mycelium init</code> / <code>mycelium run</code> begin with durable execution control for one tool; configure the other control areas that match your workflow.</p>
       </section>
+      <section id="trust-boundary">
+        <h2>Untrusted tool output</h2>
+        <p>Tool and retrieval output is data, even when it contains imperative language. Mark external content as <code>untrusted_data</code> so it cannot be promoted into operator-release authorization claims.</p>
+        <pre>from mycelium import mark_untrusted_tool_output
+
+search_result = mark_untrusted_tool_output(
+    tool_result,
+    source="tool:search",
+)</pre>
+        <p>This is a narrow prompt-injection defense at the authorization boundary. It blocks one path from injected tool content to release authority; it does not replace context isolation or broader prompt-injection evaluation.</p>
+      </section>
       <p class="docs-group" id="group-core">Execution &amp; recovery</p>
       <section id="actions">
         <h2>Action execution</h2>

@@ -18,6 +18,7 @@ Composable prevention controls (configure or call explicitly):
 - **Permission widening:** `scope_guard` freezes the run allowlist and refuses mid-run or handoff expansion.
 - **Credentials and destinations:** `secret_args` blocks raw secrets; `entity_guard` restricts write destinations.
 - **Destructive authority:** `destructive_confirm`, `authority_window`, and `use_time_currency` require exact, current permission and facts at execution time.
+- **Untrusted tool output:** `mark_untrusted_tool_output(value, source=...)` labels tool or retrieved content as `untrusted_data`; marked values cannot become operator-release authorization claims. This is a narrow prompt-injection defense, not full context taint propagation.
 - **Verification:** `mycelium doctor` inspects detectable wiring; `mycelium verify` exercises synthetic safety scenarios without calling application tools.
 - **Unified state:** one top-level `state_backend` automatically gives loop, scope, completion, state-flush, and audit-receipt guards namespaced atomic storage. Use file on one node and Redis/Postgres across workers.
 - **Provider reconciliation:** `mycelium providers verify <adapter>` adversarially tests uncertainty handling and forbidden writes, then emits a signed report bound to the adapter source. Gmail is the only adapter currently shipped; other providers implement a conformance fixture. Reports do not prove live credentials are read-only.

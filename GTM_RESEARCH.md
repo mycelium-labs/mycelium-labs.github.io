@@ -68,9 +68,11 @@ claim deterministic prevention for:
 
 - AF-001 hallucination;
 - AF-005 open-ended goal misalignment;
-- AF-009 instruction injection.
+- broad AF-009 instruction injection across the full model context.
 
-Those require judgment/evaluation or a future gateway-level mechanism. The
+The shipped trust boundary blocks marked tool content from becoming
+operator-release authorization claims. Broader context taint propagation still
+requires judgment/evaluation or a future gateway-level mechanism. The
 completion contract checks an explicit host checklist; it does not decide
 whether an open-ended goal is philosophically correct.
 
@@ -114,8 +116,9 @@ The corrected website therefore:
   execution state before the tool;
 - uses examples beyond payments and email;
 - keeps the Gmail evidence explicitly scoped to one live lane;
-- avoids implying that hallucination, goal judgment, or injection prevention is
-  shipped deterministic functionality.
+- accurately describes the narrow untrusted-tool-output defense while avoiding
+  implications that full injection prevention, hallucination control, or goal
+  judgment is solved.
 
 ## Visual direction
 
