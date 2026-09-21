@@ -36,7 +36,7 @@
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="topbar">
     <a class="logo" href="/" aria-label="Mycelium home"><i aria-hidden="true"></i>MYCELIUM</a>
-    <nav aria-label="Primary navigation"><a href="#scope">Scope</a><a href="#how">How it works</a><a href="#languages">Languages</a><a href="#setup">Setup</a><a href="#proof">Proof</a><a href="/handbook.html">Docs</a></nav>
+    <nav aria-label="Primary navigation"><a href="#scope">Scope</a><a href="#trust-boundary">Trust boundary</a><a href="#how">How it works</a><a href="#languages">Languages</a><a href="#setup">Setup</a><a href="#proof">Proof</a><a href="/handbook.html">Docs</a></nav>
     <a class="github-link" href="https://github.com/mycelium-labs/mycelium">GitHub ↗</a>
   </header>
 
@@ -78,6 +78,13 @@
         <article class="cap cap-violet"><span>05</span><div><h3>Protect secrets &amp; destinations</h3><p>Block raw credentials before claim, use secret references, and keep writes inside host-approved destination policy.</p><a href="/handbook.html#secret-in-args">Data safety →</a></div><code>DATA SAFETY</code></article>
         <article class="cap cap-ink"><span>06</span><div><h3>Control execution</h3><p>Claim consequential actions, prevent concurrent execution, recover ambiguous outcomes, and return stored results when work already completed.</p><a href="/resolve.html">Execution control →</a></div><code>EXECUTION CONTROL</code></article>
       </div>
+    </section>
+
+    <section class="manifesto" id="trust-boundary" aria-labelledby="trust-boundary-title">
+      <p class="section-tag">NEW IN 1.38.4 · TRUST BOUNDARY</p>
+      <h2 id="trust-boundary-title">Tool output is data, not authority.</h2>
+      <p>Search results, retrieved documents, and other tool content can contain instructions aimed at the agent. Mark that content as <code>untrusted_data</code>; Mycelium rejects it when it tries to become an operator-release authorization claim.</p>
+      <p><a href="/handbook.html#trust-boundary">See the implementation and its limits →</a></p>
     </section>
 
     <section class="manifesto" aria-labelledby="guide-title">
