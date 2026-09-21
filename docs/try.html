@@ -21,24 +21,26 @@
   <meta property="og:image:alt" content="Mycelium: reliability controls for AI-agent tool actions.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Instrument+Sans:wght@400;500&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=11">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css?v=24">
   <link rel="icon" href="/favicon.svg?v=7" type="image/svg+xml">
   <link rel="icon" href="/favicon-32.png?v=7" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=7">
   <style>
     :root {
-      --ink: #0a0e0b;
-      --ink-soft: #2a332c;
-      --ink-muted: #5a6b5e;
-      --paper: #ede9de;
-      --wash: #e8e4d9;
-      --line: rgba(10, 14, 11, 0.14);
-      --product: #141b15;
-      --product-ink: #ede9de;
-      --product-muted: #9caa9e;
-      --product-brand: #6be59b;
-      --accent: #d9f26e;
+      --ink: var(--night);
+      --ink-soft: #56526b;
+      --ink-muted: #625f77;
+      --paper: var(--cream);
+      --wash: #fff2bd;
+      --line: #d8d2e6;
+      --product: var(--night);
+      --product-ink: #ffffff;
+      --product-muted: #bcb8d0;
+      --product-brand: var(--lime);
+      --accent: var(--coral);
+      --font-body: var(--s-body);
+      --font-display: var(--display);
     }
 
     * { box-sizing: border-box; }
@@ -68,16 +70,18 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.1rem 1.5rem;
+      padding: 1.1rem clamp(1rem, 4vw, 3.5rem);
       font-size: 0.85rem;
     }
 
     .top a {
       color: var(--product-muted);
+      font-family: var(--s-body);
+      font-weight: 700;
       text-decoration: none;
     }
 
-    .top a:hover { color: var(--product-ink); }
+    .top a:hover { color: var(--product-brand); }
 
     .hero {
       position: relative;
@@ -88,9 +92,9 @@
       padding: 5.5rem 1.5rem 3.5rem;
       color: var(--product-ink);
       background:
-        radial-gradient(900px 480px at 88% -8%, rgba(216, 196, 90, 0.14), transparent 55%),
-        radial-gradient(700px 420px at -5% 110%, rgba(163, 165, 116, 0.12), transparent 50%),
-        linear-gradient(165deg, #14150f 0%, var(--product) 48%, #22241a 100%);
+        radial-gradient(900px 480px at 88% -8%, rgba(36, 85, 244, 0.35), transparent 55%),
+        radial-gradient(700px 420px at -5% 110%, rgba(181, 235, 67, 0.18), transparent 50%),
+        linear-gradient(165deg, #0e0d20 0%, var(--product) 48%, #28224e 100%);
       overflow: hidden;
     }
 
@@ -99,8 +103,8 @@
       position: absolute;
       inset: 0;
       background-image:
-        linear-gradient(rgba(238, 240, 226, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(238, 240, 226, 0.03) 1px, transparent 1px);
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
       background-size: 48px 48px;
       mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 75%);
       pointer-events: none;
@@ -132,7 +136,8 @@
       gap: .7rem;
       margin: 0 0 1.35rem;
       font-size: clamp(2.4rem, 6vw, 3.4rem);
-      font-weight: 600;
+      font-family: var(--font-display);
+      font-weight: 400;
       letter-spacing: -0.03em;
       line-height: 1.05;
       color: var(--product-brand);
@@ -142,7 +147,8 @@
     .headline {
       margin: 0 0 0.85rem;
       font-size: clamp(1.35rem, 3.2vw, 1.75rem);
-      font-weight: 500;
+      font-family: var(--font-display);
+      font-weight: 400;
       letter-spacing: -0.02em;
       line-height: 1.2;
       color: var(--product-ink);
@@ -167,10 +173,10 @@
     .btn-copy {
       display: inline-block;
       padding: 0.7rem 0.95rem;
-      background: #12130c;
-      border: 1px solid rgba(238, 240, 226, 0.2);
-      border-radius: 0;
-      font-family: ui-monospace, Menlo, Consolas, monospace;
+      background: rgba(19, 18, 41, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 99px;
+      font-family: var(--s-mono);
       font-size: 0.84rem;
       color: var(--product-ink);
       cursor: pointer;
@@ -178,7 +184,7 @@
     }
 
     .btn-copy:hover {
-      border-color: rgba(216, 196, 90, 0.45);
+      border-color: var(--cobalt);
       color: var(--product-brand);
     }
 
@@ -192,8 +198,10 @@
       align-items: center;
       gap: 0.4rem;
       padding: 0.7rem 1rem;
-      background: var(--product-brand);
-      color: #1c1d14;
+      background: var(--coral);
+      color: #ffffff;
+      border-radius: 99px;
+      box-shadow: 0 5px 0 #a72c2c;
       text-decoration: none;
       font-size: 0.9rem;
       font-weight: 600;
@@ -201,8 +209,8 @@
     }
 
     .btn-go:hover {
-      filter: brightness(1.05);
-      transform: translateY(-1px);
+      filter: brightness(1.06);
+      transform: translateY(-2px);
     }
 
     .scroll-hint {
@@ -236,14 +244,16 @@
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--ink-muted);
-      font-weight: 600;
+      font-family: var(--s-mono);
+      font-weight: 500;
     }
 
     .steps h2 {
       margin: 0 0 2rem;
       font-size: 1.55rem;
       letter-spacing: -0.02em;
-      font-weight: 600;
+      font-family: var(--font-display);
+      font-weight: 400;
     }
 
     .step {
@@ -273,6 +283,7 @@
       font-variant-numeric: tabular-nums;
       font-weight: 600;
       color: var(--accent);
+      font-family: var(--s-mono);
       font-size: 1.1rem;
       padding-top: 0.15rem;
     }
@@ -295,18 +306,18 @@
       padding: 0.85rem 1rem;
       background: var(--product);
       color: var(--product-ink);
-      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-family: var(--s-mono);
       font-size: 0.8rem;
       line-height: 1.5;
       overflow-x: auto;
-      border: 1px solid rgba(28, 29, 20, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .note {
       margin: 2rem 0 0;
       padding: 1.1rem 1.15rem;
       background: var(--wash);
-      border-left: 3px solid var(--accent);
+      border-left: 3px solid var(--cobalt);
       font-size: 0.92rem;
       color: var(--ink-soft);
     }
@@ -327,7 +338,7 @@
       text-underline-offset: 0.18em;
     }
 
-    .foot a:hover { color: var(--ink); }
+    .foot a:hover { color: var(--coral); }
 
     @media (max-width: 560px) {
       body { overflow-x: hidden; }
