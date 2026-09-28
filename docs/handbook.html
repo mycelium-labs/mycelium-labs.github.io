@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Mycelium Docs | Agent Reliability, Setup &amp; Recovery</title>
-  <meta name="description" content="Install Mycelium and make AI-agent tool actions reliable from Python, TypeScript, Go, or any HTTP/JSON runtime.">
+  <title>Mycelium Docs | LangGraph, CrewAI &amp; Python Agent Reliability</title>
+  <meta name="description" content="Set up Mycelium for LangGraph, CrewAI, and Python: tool validation, idempotency, budgets, and Redis or PostgreSQL workflow recovery. Explore sidecar clients.">
   <meta name="theme-color" content="#f3f1ea">
   <link rel="canonical" href="https://mycelium.nandanadileep.com/handbook.html">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta property="og:site_name" content="Mycelium">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Mycelium Docs | Agent Reliability, Setup &amp; Recovery">
-  <meta name="twitter:description" content="Install Mycelium and make AI-agent tool actions reliable from Python, TypeScript, Go, or any HTTP/JSON runtime.">
+  <meta name="twitter:title" content="Mycelium Docs | LangGraph, CrewAI &amp; Python Agent Reliability">
+  <meta name="twitter:description" content="Set up Mycelium for LangGraph, CrewAI, and Python: tool validation, idempotency, budgets, and Redis or PostgreSQL workflow recovery. Explore sidecar clients.">
   <meta name="twitter:image" content="https://mycelium.nandanadileep.com/og-image-v3.png">
   <meta name="twitter:image:alt" content="Mycelium: reliability controls for AI-agent tool actions.">
   <link rel="icon" href="/favicon.svg?v=7" type="image/svg+xml">
@@ -19,13 +19,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css?v=24">
-  <meta property="og:title" content="Mycelium Docs | Agent Reliability, Setup &amp; Recovery">
-  <meta property="og:description" content="Install, prevent, resolve, and verify. The reliability layer for AI agents.">
+  <meta property="og:title" content="Mycelium Docs | LangGraph, CrewAI &amp; Python Agent Reliability">
+  <meta property="og:description" content="Set up Mycelium for LangGraph, CrewAI, and Python: tool validation, idempotency, budgets, and Redis or PostgreSQL workflow recovery. Explore sidecar clients.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mycelium.nandanadileep.com/handbook.html">
   <meta property="og:image" content="https://mycelium.nandanadileep.com/og-image-v3.png">
   <meta property="og:image:alt" content="Mycelium: reliability controls for AI-agent tool actions.">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I build reliable AI agents in production?","acceptedAnswer":{"@type":"Answer","text":"Place a deterministic boundary between the agent and its tools. Mycelium validates calls and authority before execution, controls runtime behavior, then resolves outcomes and records evidence. pip install mycelium-runtime"}},{"@type":"Question","name":"Can I use Mycelium from TypeScript, Go, or another language?","acceptedAnswer":{"@type":"Answer","text":"Yes. Mycelium is self-hosted: the authoritative engine remains Python, while non-Python applications connect through its language-neutral HTTP and JSON sidecar. Run one sidecar locally or coordinate multiple sidecars through shared PostgreSQL. TypeScript and Go clients are available; other languages can use OpenAPI directly."}},{"@type":"Question","name":"How do I prevent duplicate tool execution in LangGraph?","acceptedAnswer":{"@type":"Answer","text":"Use a transition envelope, not only an idempotency key plus a cached result. Mycelium hashes a durable transition key, holds an execution lease, and resolves duplicates by gates. pip install mycelium-runtime && mycelium demo"}},{"@type":"Question","name":"Is Mycelium a replacement for Langfuse or LangSmith?","acceptedAnswer":{"@type":"Answer","text":"No. Those are observability tools. Mycelium controls tool actions at runtime. Use both if you want traces and deterministic action controls."}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://mycelium.nandanadileep.com/handbook.html#webpage","url":"https://mycelium.nandanadileep.com/handbook.html","name":"Mycelium Docs | LangGraph, CrewAI & Python Agent Reliability","description":"Set up Mycelium for LangGraph, CrewAI, and Python: tool validation, idempotency, budgets, and Redis or PostgreSQL workflow recovery. Explore sidecar clients.","inLanguage":"en","isPartOf":{"@id":"https://mycelium.nandanadileep.com/#website"}},{"@type":"BreadcrumbList","@id":"https://mycelium.nandanadileep.com/handbook.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Mycelium","item":"https://mycelium.nandanadileep.com/"},{"@type":"ListItem","position":2,"name":"Mycelium Docs","item":"https://mycelium.nandanadileep.com/handbook.html"}]},{"@type":"FAQPage","@id":"https://mycelium.nandanadileep.com/handbook.html#common-searches","mainEntity":[{"@type":"Question","name":"How does Mycelium improve AI agent reliability?","acceptedAnswer":{"@type":"Answer","text":"Mycelium applies configured controls to tool actions: validate inputs and authority, limit loops and budgets, coordinate retries, and record durable outcomes. Start by routing one consequential tool through Mycelium."}},{"@type":"Question","name":"How can I prevent duplicate tool execution in LangGraph?","acceptedAnswer":{"@type":"Answer","text":"Use a stable host-owned action ID and a durable ledger. Mycelium coordinates claims across retries, returns stored results for completed actions, and blocks or reconciles uncertain writes. Provider idempotency or a truthful reconciler is needed when an external effect may already have happened."}},{"@type":"Question","name":"Does Mycelium support CrewAI and plain Python?","acceptedAnswer":{"@type":"Answer","text":"Yes. Mycelium can wrap ordinary Python callables and provides LangGraph and CrewAI integrations. Configure the appropriate integration and supply stable business identities for consequential actions."}},{"@type":"Question","name":"Can Python agent workflows recover with Redis or PostgreSQL?","acceptedAnswer":{"@type":"Answer","text":"Yes. The composite decorator supports unchanged, straight-line Python functions with ledgered child calls. Redis and PostgreSQL share parent control across workers. Retry with the same operation ID to reuse completed results. Ambiguous children still reconcile or block; loops, conditions, and hidden effects are outside this scope."}},{"@type":"Question","name":"Can I use Mycelium from TypeScript or Go?","acceptedAnswer":{"@type":"Answer","text":"Experimental TypeScript and Go clients connect to the authoritative Python engine through the self-hosted v1alpha1 HTTP/JSON sidecar. Other languages can use OpenAPI. The protocol is a development contract; Python composite orchestration is not exposed through it."}},{"@type":"Question","name":"Does Mycelium replace Langfuse or LangSmith?","acceptedAnswer":{"@type":"Answer","text":"Mycelium controls tool actions at runtime. Langfuse and LangSmith provide observability and tracing. Applications can use Mycelium alongside either tool."}}]}]}</script>
 </head>
 <body class="calm-page">
   <a class="skip-link" href="#how-to-use">Skip to handbook</a>
@@ -256,8 +256,20 @@ mycelium providers verify-report gmail-adapter-report.json --json</pre>
       </section>
       <section id="api"><h2>API</h2><p>See the <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md">SDK README</a> for Python exports. Non-Python clients use the authenticated OpenAPI 3.1 contract served at <code>GET /v1/openapi.json</code>; see <a href="#languages">other languages</a>.</p></section>
       <section id="common-searches">
-        <h2>Common searches</h2>
-        <p>FAQ content for production reliability, action validation, scope, context, LangGraph duplicates, and idempotency. <a href="/verify.html">Read about Verify →</a></p>
+        <h2>AI agent reliability: frequently asked questions</h2>
+        <h3>How does Mycelium improve AI agent reliability?</h3>
+        <p>Mycelium applies configured controls to tool actions: validate inputs and authority, limit loops and budgets, coordinate retries, and record durable outcomes. Start by routing one consequential tool through Mycelium.</p>
+        <h3>How can I prevent duplicate tool execution in LangGraph?</h3>
+        <p>Use a stable host-owned action ID and a durable ledger. Mycelium coordinates claims across retries, returns stored results for completed actions, and blocks or reconciles uncertain writes. Provider idempotency or a truthful reconciler is needed when an external effect may already have happened.</p>
+        <h3>Does Mycelium support CrewAI and plain Python?</h3>
+        <p>Yes. Mycelium can wrap ordinary Python callables and provides LangGraph and CrewAI integrations. Configure the appropriate integration and supply stable business identities for consequential actions.</p>
+        <h3>Can Python agent workflows recover with Redis or PostgreSQL?</h3>
+        <p>Yes. The composite decorator supports unchanged, straight-line Python functions with ledgered child calls. Redis and PostgreSQL share parent control across workers. Retry with the same operation ID to reuse completed results. Ambiguous children still reconcile or block; loops, conditions, and hidden effects are outside this scope.</p>
+        <h3>Can I use Mycelium from TypeScript or Go?</h3>
+        <p>Experimental TypeScript and Go clients connect to the authoritative Python engine through the self-hosted v1alpha1 HTTP/JSON sidecar. Other languages can use OpenAPI. The protocol is a development contract; Python composite orchestration is not exposed through it.</p>
+        <h3>Does Mycelium replace Langfuse or LangSmith?</h3>
+        <p>Mycelium controls tool actions at runtime. Langfuse and LangSmith provide observability and tracing. Applications can use Mycelium alongside either tool.</p>
+        <p>Continue with the <a href="/prevent-duplicate-tool-calls-langgraph.html">LangGraph retry guide</a>, <a href="/resolve.html#workflow-recovery">Python workflow recovery</a>, or <a href="/try.html">Mycelium quickstart</a>.</p>
       </section>
     </article>
   </div>
