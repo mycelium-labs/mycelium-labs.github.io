@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>AI Agent Retry Safety &amp; Outcome Recovery | Mycelium</title>
-  <meta name="description" content="Reconcile ambiguous provider outcomes instead of guessing whether a crashed operation ran.">
+  <title>AI Agent Retry Safety &amp; Durable Workflow Recovery | Mycelium</title>
+  <meta name="description" content="Coordinate agent retries, reconcile uncertain tool outcomes, and resume supported Python workflows across workers with Redis or PostgreSQL.">
   <meta name="theme-color" content="#f3f1ea">
   <link rel="canonical" href="https://mycelium.nandanadileep.com/resolve.html">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta property="og:site_name" content="Mycelium">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AI Agent Retry Safety &amp; Outcome Recovery | Mycelium">
-  <meta name="twitter:description" content="Reconcile ambiguous provider outcomes instead of guessing whether a crashed operation ran.">
+  <meta name="twitter:title" content="AI Agent Retry Safety &amp; Durable Workflow Recovery | Mycelium">
+  <meta name="twitter:description" content="Coordinate agent retries, reconcile uncertain tool outcomes, and resume supported Python workflows across workers with Redis or PostgreSQL.">
   <meta name="twitter:image" content="https://mycelium.nandanadileep.com/og-image-v3.png">
   <meta name="twitter:image:alt" content="Mycelium: reliability controls for AI-agent tool actions.">
   <link rel="icon" href="/favicon.svg?v=7" type="image/svg+xml">
@@ -19,12 +19,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css?v=21">
-  <meta property="og:title" content="AI Agent Retry Safety &amp; Outcome Recovery | Mycelium">
-  <meta property="og:description" content="Do not redispatch unless the previous transition is proven terminal or safely recoverable.">
+  <meta property="og:title" content="AI Agent Retry Safety &amp; Durable Workflow Recovery | Mycelium">
+  <meta property="og:description" content="Coordinate agent retries, reconcile uncertain tool outcomes, and resume supported Python workflows across workers with Redis or PostgreSQL.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mycelium.nandanadileep.com/resolve.html">
   <meta property="og:image" content="https://mycelium.nandanadileep.com/og-image-v3.png">
   <meta property="og:image:alt" content="Mycelium: reliability controls for AI-agent tool actions.">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://mycelium.nandanadileep.com/resolve.html#webpage","url":"https://mycelium.nandanadileep.com/resolve.html","name":"AI Agent Retry Safety & Durable Workflow Recovery | Mycelium","description":"Coordinate agent retries, reconcile uncertain tool outcomes, and resume supported Python workflows across workers with Redis or PostgreSQL.","inLanguage":"en","isPartOf":{"@id":"https://mycelium.nandanadileep.com/#website"}},{"@type":"BreadcrumbList","@id":"https://mycelium.nandanadileep.com/resolve.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Mycelium","item":"https://mycelium.nandanadileep.com/"},{"@type":"ListItem","position":2,"name":"AI Agent Retry Safety & Durable Workflow Recovery","item":"https://mycelium.nandanadileep.com/resolve.html"}]}]}</script>
 </head>
 <body class="calm-page">
   <a class="skip-link" href="#content">Skip to content</a>
@@ -95,6 +96,17 @@ mycelium providers verify gmail \
   --output gmail-adapter-report.json
 mycelium providers verify-report gmail-adapter-report.json</code></pre>
         <footer><span>no live Gmail writes</span><i>SOURCE-BOUND REPORT</i></footer>
+      </div>
+    </section>
+
+    <section class="section" id="workflow-recovery">
+      <div class="section-heading">
+        <p class="eyebrow"><span></span> Python workflow recovery</p>
+        <h2>Resume agent workflows<br><em>with Redis or PostgreSQL.</em></h2>
+        <p>A workflow may finish one external action and crash before the next. Mycelium's <code>@composite</code> decorator supports recovery for unchanged, straight-line Python functions whose consequential child calls already use <code>ledger</code> or <code>ledger_sync</code>.</p>
+        <p>Retry with the same host-owned operation ID. Completed child calls return stored results; previously unattempted children can execute. Ambiguous outcomes still require reconciliation or remain blocked.</p>
+        <p>File and SQLite storage support local recovery. Redis and PostgreSQL share parent leases, fences, and step evidence across workers using the same backend configuration. Conditions, loops, hidden provider calls, and general workflow graphs are outside this supported scope. Composite orchestration is available through the Python runtime, not the experimental HTTP sidecar.</p>
+        <p><a href="/handbook.html#composite">Set up durable composite recovery</a> or <a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/docs/COMPOSITE_RECOVERY.md">read the Python API and recovery limits</a>.</p>
       </div>
     </section>
 

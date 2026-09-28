@@ -22,7 +22,7 @@ Composable prevention controls (configure or call explicitly):
 - **Verification:** `mycelium doctor` inspects detectable wiring; `mycelium verify` exercises synthetic safety scenarios without calling application tools.
 - **Unified state:** one top-level `state_backend` automatically gives loop, scope, completion, state-flush, and audit-receipt guards namespaced atomic storage. Use file on one node and Redis/Postgres across workers.
 - **Provider reconciliation:** `mycelium providers verify <adapter>` adversarially tests uncertainty handling and forbidden writes, then emits a signed report bound to the adapter source. Gmail is the only adapter currently shipped; other providers implement a conformance fixture. Reports do not prove live credentials are read-only.
-- **Durable composite recovery:** Python applications can wrap an unchanged straight-line function with `@composite` when its consequential child calls are already ledgered. Replay returns stored child results and runs only unfinished children. This bounded feature requires a stable host-owned operation ID and local file or SQLite composite-control storage; it is not a sidecar endpoint, a shared-PostgreSQL feature, or a general workflow engine.
+- **Durable composite recovery:** Python applications can wrap an unchanged straight-line function with `@composite` when its consequential child calls are already ledgered. Replay returns stored child results; previously unattempted children may run, while ambiguous outcomes reconcile or remain blocked. This bounded feature requires a stable host-owned operation ID and durable file, SQLite, Redis, or PostgreSQL composite-control storage. Redis and PostgreSQL share parent control across workers. This Python-runtime feature is not exposed through the sidecar. General workflow graphs, loops, and conditionals are outside its scope.
 
 ## Install
 
@@ -51,9 +51,9 @@ go get github.com/mycelium-labs/mycelium/clients/go@v0.1.1
 
 Java, Rust, C#, Ruby, and other runtimes can call the authenticated OpenAPI
 contract directly. Only `EXECUTE` permits the provider call; every other claim
-disposition means do not execute. The current profile is trusted-local and
-development-only: no remote hosting, multi-tenancy, production authentication,
-or hostile-client protection.
+disposition means do not execute. The experimental v1alpha1 protocol supports
+a trusted local profile and an explicit shared PostgreSQL profile. It is not a stable production contract or
+a public multi-tenant service; clients must report execution boundaries truthfully.
 
 ## Coding-agent setup
 
@@ -91,6 +91,8 @@ mycelium run --config mycelium.yaml -- python -m my_app
 
 ## Links
 
+- Python workflow recovery: https://mycelium.nandanadileep.com/resolve.html#workflow-recovery
+- Agent reliability FAQ: https://mycelium.nandanadileep.com/handbook.html#common-searches
 - Duplicate tool call guide: https://mycelium.nandanadileep.com/prevent-duplicate-tool-calls-langgraph.html
 - Handbook / docs: https://github.com/mycelium-labs/mycelium/tree/main/sdk/docs
 - Try in 5 minutes: https://mycelium.nandanadileep.com/try.html
