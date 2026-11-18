@@ -91,6 +91,7 @@ mycelium run --config mycelium.yaml -- python -m my_app
 
 ## Links
 
+- Early field evidence: https://mycelium.nandanadileep.com/field-notes.html
 - Python workflow recovery: https://mycelium.nandanadileep.com/resolve.html#workflow-recovery
 - Agent reliability FAQ: https://mycelium.nandanadileep.com/handbook.html#common-searches
 - Duplicate tool call guide: https://mycelium.nandanadileep.com/prevent-duplicate-tool-calls-langgraph.html

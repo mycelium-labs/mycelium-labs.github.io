@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Early field evidence | Mycelium</title>
+  <meta name="description" content="Observed counts from one live Gmail lane: 67 protected actions across three windows, with zero observed duplicates. Live crash recovery was not exercised.">
+  <meta name="theme-color" content="#f3f1ea">
+  <link rel="canonical" href="https://mycelium.nandanadileep.com/field-notes.html">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:site_name" content="Mycelium">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Early field evidence | Mycelium">
+  <meta name="twitter:description" content="Observed counts from one live Gmail lane: 67 protected actions across three windows, with zero observed duplicates. Live crash recovery was not exercised.">
+  <meta name="twitter:image" content="https://mycelium.nandanadileep.com/og-image-v3.png">
+  <meta name="twitter:image:alt" content="Mycelium: reliability controls for AI-agent tool actions.">
+  <link rel="icon" href="/favicon.svg?v=7" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css?v=21">
+  <meta property="og:title" content="Early field evidence | Mycelium">
+  <meta property="og:description" content="Observed counts from one live Gmail lane: 67 protected actions across three windows, with zero observed duplicates. Live crash recovery was not exercised.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mycelium.nandanadileep.com/field-notes.html">
+  <meta property="og:image" content="https://mycelium.nandanadileep.com/og-image-v3.png">
+  <meta property="og:image:alt" content="Mycelium: reliability controls for AI-agent tool actions.">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://mycelium.nandanadileep.com/field-notes.html#webpage","url":"https://mycelium.nandanadileep.com/field-notes.html","name":"Early field evidence | Mycelium","description":"Observed counts from one live Gmail lane: 67 protected actions across three windows, with zero observed duplicates. Live crash recovery was not exercised.","inLanguage":"en","isPartOf":{"@id":"https://mycelium.nandanadileep.com/#website"}},{"@type":"BreadcrumbList","@id":"https://mycelium.nandanadileep.com/field-notes.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Mycelium","item":"https://mycelium.nandanadileep.com/"},{"@type":"ListItem","position":2,"name":"Early field evidence","item":"https://mycelium.nandanadileep.com/field-notes.html"}]}]}</script>
+</head>
+<body class="calm-page">
+  <a class="skip-link" href="#content">Skip to content</a>
+  <nav class="site-nav" aria-label="Primary navigation">
+    <a class="brand" href="/" aria-label="Mycelium home"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a>
+    <div class="nav-links">
+      <a href="/#evidence">Evidence</a>
+      <a href="/#guardrails">Guardrails</a>
+      <a href="/try.html">Try</a>
+      <a href="/handbook.html">Docs</a>
+    </div>
+    <a class="nav-github" href="https://github.com/mycelium-labs/mycelium">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+
+  <main id="content">
+    <header class="page-hero" aria-labelledby="page-title" data-contour="right">
+      <p class="eyebrow"><span></span> Early field evidence</p>
+      <h1 id="page-title">67 protected Gmail actions.<br><em>Zero observed duplicates.</em></h1>
+      <p class="hero-support">These notes are for one live outbound-email lane. Counts are observed actions in UTC windows, not a controlled benchmark and not a claim about the rest of the safety catalog.</p>
+      <p class="page-trail"><a href="/">Home</a><span>→</span><span>Field notes</span></p>
+    </header>
+
+    <section class="section" data-reveal data-contour="left" data-contour-ring="b">
+      <div class="section-heading">
+        <p class="eyebrow"><span></span> How to read this</p>
+        <h2>One lane.<br><em>Success paths only.</em></h2>
+      </div>
+      <ul class="example-list">
+        <li>Method: live provider traffic, Mycelium-ledgered execution, UTC windows.</li>
+        <li>The homepage total of 67 is 25 + 23 + 19 across the three windows below.</li>
+        <li>No genuine UNKNOWN outcome occurred, so live recovery was not exercised. A crash or ambiguous provider result would be the meaningful live test of Gmail reconciliation.</li>
+      </ul>
+    </section>
+
+    <section class="section" data-reveal data-contour="right">
+      <div class="section-heading">
+        <p class="eyebrow"><span></span> Windows</p>
+        <h2>What crossed<br><em>the boundary.</em></h2>
+      </div>
+      <ul class="gate-list">
+        <li>
+          <code>Base · 29 Jul–5 Aug 2026</code>
+          <p>25 protected actions on the outbound email send tool. 0 duplicate sends, 0 failed before the effect, 0 need review, and 0 silent bypasses. The same window also records 42 send attempts and 30 unique recipients. Duplicate side-effect protection was enforced.</p>
+        </li>
+        <li>
+          <code>Week 2 · seven days ending 15 Aug 2026, 15:31 UTC</code>
+          <p>23 outbound Gmail sends entered the ledgered lane. 23 reached terminal COMPLETED. 0 ended UNKNOWN, 0 required Gmail reconciliation, and 0 failed before the effect. This window exercised the normal success path only.</p>
+        </li>
+        <li>
+          <code>Week 3 · 15 Aug 15:31 UTC to 22 Aug 15:31 UTC</code>
+          <p>Recorded as current on 22 Aug 2026, 17:30 UTC. 19 outbound Gmail sends entered the ledgered lane. 19 reached terminal COMPLETED. 0 UNKNOWN, 0 Gmail reconciliations, and 0 failures before the effect. All 19 recorded the side-effect boundary as crossed.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="section" data-reveal data-contour="left" data-contour-ring="b">
+      <div class="section-heading">
+        <p class="eyebrow"><span></span> What you can run</p>
+        <h2>Synthetic checks,<br><em>separate from these notes.</em></h2>
+      </div>
+      <ul class="example-list">
+        <li>Mycelium does not publish a model-quality eval suite. Hallucination and goal alignment stay outside these runtime guards.</li>
+        <li><a href="/verify.html">Doctor and Verify</a> inspect configuration and exercise synthetic redispatch, crash, contention, and outage scenarios. They do not call application tools, models, or live providers.</li>
+        <li><a href="https://github.com/mycelium-labs/mycelium/blob/main/sdk/README.md#provider-adapter-conformance-and-signed-reports">Provider conformance</a> challenges the Gmail adapter with lag, ambiguity, duplicate matches, malformed handles, and forbidden writes, then emits a signed report bound to the tested source. That report is not live-lane evidence.</li>
+      </ul>
+    </section>
+
+    <section class="section" data-reveal data-contour="right">
+      <div class="section-heading">
+        <p class="eyebrow"><span></span> Coding agents</p>
+        <h2>There is a setup skill.</h2>
+      </div>
+      <p>The repository ships <code>$mycelium-setup</code>. In a project, ask a coding agent to use it. It inventories tools, proposes side-effect classifications, fills <code>mycelium.yaml</code>, wires a supported runtime, and runs Doctor and Verify. You still approve consequential classifications, identity, secrets, and provider access.</p>
+      <p class="stack-note"><a href="/handbook.html#agent-setup">Read the setup contract →</a> <a href="https://github.com/mycelium-labs/mycelium/tree/main/.agents/skills/mycelium-setup">Inspect the skill ↗</a></p>
+    </section>
+
+    <section class="final-cta" data-reveal data-contour="both">
+      <p class="eyebrow light"><span></span> Next</p>
+      <h2>Protect one tool.<br><em>Then inspect the wiring.</em></h2>
+      <div class="hero-actions centered">
+        <a class="cta-button light-cta" href="/try.html">Protect your first workflow, free</a>
+        <a class="text-link light-link" href="/verify.html">See verification <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>Mycelium</a><p>Let agents act. Keep the consequences controlled.</p><div><a href="/verify.html">Verify</a><a href="/handbook.html">Docs</a><a href="https://github.com/mycelium-labs/mycelium">GitHub</a></div></footer>
+  <script src="/site.js?v=2" defer></script>
+</body>
+</html>
